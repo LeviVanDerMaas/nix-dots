@@ -5,5 +5,6 @@
   imports = [
     ./kitty.nix
     ./starship.nix
+    ./bash.nix
   ];
 }
