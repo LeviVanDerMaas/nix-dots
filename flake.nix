@@ -16,18 +16,15 @@
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
 };
 
-  outputs = { self, nixpkgs, home-manager, ... }@inputs: {
+  outputs = { self, nixpkgs, ... }@inputs: {
     nixosConfigurations = {
+      "para-desktop" = nixpkgs.lib.nixosSystem {
+        specialArgs = { inherit inputs; }; # Pass flake inputs to external config files
+	modules = [ ./hosts/para-desktop/configuration.nix ];
+      };
       "para-laptop" = nixpkgs.lib.nixosSystem {
         specialArgs = { inherit inputs; }; # Pass flake inputs to external config files
 	modules = [ ./hosts/para-laptop/configuration.nix ];
-      };
-    };
-
-    homeConfigurations = {
-      "levi@para-laptop" = home-manager.lib.homeManagerConfiguration {
-	extraSpecialArgs = { inherit inputs; };
-	modules = [ ./homes/levi.nix ];
       };
     };
   };
