@@ -1,0 +1,35 @@
+{
+  description = "Top-level flake for NixOs and home-manager configs";
+  # To initially use this flake, make sure configuration.nix has
+  # nix.settings.experimental-features = [ "nix-command" "flakes" ]
+
+  # inputs declares all dependencies of the flake.
+  inputs = {
+    # Makes the flake fetch nixpkgs from the unstable branch,
+    # i.e. makes all nixpkgs available at "cutting-edge" versions.
+    nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
+    
+    # Fetches the home manager flake.
+    home-manager.url = "github:nix-community/home-manager/master";
+    # Makes sure nixpkgs of home-manager follows our own, thus preventing installing seperate
+    # pkg versions for home-manager.
+    home-manager.inputs.nixpkgs.follows = "nixpkgs";
+};
+
+  outputs = { self, nixpkgs, home-manager, ... }@inputs: {
+    nixosConfigurations = {
+      "para-laptop" = nixpkgs.lib.nixosSystem {
+        specialArgs = { inherit inputs; }; # Pass flake inputs to external config files
+	modules = [ ./hosts/para-laptop/configuration.nix ];
+      };
+    };
+
+    homeConfigurations = {
+      "levi@para-laptop" = home-manager.lib.homeManagerConfiguration {
+	extraSpecialArgs = { inherit inputs; };
+	modules = [ ./homes/levi.nix ];
+      };
+    };
+  };
+
+}
