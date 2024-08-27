@@ -8,7 +8,7 @@
     homeDirectory = "/home/levi";
   };
 
-  imports = [ ./terminal ];
+  imports = [ ../../modules/home-manager ];
 
   # Non-module programs and packages
   programs.firefox.enable = true;
