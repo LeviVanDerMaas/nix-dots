@@ -10,14 +10,16 @@
 
   imports = [ ../modules/home-manager ];
 
-  # programs.kitty = {
-  #   enable = true;
-  #   theme = "Catppuccin-Mocha";
-  #   settings = {
-  #     background_opacity = "0.85";
-  #     allow_remote_control = true;
-  #   };
-  # }; 
+  # Non-module programs and packages
+  programs.firefox.enable = true;
+  programs.git.enable = true;
+  programs.zoxide.enable = true;
+  
+
+  home.packages = with pkgs; [
+    discord
+    neofetch
+  ];
 
   # This value determines the Home Manager release that your configuration is
   # compatible with. This helps avoid breakage when a new Home Manager release
@@ -27,4 +29,9 @@
   # want to update the value, then make sure to first check the Home Manager
   # release notes.
   home.stateVersion = "24.05"; # note that this is an unstable version
+
+  nixpkgs.config = {
+    allowUnfree = true;
+    allowUnfreePredicate = _: true;
+  };
 }

@@ -100,11 +100,8 @@
   };
 
   # Install firefox.
-  programs.firefox.enable = true;
   programs.neovim.enable = true;
-  programs.nano.enable = false;
   programs.partition-manager.enable = true;
-  programs.git.enable = true;
 
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;

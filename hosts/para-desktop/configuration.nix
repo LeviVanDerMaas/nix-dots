@@ -160,7 +160,6 @@
     bat
     git
     openssh
-    discord
     gamescope # Can be used to deal with certain Steam Games being verry annoying with windowmanagement
     kitty
     neovim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.

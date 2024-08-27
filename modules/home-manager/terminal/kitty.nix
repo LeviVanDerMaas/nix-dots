@@ -5,9 +5,9 @@
     # font.name = "FiraCode Nerd Font";
 
     settings = {
+      background_blur = 1;
       background_opacity = "0.80";
       enable_audio_bell = false;
-      background_blur = 1;
     };
 
     keybindings = {
