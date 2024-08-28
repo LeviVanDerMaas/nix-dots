@@ -14,4 +14,6 @@
       wl-clipboard # Required for clipboard sync
     ];
   };
+
+  xdg.configFile.nvim.source = ./config;
 }
