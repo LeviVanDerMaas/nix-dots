@@ -33,6 +33,12 @@
       }
       luasnip # Snippet engine
       cmp_luasnip # Makes luasnip work with nvim-cmp
+      cmp-nvim-lsp-signature-help
+      cmp-buffer
+      cmp-path
+      cmp-cmdline
+      cmp-git
+      cmp-calc
 
       # Treesitter
       {
