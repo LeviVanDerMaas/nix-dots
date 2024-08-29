@@ -17,6 +17,11 @@
       nodejs_22 # Required for copilot-vim
       ripgrep # Required for telescope
       wl-clipboard # Required for clipboard sync
+
+      # Language servers
+      clang-tools
+      lua-language-server
+      nixd
     ];
 
     plugins = with pkgs.vimPlugins; [
@@ -36,7 +41,11 @@
       }
 
       # LSP
-      nvim-lspconfig # Configs for built-in LSP for many languages # REQUIRES CONFIG
+      {
+        # Configs for built-in LSPs for many languages
+        plugin = nvim-lspconfig;
+        config = toLuaFile ./plugins/lsp.lua;
+      }
       cmp-nvim-lsp # nvim-cmp source for built-in LSP client
       lspkind-nvim # Adds icons to built-in lsp (requires patched font)
       {
@@ -44,7 +53,7 @@
         plugin = fidget-nvim;
         config = toLua "require('fidget').setup({})";
       }
-      # lazydev.nvim?
+      neodev-nvim # Should replace this with lazydev.nvim at some point
 
       
       # Copilot
@@ -54,7 +63,7 @@
 
       # Git
       vim-fugitive # Git wrapper for nvim
-      # gitsigns.nvim?
+      gitsigns-nvim # Add signs for git to the sign column, and more
 
       # UI
       # onedark?
