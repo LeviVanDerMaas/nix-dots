@@ -21,13 +21,19 @@
 
     plugins = with pkgs.vimPlugins; [
       # Completion
-      nvim-cmp # Completion engine # REQUIRES CONFIG
+      {
+        # Completion engine
+        plugin = nvim-cmp;
+        config = toLuaFile ./plugins/nvim-cmp.lua;
+      }
       luasnip # Snippet engine
       cmp_luasnip # Makes luasnip work with nvim-cmp
 
       # Treesitter
-      nvim-treesitter.withAllGrammars #REQUIRES CONFIG
-      # nvim-treesitter-text-objects?
+      {
+        plugin = nvim-treesitter.withAllGrammars;
+        config = toLuaFile ./plugins/treesitter.lua;
+      }
 
       # LSP
       nvim-lspconfig # Configs for built-in LSP for many languages # REQUIRES CONFIG
@@ -60,7 +66,10 @@
       }
 
       # Telescope
-      telescope-nvim #REQUIRES CONFIG
+      {
+        plugin = telescope-nvim;
+        config = toLuaFile ./plugins/telescope.lua;
+      }
       telescope-ui-select-nvim # Replace vim.ui.select with telescope
 
       # Code-editing
@@ -68,7 +77,7 @@
       {
         # Adds indentation guides
         plugin = indent-blankline-nvim;
-	config = toLua "require('ibl').setup()";
+        config = toLua "require('ibl').setup()";
       }
       {
         # Better commenting than built-in
@@ -80,7 +89,11 @@
       plenary-nvim # Dependency for some plugins, such as telescope
 
     ];
-  };    
-        
-  # xdg.configFile.nvim.source = ./config;
+
+    extraLuaConfig = ''
+      ${builtins.readFile ./options.lua}
+      ${builtins.readFile ./keymaps.lua}
+      ${builtins.readFile ./commands.lua}
+    '';
+  };
 }
