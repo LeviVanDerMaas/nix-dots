@@ -6,8 +6,9 @@
 
 {
   imports =
-    [ # Include the results of the hardware scan.
+    [
       ./hardware-configuration.nix
+      ./openrgb.nix
       inputs.home-manager.nixosModules.home-manager
     ];
 
@@ -74,34 +75,6 @@
 
   # Enable CUPS to print documents.
   services.printing.enable = true;
-
-  # Openrgb udev rules
-  # 2F0126
-  # 5D0167
-  services.hardware.openrgb.enable = true;
-  services.hardware.openrgb.package = (pkgs.openrgb.overrideAttrs (oldAttrs: {
-    src = inputs.openrgb;
-    postPatch = ''
-      patchShebangs scripts/build-udev-rules.sh
-      substituteInPlace scripts/build-udev-rules.sh \
-        --replace /bin/chmod "${pkgs.coreutils}/bin/chmod" \
-	--replace /usr/bin/env "${pkgs.coreutils}/bin/env"
-    '';
-  }));
-
-  systemd.services.openrgb.preStart = "${pkgs.coreutils}/bin/sleep 3";
-
-  systemd.services.openrgbInitSet = {
-    enable = true;
-    wantedBy = [ "openrgb.service" ];
-    after = [ "openrgb.service" ];
-    preStart = "${pkgs.coreutils}/bin/sleep 6";
-    serviceConfig = {
-       Type = "oneshot";
-       ExecStart = "${pkgs.openrgb}/bin/openrgb -d 1 -c 5D0167";
-   };
-  };
-
 
   # Enable sound with pipewire.
   hardware.pulseaudio.enable = false;

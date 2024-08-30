@@ -63,17 +63,28 @@
       }
       neodev-nvim # Should replace this with lazydev.nvim at some point
 
-      
       # Copilot
       copilot-lua # Pure lua version of copilot.vim
 
       # Git
       vim-fugitive # Git wrapper for nvim
-      gitsigns-nvim # Add signs for git to the sign column, and more
+      {
+        # Add signs for git to the sign column, and more
+        plugin = gitsigns-nvim;
+        config = toLuaFile ./plugins/gitsigns.lua;
+      }
 
       # UI
-      # onedark?
-      # lualine?
+      {
+        # Theme
+        plugin = onedark-nvim;
+        config = toLuaFile ./plugins/onedark.lua;
+      }
+      {
+        # Statusline
+        plugin = lualine-nvim;
+        config = toLuaFile ./plugins/lualine.lua;
+      }
       {
         # Shows key-maps in pop-up (with delay)
         plugin = which-key-nvim;
