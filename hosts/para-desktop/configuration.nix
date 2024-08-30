@@ -89,14 +89,18 @@
     '';
   }));
 
-  # systemd.services.openrgbSet = {
-  #   enable = false;
-  #   path = [ pkgs.nix ];
-  #   serviceConfig = {
-  #      Type = "oneshot";
-  #      ExecStart = "${pkgs.openrgb}/bin/openrgb -d 1 -c 5D0167";
-  #  };
-  # };
+  systemd.services.openrgb.preStart = "${pkgs.coreutils}/bin/sleep 3";
+
+  systemd.services.openrgbInitSet = {
+    enable = true;
+    wantedBy = [ "openrgb.service" ];
+    after = [ "openrgb.service" ];
+    preStart = "${pkgs.coreutils}/bin/sleep 6";
+    serviceConfig = {
+       Type = "oneshot";
+       ExecStart = "${pkgs.openrgb}/bin/openrgb -d 1 -c 5D0167";
+   };
+  };
 
 
   # Enable sound with pipewire.
