@@ -9,3 +9,5 @@ require('onedark').setup {
         ["@operator"] = { fg = "$cyan" },
     }
 }
+
+vim.cmd.colorscheme 'onedark'

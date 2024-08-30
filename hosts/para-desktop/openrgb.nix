@@ -2,7 +2,7 @@
 
 let
   openrgbServiceDelay = 3;
-  openrgbInitSetDelay = 7;
+  openrgbInitSetDelay = 10;
   openrgbInitSetArgs =
     # Run openrgb -h for more info
     "-d 1 -c 5D0167";
