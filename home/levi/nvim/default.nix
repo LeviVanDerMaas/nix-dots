@@ -40,7 +40,7 @@
       cmp-path # cmp source for paths
       cmp-cmdline # cmp source for cmdline
       cmp-calc # cmp source for calculations
-      cmp-copilot # cmp source for copilot
+      copilot-cmp # cmp source for copilot
 
       # Treesitter
       {

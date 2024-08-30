@@ -40,17 +40,17 @@
     "openrgb": {
       "flake": false,
       "locked": {
-        "lastModified": 1724908143,
-        "narHash": "sha256-fOns/rFBizVVwQDl39fiN8qRlsmHRBfKwiXjKRWQqos=",
+        "lastModified": 1722209914,
+        "narHash": "sha256-VeiZFA4admqNWkXXG4I6B47q9teWZJQBF1n1COP6+2Q=",
         "owner": "CalcProgrammer1",
         "repo": "OpenRGB",
-        "rev": "11bdaaa2fc9330117d2abd834339191902982c22",
+        "rev": "b5638eee126234ebfe8eb7fe240d7b732f5d5dc3",
         "type": "github"
       },
       "original": {
         "owner": "CalcProgrammer1",
         "repo": "OpenRGB",
-        "rev": "11bdaaa2fc9330117d2abd834339191902982c22",
+        "rev": "b5638eee126234ebfe8eb7fe240d7b732f5d5dc3",
         "type": "github"
       }
     },
