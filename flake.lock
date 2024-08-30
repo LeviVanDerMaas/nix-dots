@@ -37,10 +37,28 @@
         "type": "github"
       }
     },
+    "openrgb": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1724908143,
+        "narHash": "sha256-fOns/rFBizVVwQDl39fiN8qRlsmHRBfKwiXjKRWQqos=",
+        "owner": "CalcProgrammer1",
+        "repo": "OpenRGB",
+        "rev": "11bdaaa2fc9330117d2abd834339191902982c22",
+        "type": "github"
+      },
+      "original": {
+        "owner": "CalcProgrammer1",
+        "repo": "OpenRGB",
+        "rev": "11bdaaa2fc9330117d2abd834339191902982c22",
+        "type": "github"
+      }
+    },
     "root": {
       "inputs": {
         "home-manager": "home-manager",
-        "nixpkgs": "nixpkgs"
+        "nixpkgs": "nixpkgs",
+        "openrgb": "openrgb"
       }
     }
   },

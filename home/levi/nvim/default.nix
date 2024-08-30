@@ -9,6 +9,8 @@
   {
     enable = true;
 
+    defaultEditor = true;
+
     viAlias = true;
     vimAlias = true;
     vimdiffAlias = true;
@@ -34,11 +36,11 @@
       luasnip # Snippet engine
       cmp_luasnip # Makes luasnip work with nvim-cmp
       cmp-nvim-lsp-signature-help
-      cmp-buffer
-      cmp-path
-      cmp-cmdline
-      cmp-git
-      cmp-calc
+      cmp-buffer # cmp source for buffer words
+      cmp-path # cmp source for paths
+      cmp-cmdline # cmp source for cmdline
+      cmp-calc # cmp source for calculations
+      cmp-copilot # cmp source for copilot
 
       # Treesitter
       {
@@ -64,8 +66,6 @@
       
       # Copilot
       copilot-lua # Pure lua version of copilot.vim
-      copilot-cmp # nvim-cmp source for copilot
-      # copilot.lua?
 
       # Git
       vim-fugitive # Git wrapper for nvim

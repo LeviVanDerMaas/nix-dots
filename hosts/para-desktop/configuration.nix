@@ -80,12 +80,7 @@
   # 5D0167
   services.hardware.openrgb.enable = true;
   services.hardware.openrgb.package = (pkgs.openrgb.overrideAttrs (oldAttrs: {
-    src = pkgs.fetchFromGitLab {
-      owner = "CalcProgrammer1";
-      repo = "OpenRGB";
-      rev = "b5638eee126234ebfe8eb7fe240d7b732f5d5dc3";
-      hash = "sha256-VeiZFA4admqNWkXXG4I6B47q9teWZJQBF1n1COP6+2Q=";
-    };
+    src = inputs.openrgb;
     postPatch = ''
       patchShebangs scripts/build-udev-rules.sh
       substituteInPlace scripts/build-udev-rules.sh \
@@ -93,6 +88,16 @@
 	--replace /usr/bin/env "${pkgs.coreutils}/bin/env"
     '';
   }));
+
+  # systemd.services.openrgbSet = {
+  #   enable = false;
+  #   path = [ pkgs.nix ];
+  #   serviceConfig = {
+  #      Type = "oneshot";
+  #      ExecStart = "${pkgs.openrgb}/bin/openrgb -d 1 -c 5D0167";
+  #  };
+  # };
+
 
   # Enable sound with pipewire.
   hardware.pulseaudio.enable = false;
