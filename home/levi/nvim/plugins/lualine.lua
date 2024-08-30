@@ -11,9 +11,9 @@ end
 local buffer_status = function()
     local readonly = vim.bo.readonly and '[RO] ' or ''
     local modified = vim.bo.modified and '[+] ' or ''
-    local nonmodifiable = true and '[-] '
-    local otherBufModified = true and '[*] ' or ''
-    return readonly .. modified  .. nonmodifiable  .. otherBufModified
+    local nonmodifiable = (not vim.bo.modifiable) and '[-] ' or ''
+    local otherBufModified = check_other_buf_modifed() and '[*] ' or ''
+    return readonly .. nonmodifiable .. modified .. otherBufModified
 end
 
 require('lualine').setup {
@@ -23,14 +23,14 @@ require('lualine').setup {
     },
     sections = {
         lualine_a = { 'mode', 'selectioncount' },
-        lualine_b = { 
+        lualine_b = {
             { 'filename', file_status = false },
         },
         lualine_c = { buffer_status },
         lualine_x = { 'diagnostics' },
         lualine_y = {
             { 'diff', separator = '' },
-            'branch' ,
+            'branch',
         },
         lualine_z = { 'location' }
     },

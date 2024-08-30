@@ -1,5 +1,24 @@
 -- Open new buffer relative to current buffer via :Re <filename>
 vim.cmd [[command -nargs=1 Re execute "edit" expand('%:h') .. fnameescape('/<args>') ]]
 
--- Apply lsp formatting
-vim.cmd [[command LspFormat lua vim.lsp.buf.format()]]
+-- LSP auto formatting on save
+_G.autoformat = true -- Global to track if we want autoformatting to be enabled
+function AutoFormat(set)
+    if set == "toggle" then
+        _G.autoformat = not _G.autoformat
+    elseif set == "on" then
+        _G.autoformat = true
+    elseif set == "off" then
+        _G.autoformat = false
+    elseif set == "?" then
+        _G.autoformat = not _G.autoformat
+    else
+        print("AutoFormat: Invalid argument. Must be 'on', 'off', 'toggle', or '?'")
+        return
+    end
+    local status_string = _G.autoformat and 'on' or 'off'
+    print("Autoformat via LSP turned " .. status_string)
+end
+
+vim.cmd [[command -nargs=1 AutoFormat lua AutoFormat(<f-args>)]]
+vim.cmd [[autocmd BufWritePre * lua if _G.autoformat then vim.lsp.buf.format() end]] -- Autoformat on save
