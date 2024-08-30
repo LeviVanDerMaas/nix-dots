@@ -1,13 +1,11 @@
-local function check_other_buf_modifed() -- Check if any buffer other than current is modified
-    for _, buf in ipairs(vim.api.nvim_list_bufs()) do
-        if vim.api.nvim_buf_is_loaded(buf) and buf ~= vim.api.nvim_get_current_buf() and vim.api.nvim_buf_get_option(buf, "modified") then
-            return true
-        end
+local autoformat_str = function()
+    if autoformatting_status() == 1 and _G.AUTOFORMAT then
+        return '[AF]'
+    else
+        return ''
     end
-    return false
 end
 
--- Custom lualine component to show modified and readonly status
 local buffer_status = function()
     local readonly = vim.bo.readonly and '[RO] ' or ''
     local modified = vim.bo.modified and '[+] ' or ''
@@ -18,7 +16,7 @@ end
 
 require('lualine').setup {
     options = {
-        component_separators = '|',
+        component_separators = '│',
         section_separators = '',
     },
     sections = {
@@ -27,8 +25,9 @@ require('lualine').setup {
             { 'filename', file_status = false },
         },
         lualine_c = { buffer_status },
-        lualine_x = { 'diagnostics' },
+        lualine_x = { autoformat_str },
         lualine_y = {
+            'diagnostics',
             { 'diff', separator = '' },
             'branch',
         },

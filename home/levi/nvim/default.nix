@@ -117,6 +117,7 @@
     ];
 
     extraLuaConfig = ''
+      ${builtins.readFile ./helpers.lua}
       ${builtins.readFile ./options.lua}
       ${builtins.readFile ./keymaps.lua}
       ${builtins.readFile ./commands.lua}
