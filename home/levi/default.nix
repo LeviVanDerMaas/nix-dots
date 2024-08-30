@@ -15,14 +15,16 @@
   ];
 
   # Non-module programs and packages
+  programs.bat.enable = true;
   programs.firefox.enable = true;
+  programs.ripgrep.enable = true;
   programs.git.enable = true;
   programs.zoxide.enable = true;
-  
 
   home.packages = with pkgs; [
     discord
     neofetch
+    prismlauncher
   ];
 
   # This value determines the Home Manager release that your configuration is

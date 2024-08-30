@@ -2,7 +2,7 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ inputs, config, pkgs, ... }:
+{ inputs, pkgs, ... }:
 
 {
   imports =
@@ -106,12 +106,6 @@
     ];
   };
 
-  # Install firefox.
-  programs.firefox.enable = true;
-
-  # Install git
-  programs.git.enable = true;
-
   programs.steam = {
     enable = true;
     package = pkgs.steam.override {
@@ -138,17 +132,10 @@
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
+  programs.nano.enable = false;
+  programs.neovim.enable = true;
+  programs.neovim.defaultEditor = true;
   environment.systemPackages = with pkgs; [
-    bat
-    git
-    openssh
-    gamescope # Can be used to deal with certain Steam Games being verry annoying with windowmanagement
-    kitty
-    neovim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
-    wl-clipboard
-    neofetch
-    prismlauncher
-    zoxide
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
@@ -162,7 +149,7 @@
   # List services that you want to enable:
 
   # Enable the OpenSSH daemon.
-  # services.openssh.enable = true;
+  services.openssh.enable = true;
 
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];
