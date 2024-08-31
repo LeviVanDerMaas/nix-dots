@@ -1,0 +1,6 @@
+{
+  imports = [
+    ./bash
+    ./starship.nix
+  ];
+}

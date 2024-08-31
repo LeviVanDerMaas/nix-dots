@@ -106,6 +106,9 @@
     ];
   };
 
+  # Allow unfree packages
+  nixpkgs.config.allowUnfree = true;
+
   programs.steam = {
     enable = true;
     package = pkgs.steam.override {
@@ -127,15 +130,22 @@
     };
   };
 
-  # Allow unfree packages
-  nixpkgs.config.allowUnfree = true;
-
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   programs.nano.enable = false;
   programs.neovim.enable = true;
   programs.neovim.defaultEditor = true;
+  hardware.keyboard.zsa.enable = true;
+  programs.bash.shellAliases = {
+    bright-max = "ddcutil -d 1 setvcp x10 100; ddcutil -d 2 setvcp x10 100;";
+    bright-day = "ddcutil -d 1 setvcp x10 50; ddcutil -d 2 setvcp x10 80;";
+    bright-evening = "ddcutil -d 1 setvcp x10 30; ddcutil -d 2 setvcp x10 40;";
+    bright-night = "ddcutil -d 1 setvcp x10 10; ddcutil -d 2 setvcp x10 20;";
+    bright-min = "ddcutil -d 1 setvcp x10 0; ddcutil -d 2 setvcp x10 0;";
+  };
   environment.systemPackages = with pkgs; [
+    ddcutil
+    keymapp
   ];
 
   fonts = {
