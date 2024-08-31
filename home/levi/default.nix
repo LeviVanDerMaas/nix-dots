@@ -12,6 +12,7 @@
     ../../modules/home-manager
 
     ./nvim
+    ./git.nix
   ];
 
   # Non-module programs and packages
