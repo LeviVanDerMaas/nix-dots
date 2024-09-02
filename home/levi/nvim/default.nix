@@ -76,9 +76,8 @@
 
       # UI
       {
-        # Theme
-        plugin = onedark-nvim;
-        config = toLuaFile ./plugins/onedark.lua;
+        plugin = catppuccin-nvim;
+        config = "colorscheme catppuccin-macchiato";
       }
       {
         # Statusline
