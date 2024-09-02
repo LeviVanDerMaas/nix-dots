@@ -3,7 +3,7 @@
 let
   cfg = config.openrgb;
   toStr = builtins.toString;
-  openrgbInitRun = import ./openrgbInitRun.nix { inherit pkgs; inherit config; };
+  openrgbInitRun = import ./initRunScript.nix { inherit pkgs; inherit config; };
 in
 {
   options = {
@@ -20,7 +20,7 @@ in
     };
     openrgb.initRunArgs = lib.mkOption {
       type = lib.types.str;
-      default = null;
+      default = "";
       description = ''
         If set, this will create an additional systemd oneshot service
         'openrgbInitRun' to execute after the OpenRGB server daemon has started
@@ -73,7 +73,7 @@ in
       }));
     };
 
-    systemd.services.openrgb.preStart = "${pkgs.coreutils}/bin/sleep ${builtins.toString cfg.serverStartDelay}";
+    systemd.services.openrgb.preStart = "${pkgs.coreutils}/bin/sleep ${toStr cfg.serverStartDelay}";
 
     # A custom systemd service to automatically run openrgb on startup with
     # given arguments (e.g. setting the values of fans that do not retain them
@@ -83,7 +83,7 @@ in
     # This means that once systemd begins starting other services after boot, it will take 
     # at least the delay of this service and openrgb.service until this service actually
     # runs the openrgb arguments.
-    systemd.services.openrgbInitSet = {
+    systemd.services.openrgbInitSet = lib.mkIf (cfg.initRunArgs != "") {
       enable = true;
       description =  "Custom OpenRGB initial argument runner";
       wantedBy = [ "openrgb.service" ];

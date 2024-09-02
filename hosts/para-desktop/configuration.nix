@@ -8,9 +8,18 @@
   imports =
     [
       ./hardware-configuration.nix
-      ./openrgb.nix
+      ../../modules/nixos/openrgb
       inputs.home-manager.nixosModules.home-manager
     ];
+
+  openrgb = {
+    enable = true;
+    serverStartDelay = 3;
+    initRunArgs = ''-d "NZXT RGB & Fan Controller" -c 5D0167'';
+    initRunDelay = 10;
+    initRunTries = 10;
+    initRunTryInterval = 5;
+  };
 
   home-manager = {
     extraSpecialArgs = { inherit inputs; };
@@ -196,5 +205,4 @@
   # Before changing this value read the documentation for this option
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
   system.stateVersion = "24.05"; # Did you read the comment?
-
 }
