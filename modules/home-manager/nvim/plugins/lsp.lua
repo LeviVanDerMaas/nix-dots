@@ -79,6 +79,8 @@ capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
 
 require('neodev').setup({
     override = function(root_dir, library)
+        -- There is probably a way to make this work for all users instead of one,
+        -- but I don't care enough to fix that.
         if root_dir:find("/home/levi/.dots", 1, true) == 1 then
             library.enabled = true
             library.plugins = true

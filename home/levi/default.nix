@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ pkgs, ... }:
 
 {
   programs.home-manager.enable = true;
@@ -16,7 +16,6 @@
   programs.bat.enable = true;
   programs.firefox.enable = true;
   programs.ripgrep.enable = true;
-  programs.git.enable = true;
   programs.zoxide.enable = true;
 
   home.packages = with pkgs; [
@@ -25,6 +24,9 @@
     obsidian
     prismlauncher
   ];
+
+  # Additional Git settings
+  programs.git.userName = "Levi van der Maas";
 
   # This value determines the Home Manager release that your configuration is
   # compatible with. This helps avoid breakage when a new Home Manager release
