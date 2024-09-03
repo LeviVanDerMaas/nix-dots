@@ -30,7 +30,6 @@ in
     home.packages = with pkgs; [
       discord
       obsidian
-      prismlauncher
     ] ++ cfg.extraPackages;
 
     # Additional Git settings
