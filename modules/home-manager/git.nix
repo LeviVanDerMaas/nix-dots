@@ -17,5 +17,8 @@
     extraConfig = {
       init.defaultBranch = "master";
     };
+    extraConfig = {
+      user.useConfigOnly = true;
+    };
   };
 }
