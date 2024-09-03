@@ -1,8 +1,8 @@
 {
   programs.kitty = {
     enable = true;
-
-    # font.name = "FiraCode Nerd Font";
+    
+    theme = "Catppuccin-Mocha";
 
     settings = {
       background_blur = 1;

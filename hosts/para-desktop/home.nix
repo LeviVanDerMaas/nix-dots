@@ -9,24 +9,11 @@
   };
 
   imports = [ 
-    ../../modules/home-manager
+    ../../modules/home-manager/levi.nix
   ];
+  hyprland.enable = true;
 
-  # Non-module programs and packages
-  programs.bat.enable = true;
-  programs.firefox.enable = true;
-  programs.ripgrep.enable = true;
-  programs.zoxide.enable = true;
-
-  home.packages = with pkgs; [
-    discord
-    neofetch
-    obsidian
-    prismlauncher
-  ];
-
-  # Additional Git settings
-  programs.git.userName = "Levi van der Maas";
+  levi.extraPackages = [ pkgs.hello ];
 
   # This value determines the Home Manager release that your configuration is
   # compatible with. This helps avoid breakage when a new Home Manager release

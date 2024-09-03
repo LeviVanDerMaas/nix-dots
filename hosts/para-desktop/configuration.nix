@@ -24,7 +24,7 @@
   home-manager = {
     extraSpecialArgs = { inherit inputs; };
     users = {
-      levi = import ../../home/levi;
+      levi = import ./home.nix;
     };
   };
 
@@ -74,6 +74,10 @@
 
   # Hyprland
   programs.hyprland.enable = true;
+  # Set desktop portal, needed for Hyprland.
+  xdg.portal.enable = true;
+  xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
+
 
   # Configure keymap in X11
   services.xserver = {

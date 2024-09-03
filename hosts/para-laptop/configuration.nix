@@ -14,7 +14,7 @@
   home-manager = {
     extraSpecialArgs = { inherit inputs; };
     users = {
-      levi = import ../../home/levi;
+      levi = import ./home.nix;
     };
   };
 
