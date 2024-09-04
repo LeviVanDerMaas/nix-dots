@@ -8,7 +8,7 @@
   imports =
     [
       ./hardware-configuration.nix
-      ../../modules/nixos/openrgb
+      ../../modules/nixos
       inputs.home-manager.nixosModules.home-manager
     ];
 

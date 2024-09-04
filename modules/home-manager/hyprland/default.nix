@@ -5,7 +5,7 @@ let
 in
 {
   options = {
-    hyprland.enable = lib.mkEnableOption "Whether to enable the hyprland home-manager module";
+    hyprland.enable = lib.mkEnableOption "Hyprland Home-Manager Module";
   };
 
   config = lib.mkIf cfg.enable {

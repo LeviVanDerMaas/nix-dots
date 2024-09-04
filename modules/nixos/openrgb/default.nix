@@ -8,7 +8,7 @@ in
 {
   options = {
     openrgb.enable = 
-      lib.mkEnableOption "Whether to enable the openrgb module";
+      lib.mkEnableOption "OpenRGB module";
     openrgb.serverStartDelay = lib.mkOption {
       type = lib.types.int;
       default = 0;
