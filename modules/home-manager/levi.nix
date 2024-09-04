@@ -5,6 +5,7 @@ let
 in
 {
   imports = [
+    ./bat
     ./git
     ./hyprland
     ./kitty
@@ -23,7 +24,6 @@ in
   config = { 
 
     # Non-module programs and packages
-    programs.bat.enable = true;
     programs.firefox.enable = true;
     programs.ripgrep.enable = true;
     programs.zoxide.enable = true;

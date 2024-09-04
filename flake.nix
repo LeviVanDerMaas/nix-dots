@@ -18,6 +18,10 @@
     # Experimental release containing controls my rgb fans, expected to be merged into v 0.10
     openrgb.url = "github:CalcProgrammer1/OpenRGB?rev=b5638eee126234ebfe8eb7fe240d7b732f5d5dc3";
     openrgb.flake = false;
+
+    # Catppuccin theme for bat
+    batThemeCatppuccin.url = "github:catppuccin/bat/main";
+    batThemeCatppuccin.flake = false;
 };
 
   outputs = { self, nixpkgs, ... }@inputs: {
