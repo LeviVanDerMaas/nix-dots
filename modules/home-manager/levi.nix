@@ -11,6 +11,7 @@ in
     ./kitty
     ./nvim
     ./shell
+    ./fd
   ];
 
   options = {
