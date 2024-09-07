@@ -15,5 +15,12 @@
       typechanged = "[T](bold red)";
       stashed = "[\\$](bold yellow)";
     };
+
+    nix_shell = {
+      format = "via [$symbol$name $state]($style) ";
+      impure_msg = "";
+      pure_msg = "(PURE)";
+      unknown_msg = "(PURE??)";
+    };
   };
 }

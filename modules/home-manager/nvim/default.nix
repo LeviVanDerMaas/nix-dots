@@ -17,7 +17,8 @@
 
     extraPackages = with pkgs; [
       nodejs_22 # Required for copilot-vim
-      ripgrep # Required for telescope
+      ripgrep # Optional dep for telescope, faster live grep
+      fd # Optional dep for telescope, faster file finding
       wl-clipboard # Required for clipboard sync
 
       # Language servers
