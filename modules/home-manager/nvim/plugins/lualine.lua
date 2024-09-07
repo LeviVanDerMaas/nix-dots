@@ -1,7 +1,10 @@
 local autoformat_str = function()
-    if autoformatting_status() == 1 and _G.AUTOFORMAT then
+    local status = autoformatting_status()
+    if status == 1 then
         return '[AF]'
-    else
+    elseif status == 0 then
+        return '[F]'
+    elseif status == -1 then
         return ''
     end
 end
