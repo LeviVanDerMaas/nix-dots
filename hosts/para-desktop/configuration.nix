@@ -149,12 +149,19 @@
   programs.neovim.enable = true;
   programs.neovim.defaultEditor = true;
   hardware.keyboard.zsa.enable = true;
-  programs.bash.shellAliases = {
-    bright-max = "ddcutil -d 1 setvcp x10 100; ddcutil -d 2 setvcp x10 100;";
-    bright-day = "ddcutil -d 1 setvcp x10 50; ddcutil -d 2 setvcp x10 80;";
-    bright-evening = "ddcutil -d 1 setvcp x10 30; ddcutil -d 2 setvcp x10 40;";
-    bright-night = "ddcutil -d 1 setvcp x10 10; ddcutil -d 2 setvcp x10 20;";
-    bright-min = "ddcutil -d 1 setvcp x10 0; ddcutil -d 2 setvcp x10 0;";
+  programs.bash = { 
+    # Add a function to manage the brightness of the screen
+    interactiveShellInit = ''
+      br() {
+        if [ $# -eq 1 ]; then
+          ddcutil -d 1 setvcp x10 $1; ddcutil -d 2 setvcp x10 $1
+        elif [ $# -eq 2 ]; then
+          ddcutil -d $1 setvcp x10 $2;
+        else
+          echo "Use either <screen> <brightness> or <brightness>"
+        fi
+      }
+    '';
   };
   environment.systemPackages = with pkgs; [
     ddcutil
