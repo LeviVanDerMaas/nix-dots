@@ -2,7 +2,7 @@
 -- calls upon it.
 
 -- Autoformatting
-_G.AUTOFORMAT = true             -- Global to track if we want autoformatting to be enabled
+_G.AUTOFORMAT = false            -- Global to track if we want autoformatting to be enabled
 function autoformatting_status() -- Check if current buffer has formatting
     local clients = vim.lsp.get_clients({ bufnr = vim.api.nvim_get_current_buf() })
     clients = vim.tbl_filter(function(client)
