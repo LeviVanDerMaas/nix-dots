@@ -30,7 +30,7 @@ in
     programs.zoxide.enable = true;
     home.packages = with pkgs; [
       discord
-      neofetch
+      fastfetch
       obsidian
     ] ++ cfg.extraPackages;
 
