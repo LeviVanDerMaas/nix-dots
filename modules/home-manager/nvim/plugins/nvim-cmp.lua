@@ -42,10 +42,14 @@ cmp.setup({
         ['<C-d>'] = cmp.mapping.scroll_docs(4),
         ['<C-Space>'] = cmp.mapping.complete(),
         ['<C-e>'] = cmp.mapping.close(),
-        ['<CR>'] = cmp.mapping.confirm({
-            behavior = cmp.ConfirmBehavior.Insert,
-            select = true,
-        })
+        ["<CR>"] = cmp.mapping(function(fallback)
+                if cmp.visible() and cmp.get_active_entry() then
+                    cmp.confirm({ behavior = cmp.ConfirmBehavior.Replace, select = false })
+                else
+                    fallback()
+                end
+            end
+        ),
     }),
     sources = cmp.config.sources({
         { name = "copilot",                group_index = 2 },
@@ -62,23 +66,23 @@ cmp.setup({
         documentation = cmp.config.window.bordered(),
     },
     formatting = {
-      format = lspkind.cmp_format({
-        mode = 'symbol_text',
-        maxwidth = 50, -- prevent the popup from showing more than provided characters (e.g 50 will not show more than 50 characters)
-        -- can also be a function to dynamically calculate max width such as
-        -- maxwidth = function() return math.floor(0.45 * vim.o.columns) end,
-        ellipsis_char = '...',    -- when popup menu exceed maxwidth, the truncated part would show ellipsis_char instead (must define maxwidth first)
-        show_labelDetails = true, -- show labelDetails in menu. Disabled by default
+        format = lspkind.cmp_format({
+            mode = 'symbol_text',
+            maxwidth = 50, -- prevent the popup from showing more than provided characters (e.g 50 will not show more than 50 characters)
+            -- can also be a function to dynamically calculate max width such as
+            -- maxwidth = function() return math.floor(0.45 * vim.o.columns) end,
+            ellipsis_char = '...', -- when popup menu exceed maxwidth, the truncated part would show ellipsis_char instead (must define maxwidth first)
+            show_labelDetails = true, -- show labelDetails in menu. Disabled by default
 
-        symbol_map = { Copilot = "" },
+            symbol_map = { Copilot = "" },
 
-        -- The function below will be called before any actual modifications from lspkind
-        -- so that you can provide more controls on popup customization. (See [#30](https://github.com/onsails/lspkind-nvim/pull/30))
-        before = function(entry, vim_item)
-          -- Currently don't do anything
-          return vim_item
-        end
-      })
+            -- The function below will be called before any actual modifications from lspkind
+            -- so that you can provide more controls on popup customization. (See [#30](https://github.com/onsails/lspkind-nvim/pull/30))
+            before = function(entry, vim_item)
+                -- Currently don't do anything
+                return vim_item
+            end
+        })
     },
 })
 

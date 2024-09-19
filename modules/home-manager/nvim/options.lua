@@ -7,7 +7,7 @@ vim.opt.undodir = vim.fn.expand('~/.cache/nvim/undo')
 vim.g.mapleader = ' ' -- Set BEFORE loading plugins!
 vim.opt.updatetime = 50 -- Low because Cursurhold autocmd is used to create diagnostics windows
 vim.opt.clipboard = 'unnamed,unnamedplus' 
-vim.opt.completeopt = 'menuone,noselect,preview'
+vim.opt.completeopt = 'menuone,noselect,noinsert,preview'
 vim.opt.mouse = 'a'
 
 -- Tab & Indent Behaviour
