@@ -1,7 +1,9 @@
-open() {
+launch() {
     if [ "$#" -gt 0 ]; then 
-        xdg-open "$@" &> /dev/null & disown
-    else
-        xdg-open . &> /dev/null & disown
+        "$@" &> /dev/null & disown
     fi
+}
+
+open() {
+    xdg-open "$@" &> /dev/null & disown
 }
