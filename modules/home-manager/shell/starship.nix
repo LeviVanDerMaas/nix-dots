@@ -4,6 +4,10 @@
   programs.starship.enable = true;
   
   programs.starship.settings = {
+    directory = {
+      truncation_length = 9;
+    };
+
     git_status = {
        
       format = "([\\[$all_status$ahead_behind\\]]($style) )";
