@@ -3,6 +3,7 @@ local luasnip = require 'luasnip'
 local lspkind = require 'lspkind'
 
 -- Needed for integrating copilot_cmp with nvim_cmp
+require("copilot").setup({})
 require("copilot_cmp").setup()
 local has_words_before = function()
     if vim.api.nvim_buf_get_option(0, "buftype") == "prompt" then return false end
