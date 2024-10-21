@@ -1,4 +1,4 @@
-{ lib, config, ... }:
+{ pkgs, lib, config, ... }:
 
 let
   cfg = config.docker;
@@ -24,5 +24,9 @@ in
     };
 
     users.extraGroups.docker.members = cfg.dockerGroupMembers;
+
+    environment.systemPackages = with pkgs; [
+      docker-compose
+    ];
   };
 }
