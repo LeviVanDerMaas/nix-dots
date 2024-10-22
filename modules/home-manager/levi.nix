@@ -32,6 +32,7 @@ in
       discord
       fastfetch
       obsidian
+      vlc
     ] ++ cfg.extraPackages;
 
     # Additional Git settings
