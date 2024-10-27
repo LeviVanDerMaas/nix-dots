@@ -13,7 +13,6 @@
   ];
 
   levi.extraPackages = with pkgs; [
-    blender
   ];
 
   # This value determines the Home Manager release that your configuration is

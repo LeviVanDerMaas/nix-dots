@@ -18,7 +18,7 @@ in
     };
   };
 
-  config = {
+  config = lib.mkIf cfg.enable {
     virtualisation.docker = {
       enable = true;
     };

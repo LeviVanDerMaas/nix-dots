@@ -15,7 +15,6 @@
 
   levi.extraPackages = with pkgs; [
     prismlauncher
-    blender
   ];
 
   # This value determines the Home Manager release that your configuration is
