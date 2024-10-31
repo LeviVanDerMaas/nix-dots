@@ -11,9 +11,9 @@
   imports = [ 
     ../../modules/home-manager/levi
   ];
-  modules.hyprland.enable = true;
+  modules.home-manager.levi.hyprland.enable = true;
 
-  levi.extraPackages = with pkgs; [
+  modules.home-manager.levi.extraPackages = with pkgs; [
     prismlauncher
   ];
 

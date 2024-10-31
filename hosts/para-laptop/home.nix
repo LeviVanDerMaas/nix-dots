@@ -12,7 +12,7 @@
     ../../modules/home-manager/levi
   ];
 
-  levi.extraPackages = with pkgs; [
+  modules.home-manager.levi.extraPackages = with pkgs; [
   ];
 
   # This value determines the Home Manager release that your configuration is

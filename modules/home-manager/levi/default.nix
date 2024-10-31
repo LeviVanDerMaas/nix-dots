@@ -1,7 +1,7 @@
 {pkgs, lib, config, ...}:
 
 let
-  cfg = config.levi;
+  cfg = config.modules.home-manager.levi;
 in
 {
   imports = [
@@ -14,8 +14,8 @@ in
     ./fd
   ];
 
-  options = {
-    levi.extraPackages = lib.mkOption {
+  options.modules.home-manager.levi = {
+    extraPackages = lib.mkOption {
       type = lib.types.listOf lib.types.package;
       default = [];
       description = ''
@@ -40,6 +40,5 @@ in
     ] ++ cfg.extraPackages;
 
     # Additional Git settings
-    programs.git.userName = "Levi van der Maas";
   };
 }

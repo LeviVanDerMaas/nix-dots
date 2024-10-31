@@ -1,10 +1,10 @@
 { pkgs, config, lib, ... }:
 
 let 
-  cfg = config.modules.hyprland;
+  cfg = config.modules.home-manager.levi.hyprland;
 in
 {
-  options.modules.hyprland = {
+  options.modules.home-manager.levi.hyprland = {
     enable = lib.mkEnableOption "Hyprland Home-Manager Module";
   };
 
