@@ -1,24 +1,22 @@
-# Edit this configuration file to define what should be installed on
-# your system.  Help is available in the configuration.nix(5) man page
-# and in the NixOS manual (accessible by running ‘nixos-help’).
-
 { inputs, pkgs, ... }:
 
 {
+  networking.hostName = "para-desktop";
+
   imports =
     [
       ./hardware-configuration.nix
       ../../modules/nixos
       inputs.home-manager.nixosModules.home-manager
     ];
+  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+  nixpkgs.config.allowUnfree = true;
 
-  modules.nixos.openrgb = {
-    enable = true;
-    serverStartDelay = 3;
-    initRunArgs = ''-d "NZXT RGB & Fan Controller" -c 5D0167'';
-    initRunDelay = 10;
-    initRunTries = 10;
-    initRunTryInterval = 5;
+  # Don't forget to set a password with ‘passwd’.
+  users.users.levi = {
+    isNormalUser = true;
+    description = "Levi";
+    extraGroups = [ "networkmanager" "wheel" ];
   };
 
   home-manager = {
@@ -28,30 +26,36 @@
     };
   };
 
-  zramSwap.enable = true;
 
-  # Bootloader.
+
+
+
+  # Bootloader
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
-  networking.hostName = "para-desktop"; # Define your hostname.
-  # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
+  # Disk
+  zramSwap.enable = true;
 
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+  # Sound
+  hardware.pulseaudio.enable = false;
+  security.rtkit.enable = true;
+  services.pipewire = {
+    enable = true;
+    alsa.enable = true;
+    alsa.support32Bit = true;
+    pulse.enable = true;
+  };
 
-  # Configure network proxy if necessary
-  # networking.proxy.default = "http://user:password@proxy:port/";
-  # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
-
-  # Enable networking
+  # Networking
   networking.networkmanager.enable = true;
 
-  # Set your time zone.
+  # Enable CUPS to print documents.
+  services.printing.enable = true;
+
+  # Locale
   time.timeZone = "Europe/Amsterdam";
-
-  # Select internationalisation properties.
   i18n.defaultLocale = "en_US.UTF-8";
-
   i18n.extraLocaleSettings = {
     LC_ADDRESS = "en_US.UTF-8";
     LC_IDENTIFICATION = "en_US.UTF-8";
@@ -62,6 +66,28 @@
     LC_PAPER = "en_US.UTF-8";
     LC_TELEPHONE = "en_US.UTF-8";
     LC_TIME = "en_US.UTF-8";
+  };
+
+  fonts = {
+    enableDefaultPackages = true;
+    packages = with pkgs; [
+      noto-fonts
+      noto-fonts-cjk
+      noto-fonts-color-emoji
+
+      fira-code
+      fira-code-symbols
+
+      (nerdfonts.override { fonts = [ "NerdFontsSymbolsOnly" ]; })
+    ];
+
+    fontconfig = {
+      defaultFonts = {
+        serif = [ "Noto Serif" "Symbols Nerd Font" ];
+        sansSerif = [ "Noto Sans" "Symbols Nerd Font" ];
+        monospace = [ "Fira Code" "Symbols Nerd Font Mono" ];
+      };
+    };
   };
 
   # Enable the X11 windowing system.
@@ -86,41 +112,8 @@
     xkbVariant = "";
   };
 
-  # Enable CUPS to print documents.
-  services.printing.enable = true;
 
-  # Enable sound with pipewire.
-  hardware.pulseaudio.enable = false;
-  security.rtkit.enable = true;
-  services.pipewire = {
-    enable = true;
-    alsa.enable = true;
-    alsa.support32Bit = true;
-    pulse.enable = true;
-    # If you want to use JACK applications, uncomment this
-    #jack.enable = true;
 
-    # use the example session manager (no others are packaged yet so this is enabled by default,
-    # no need to redefine it in your config for now)
-    #media-session.enable = true;
-  };
-
-  # Enable touchpad support (enabled default in most desktopManager).
-  # services.xserver.libinput.enable = true;
-
-  # Define a user account. Don't forget to set a password with ‘passwd’.
-  users.users.levi = {
-    isNormalUser = true;
-    description = "Levi";
-    extraGroups = [ "networkmanager" "wheel" ];
-    packages = with pkgs; [
-      kdePackages.kate
-    #  thunderbird
-    ];
-  };
-
-  # Allow unfree packages
-  nixpkgs.config.allowUnfree = true;
 
   programs.steam = {
     enable = true;
@@ -141,6 +134,15 @@
         gperftools # Needed for tf2 to work
       ];
     };
+  };
+
+  modules.nixos.openrgb = {
+    enable = true;
+    serverStartDelay = 3;
+    initRunArgs = ''-d "NZXT RGB & Fan Controller" -c 5D0167'';
+    initRunDelay = 10;
+    initRunTries = 10;
+    initRunTryInterval = 5;
   };
 
   # List packages installed in system profile. To search, run:
@@ -168,46 +170,9 @@
     keymapp
   ];
 
-  fonts = {
-    enableDefaultPackages = true;
-    packages = with pkgs; [
-      noto-fonts
-      noto-fonts-cjk
-      noto-fonts-color-emoji
-
-      fira-code
-      fira-code-symbols
-
-      (nerdfonts.override { fonts = [ "NerdFontsSymbolsOnly" ]; })
-    ];
-
-    fontconfig = {
-      defaultFonts = {
-        serif = [ "Noto Serif" "Symbols Nerd Font" ];
-        sansSerif = [ "Noto Sans" "Symbols Nerd Font" ];
-        monospace = [ "Fira Code" "Symbols Nerd Font Mono" ];
-      };
-    };
- };
-
-  # Some programs need SUID wrappers, can be configured further or are
-  # started in user sessions.
-  # programs.mtr.enable = true;
-  # programs.gnupg.agent = {
-  #   enable = true;
-  #   enableSSHSupport = true;
-  # };
-
-  # List services that you want to enable:
 
   # Enable the OpenSSH daemon.
   services.openssh.enable = true;
-
-  # Open ports in the firewall.
-  # networking.firewall.allowedTCPPorts = [ ... ];
-  # networking.firewall.allowedUDPPorts = [ ... ];
-  # Or disable the firewall altogether.
-  # networking.firewall.enable = false;
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions

@@ -11,11 +11,16 @@
   imports = [ 
     ../../modules/home-manager/levi
   ];
+
   modules.home-manager.levi.hyprland.enable = true;
 
   modules.home-manager.levi.extraPackages = with pkgs; [
     prismlauncher
   ];
+
+
+
+
 
   # This value determines the Home Manager release that your configuration is
   # compatible with. This helps avoid breakage when a new Home Manager release
