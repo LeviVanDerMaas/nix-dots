@@ -1,13 +1,13 @@
 { pkgs, lib, config, ... }:
 
 let
-  cfg = config.docker;
+  cfg = config.modules.nixos.docker;
 in
 {
-  options = {
-    docker.enable = 
+  options.modules.nixos.docker = {
+    enable = 
       lib.mkEnableOption "Docker module";
-    docker.dockerGroupMembers = lib.mkOption {
+    dockerGroupMembers = lib.mkOption {
       type = lib.types.listOf lib.types.str;
       default = [];
       description = ''

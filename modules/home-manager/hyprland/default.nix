@@ -1,11 +1,11 @@
 { pkgs, config, lib, ... }:
 
 let 
-  cfg = config.hyprland;
+  cfg = config.modules.hyprland;
 in
 {
-  options = {
-    hyprland.enable = lib.mkEnableOption "Hyprland Home-Manager Module";
+  options.modules.hyprland = {
+    enable = lib.mkEnableOption "Hyprland Home-Manager Module";
   };
 
   config = lib.mkIf cfg.enable {

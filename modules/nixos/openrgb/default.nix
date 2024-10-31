@@ -1,15 +1,15 @@
 { inputs, pkgs, lib, config, ...}:
 
 let
-  cfg = config.openrgb;
+  cfg = config.modules.nixos.openrgb;
   toStr = builtins.toString;
   openrgbInitRun = import ./initRunScript.nix { inherit pkgs; inherit config; };
 in
 {
-  options = {
-    openrgb.enable = 
+  options.modules.nixos.openrgb = {
+    enable = 
       lib.mkEnableOption "OpenRGB module";
-    openrgb.serverStartDelay = lib.mkOption {
+    serverStartDelay = lib.mkOption {
       type = lib.types.int;
       default = 0;
       description = ''
@@ -18,7 +18,7 @@ in
         when booting, meaning the server will not detect them.
     '';
     };
-    openrgb.initRunArgs = lib.mkOption {
+    initRunArgs = lib.mkOption {
       type = lib.types.str;
       default = "";
       description = ''
@@ -28,7 +28,7 @@ in
         See 'openrgb -h' for more info.
     '';
     };
-    openrgb.initRunDelay = lib.mkOption {
+    initRunDelay = lib.mkOption {
       type = lib.types.int;
       default = 0;
       description = ''
@@ -37,7 +37,7 @@ in
         to completely set up.
     '';
     };
-    openrgb.initRunTries = lib.mkOption {
+    initRunTries = lib.mkOption {
       type = lib.types.int;
       default = 1;
       description = ''
@@ -46,7 +46,7 @@ in
         might not have detected all hardware yet.
     '';
     };
-    openrgb.initRunTryInterval = lib.mkOption {
+    initRunTryInterval = lib.mkOption {
       type = lib.types.int;
       default = 5;
       description = ''

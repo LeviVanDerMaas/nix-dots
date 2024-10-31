@@ -12,7 +12,7 @@
       inputs.home-manager.nixosModules.home-manager
     ];
 
-  openrgb = {
+  modules.nixos.openrgb = {
     enable = true;
     serverStartDelay = 3;
     initRunArgs = ''-d "NZXT RGB & Fan Controller" -c 5D0167'';

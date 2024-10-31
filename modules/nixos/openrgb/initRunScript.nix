@@ -1,6 +1,6 @@
 { pkgs, config, ... }:
 let
-  cfg = config.openrgb;
+  cfg = config.modules.nixos.openrgb;
   toStr = builtins.toString;
 in
 pkgs.writeShellScript "openrgbInitRun" ''
