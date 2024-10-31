@@ -9,7 +9,7 @@
   };
 
   imports = [ 
-    ../../modules/home-manager/levi.nix
+    ../../modules/home-manager/levi
   ];
 
   levi.extraPackages = with pkgs; [

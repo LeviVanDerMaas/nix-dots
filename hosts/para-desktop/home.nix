@@ -9,7 +9,7 @@
   };
 
   imports = [ 
-    ../../modules/home-manager/levi.nix
+    ../../modules/home-manager/levi
   ];
   modules.hyprland.enable = true;
 
