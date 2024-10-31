@@ -3,12 +3,11 @@
 {
   networking.hostName = "para-laptop";
 
-  imports =
-    [
+  imports = [
       ./hardware-configuration.nix
       ../../modules/nixos
       inputs.home-manager.nixosModules.home-manager
-    ];
+  ];
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
   nixpkgs.config.allowUnfree = true;
 
@@ -72,41 +71,13 @@
     LC_TIME = "nl_NL.UTF-8";
   };
 
-  fonts = {
-    enableDefaultPackages = true;
-    packages = with pkgs; [
-      noto-fonts
-      noto-fonts-cjk
-      noto-fonts-color-emoji
 
-      fira-code
-      fira-code-symbols
 
-      (nerdfonts.override { fonts = [ "NerdFontsSymbolsOnly" ]; })
-    ];
 
-    fontconfig = {
-      defaultFonts = {
-        serif = [ "Noto Serif" "Symbols Nerd Font" ];
-        sansSerif = [ "Noto Sans" "Symbols Nerd Font" ];
-        monospace = [ "Fira Code" "Symbols Nerd Font Mono" ];
-      };
-    };
-  };
-
-  # Enable the X11 windowing system.
-  # You can disable this if you're only using the Wayland session.
-  services.xserver.enable = true;
 
   # Enable the KDE Plasma Desktop Environment.
   services.displayManager.sddm.enable = true;
   services.desktopManager.plasma6.enable = true;
-
-  # Configure keymap in X11
-  services.xserver = {
-    layout = "us";
-    xkbOptions = "caps:escape";
-  };
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget

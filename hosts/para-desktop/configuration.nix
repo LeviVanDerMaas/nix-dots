@@ -3,12 +3,11 @@
 {
   networking.hostName = "para-desktop";
 
-  imports =
-    [
+  imports = [
       ./hardware-configuration.nix
       ../../modules/nixos
       inputs.home-manager.nixosModules.home-manager
-    ];
+  ];
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
   nixpkgs.config.allowUnfree = true;
 
@@ -68,73 +67,16 @@
     LC_TIME = "en_US.UTF-8";
   };
 
-  fonts = {
-    enableDefaultPackages = true;
-    packages = with pkgs; [
-      noto-fonts
-      noto-fonts-cjk
-      noto-fonts-color-emoji
 
-      fira-code
-      fira-code-symbols
 
-      (nerdfonts.override { fonts = [ "NerdFontsSymbolsOnly" ]; })
-    ];
 
-    fontconfig = {
-      defaultFonts = {
-        serif = [ "Noto Serif" "Symbols Nerd Font" ];
-        sansSerif = [ "Noto Sans" "Symbols Nerd Font" ];
-        monospace = [ "Fira Code" "Symbols Nerd Font Mono" ];
-      };
-    };
-  };
-
-  # Enable the X11 windowing system.
-  # You can disable this if you're only using the Wayland session.
-  services.xserver.enable = true;
 
   # Enable the KDE Plasma Desktop Environment.
   services.displayManager.sddm.enable = true;
   services.desktopManager.plasma6.enable = true;
 
-  # Hyprland
-  programs.hyprland.enable = true;
-  # Set desktop portal, needed for Hyprland.
-  xdg.portal.enable = true;
-  xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
 
-
-  # Configure keymap in X11
-  services.xserver = {
-    layout = "us";
-    xkbOptions = "caps:escape";
-    xkbVariant = "";
-  };
-
-
-
-
-  programs.steam = {
-    enable = true;
-    package = pkgs.steam.override {
-      extraPkgs = pkgs: with pkgs; [
-        xorg.libXcursor
-        xorg.libXi
-        xorg.libXinerama
-        xorg.libXScrnSaver
-        libpng
-        libpulseaudio
-        libvorbis
-        stdenv.cc.cc.lib
-        libkrb5
-        keyutils
-      ];
-      extraLibraries = pkgs: with pkgs; [
-        gperftools # Needed for tf2 to work
-      ];
-    };
-  };
+  modules.nixos.steam.enable = true;
 
   modules.nixos.openrgb = {
     enable = true;
@@ -170,6 +112,11 @@
     keymapp
   ];
 
+  # Hyprland
+  programs.hyprland.enable = true;
+  # Set desktop portal, needed for Hyprland.
+  xdg.portal.enable = true;
+  xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
 
   # Enable the OpenSSH daemon.
   services.openssh.enable = true;
