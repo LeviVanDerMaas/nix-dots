@@ -1,7 +1,7 @@
 { inputs, pkgs, ... }:
 
 {
-  networking.hostName = "para-desktop";
+  networking.hostName = "lucy";
 
   imports = [
       ./hardware-configuration.nix
@@ -36,6 +36,13 @@
   # Disk
   zramSwap.enable = true;
 
+  # No hibernation
+  systemd.sleep.extraConfig = ''
+    AllowHibernation=no
+    AllowHybridSleep=no
+    AllowSuspendThenHibernate=no
+  '';
+
   # Sound
   hardware.pulseaudio.enable = false;
   security.rtkit.enable = true;
@@ -49,29 +56,23 @@
   # Networking
   networking.networkmanager.enable = true;
 
-  # RGB
-  modules.nixos.openrgb = {
-    enable = true;
-    serverStartDelay = 3;
-    initRunArgs = ''-d "NZXT RGB & Fan Controller" -c 5D0167'';
-    initRunDelay = 10;
-    initRunTries = 10;
-    initRunTryInterval = 5;
-  };
+  # Enable bluetooth
+  hardware.bluetooth.enable = true;
+  hardware.bluetooth.powerOnBoot = true;
 
   # Locale
   time.timeZone = "Europe/Amsterdam";
   i18n.defaultLocale = "en_US.UTF-8";
   i18n.extraLocaleSettings = {
-    LC_ADDRESS = "en_US.UTF-8";
-    LC_IDENTIFICATION = "en_US.UTF-8";
-    LC_MEASUREMENT = "en_US.UTF-8";
-    LC_MONETARY = "en_US.UTF-8";
-    LC_NAME = "en_US.UTF-8";
-    LC_NUMERIC = "en_US.UTF-8";
-    LC_PAPER = "en_US.UTF-8";
-    LC_TELEPHONE = "en_US.UTF-8";
-    LC_TIME = "en_US.UTF-8";
+    LC_ADDRESS = "nl_NL.UTF-8";
+    LC_IDENTIFICATION = "nl_NL.UTF-8";
+    LC_MEASUREMENT = "nl_NL.UTF-8";
+    LC_MONETARY = "nl_NL.UTF-8";
+    LC_NAME = "nl_NL.UTF-8";
+    LC_NUMERIC = "nl_NL.UTF-8";
+    LC_PAPER = "nl_NL.UTF-8";
+    LC_TELEPHONE = "nl_NL.UTF-8";
+    LC_TIME = "nl_NL.UTF-8";
   };
 
 
@@ -80,7 +81,6 @@
 
   modules.nixos = {
     plasma.enable = true;
-    steam.enable = true;
   };
 
   services = {
@@ -88,41 +88,15 @@
     openssh.enable = true; # SSH daemon
   };
 
-  hardware.keyboard.zsa.enable = true; # udevs for flashing ZSA Moonlander keyboard
-
-  # Hyprland
-  programs.hyprland.enable = true;
-  # Set desktop portal, needed for Hyprland.
-  xdg.portal.enable = true;
-  xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
-
   programs = {
     nano.enable = false;
     neovim = {
       enable = true;
       defaultEditor = true;
     };
-
-    bash = { 
-      # Add a function to manage the brightness of the screen
-      interactiveShellInit = ''
-        br() {
-          if [ $# -eq 1 ]; then
-            ddcutil -d 1 setvcp x10 $1; ddcutil -d 2 setvcp x10 $1
-          elif [ $# -eq 2 ]; then
-            ddcutil -d $1 setvcp x10 $2;
-          else
-            echo "Use either <screen> <brightness> or <brightness>"
-          fi
-        }
-      '';
-    };
-
   };
 
   environment.systemPackages = with pkgs; [
-    ddcutil
-    keymapp
   ];
 
 
@@ -136,4 +110,5 @@
   # Before changing this value read the documentation for this option
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
   system.stateVersion = "24.05"; # Did you read the comment?
+
 }

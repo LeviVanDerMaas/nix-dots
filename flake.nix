@@ -26,13 +26,13 @@
 
   outputs = { self, nixpkgs, ... }@inputs: {
     nixosConfigurations = {
-      "para-desktop" = nixpkgs.lib.nixosSystem {
+      "boo" = nixpkgs.lib.nixosSystem {
         specialArgs = { inherit inputs; }; # Pass flake inputs to external config files
-	modules = [ ./hosts/para-desktop/configuration.nix ];
+	modules = [ ./hosts/boo/configuration.nix ];
       };
-      "para-laptop" = nixpkgs.lib.nixosSystem {
+      "lucy" = nixpkgs.lib.nixosSystem {
         specialArgs = { inherit inputs; }; # Pass flake inputs to external config files
-	modules = [ ./hosts/para-laptop/configuration.nix ];
+	modules = [ ./hosts/lucy/configuration.nix ];
       };
     };
   };
