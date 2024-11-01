@@ -49,8 +49,15 @@
   # Networking
   networking.networkmanager.enable = true;
 
-  # Enable CUPS to print documents.
-  services.printing.enable = true;
+  # RGB
+  modules.nixos.openrgb = {
+    enable = true;
+    serverStartDelay = 3;
+    initRunArgs = ''-d "NZXT RGB & Fan Controller" -c 5D0167'';
+    initRunDelay = 10;
+    initRunTries = 10;
+    initRunTryInterval = 5;
+  };
 
   # Locale
   time.timeZone = "Europe/Amsterdam";
@@ -71,46 +78,17 @@
 
 
 
-  # Enable the KDE Plasma Desktop Environment.
-  services.displayManager.sddm.enable = true;
-  services.desktopManager.plasma6.enable = true;
-
-
-  modules.nixos.steam.enable = true;
-
-  modules.nixos.openrgb = {
-    enable = true;
-    serverStartDelay = 3;
-    initRunArgs = ''-d "NZXT RGB & Fan Controller" -c 5D0167'';
-    initRunDelay = 10;
-    initRunTries = 10;
-    initRunTryInterval = 5;
+  modules.nixos = {
+    plasma.enable = true;
+    steam.enable = true;
   };
 
-  # List packages installed in system profile. To search, run:
-  # $ nix search wget
-  programs.nano.enable = false;
-  programs.neovim.enable = true;
-  programs.neovim.defaultEditor = true;
-  hardware.keyboard.zsa.enable = true;
-  programs.bash = { 
-    # Add a function to manage the brightness of the screen
-    interactiveShellInit = ''
-      br() {
-        if [ $# -eq 1 ]; then
-          ddcutil -d 1 setvcp x10 $1; ddcutil -d 2 setvcp x10 $1
-        elif [ $# -eq 2 ]; then
-          ddcutil -d $1 setvcp x10 $2;
-        else
-          echo "Use either <screen> <brightness> or <brightness>"
-        fi
-      }
-    '';
+  services = {
+    printing.enable = true; # Enables printing
+    openssh.enable = true; # SSH daemon
   };
-  environment.systemPackages = with pkgs; [
-    ddcutil
-    keymapp
-  ];
+
+  hardware.keyboard.zsa.enable = true; # udevs for flashing ZSA Moonlander keyboard
 
   # Hyprland
   programs.hyprland.enable = true;
@@ -118,8 +96,38 @@
   xdg.portal.enable = true;
   xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
 
-  # Enable the OpenSSH daemon.
-  services.openssh.enable = true;
+  programs = {
+    nano.enable = false;
+    neovim = {
+      enable = true;
+      defaultEditor = true;
+    };
+
+    bash = { 
+      # Add a function to manage the brightness of the screen
+      interactiveShellInit = ''
+        br() {
+          if [ $# -eq 1 ]; then
+            ddcutil -d 1 setvcp x10 $1; ddcutil -d 2 setvcp x10 $1
+          elif [ $# -eq 2 ]; then
+            ddcutil -d $1 setvcp x10 $2;
+          else
+            echo "Use either <screen> <brightness> or <brightness>"
+          fi
+        }
+      '';
+    };
+
+  };
+
+  environment.systemPackages = with pkgs; [
+    ddcutil
+    keymapp
+  ];
+
+
+
+
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions

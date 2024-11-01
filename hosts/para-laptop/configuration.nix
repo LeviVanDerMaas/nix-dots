@@ -36,6 +36,13 @@
   # Disk
   zramSwap.enable = true;
 
+  # No hibernation
+  systemd.sleep.extraConfig = ''
+    AllowHibernation=no
+    AllowHybridSleep=no
+    AllowSuspendThenHibernate=no
+  '';
+
   # Sound
   hardware.pulseaudio.enable = false;
   security.rtkit.enable = true;
@@ -52,9 +59,6 @@
   # Enable bluetooth
   hardware.bluetooth.enable = true;
   hardware.bluetooth.powerOnBoot = true;
-
-  # Enable CUPS to print documents.
-  services.printing.enable = true;
 
   # Locale
   time.timeZone = "Europe/Amsterdam";
@@ -75,27 +79,29 @@
 
 
 
-  # Enable the KDE Plasma Desktop Environment.
-  services.displayManager.sddm.enable = true;
-  services.desktopManager.plasma6.enable = true;
+  modules.nixos = {
+    plasma.enable = true;
+  };
 
-  # List packages installed in system profile. To search, run:
-  # $ nix search wget
-  programs.nano.enable = false;
-  programs.neovim.enable = true;
-  programs.neovim.defaultEditor = true;
+  services = {
+    printing.enable = true; # Enables printing
+    openssh.enable = true; # SSH daemon
+  };
+
+  programs = {
+    nano.enable = false;
+    neovim = {
+      enable = true;
+      defaultEditor = true;
+    };
+  };
+
   environment.systemPackages = with pkgs; [
   ];
 
-  # No hibernation
-  systemd.sleep.extraConfig = ''
-    AllowHibernation=no
-    AllowHybridSleep=no
-    AllowSuspendThenHibernate=no
-  '';
 
-  # Enable the OpenSSH daemon.
-  services.openssh.enable = true;
+
+
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions

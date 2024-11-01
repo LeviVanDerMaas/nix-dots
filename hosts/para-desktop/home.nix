@@ -16,6 +16,7 @@
 
   modules.home-manager.levi.extraPackages = with pkgs; [
     prismlauncher
+    r2modman
   ];
 
 
