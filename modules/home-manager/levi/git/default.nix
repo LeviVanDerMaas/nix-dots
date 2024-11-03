@@ -20,6 +20,7 @@ in
       d = "diff";
       ds = "diff --staged";
       s = "status";
+      softmerge = "merge --no-ff --no-commit";
     };
     extraConfig = {
       init.defaultBranch = "master";
