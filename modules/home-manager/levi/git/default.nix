@@ -7,7 +7,6 @@ in
     userName = "Levi van der Maas";
     userEmail = "";
     difftastic.enable = true;
-    lfs.enable = true;
     aliases = {
       l = "log --graph --abbrev-commit --decorate --format=format:'${commit-fstr}'";
       graph = "log --graph --abbrev-commit --decorate --all --format=format:'${commit-fstr}'";

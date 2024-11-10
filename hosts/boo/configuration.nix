@@ -79,16 +79,19 @@
 
 
   modules.nixos = {
+    ddcutil = {
+      enable = true;
+      numMonitors = 2;
+    };
     plasma.enable = true;
     steam.enable = true;
+    zsa.enable = true;
   };
 
   services = {
     printing.enable = true; # Enables printing
     openssh.enable = true; # SSH daemon
   };
-
-  hardware.keyboard.zsa.enable = true; # udevs for flashing ZSA Moonlander keyboard
 
   # Hyprland
   programs.hyprland.enable = true;
@@ -103,27 +106,7 @@
       defaultEditor = true;
     };
 
-    bash = { 
-      # Add a function to manage the brightness of the screen
-      interactiveShellInit = ''
-        br() {
-          if [ $# -eq 1 ]; then
-            ddcutil -d 1 setvcp x10 $1; ddcutil -d 2 setvcp x10 $1
-          elif [ $# -eq 2 ]; then
-            ddcutil -d $1 setvcp x10 $2;
-          else
-            echo "Use either <screen> <brightness> or <brightness>"
-          fi
-        }
-      '';
-    };
-
   };
-
-  environment.systemPackages = with pkgs; [
-    ddcutil
-    keymapp
-  ];
 
 
 
