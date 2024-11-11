@@ -1,8 +1,8 @@
 {
   services.xserver.enable = true;
-  services.xserver = {
+  services.xserver.xkb = {
     layout = "us";
-    xkbOptions = "caps:escape";
-    xkbVariant = "";
+    options = "caps:escape";
+    variant = "";
   };
 }

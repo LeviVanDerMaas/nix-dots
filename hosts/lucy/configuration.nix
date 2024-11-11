@@ -56,6 +56,9 @@
   # Networking
   networking.networkmanager.enable = true;
 
+  # Printing
+  services.printing.enable = true; # Enables printing
+
   # Enable bluetooth
   hardware.bluetooth.enable = true;
   hardware.bluetooth.powerOnBoot = true;
@@ -82,22 +85,6 @@
   modules.nixos = {
     plasma.enable = true;
   };
-
-  services = {
-    printing.enable = true; # Enables printing
-    openssh.enable = true; # SSH daemon
-  };
-
-  programs = {
-    nano.enable = false;
-    neovim = {
-      enable = true;
-      defaultEditor = true;
-    };
-  };
-
-  environment.systemPackages = with pkgs; [
-  ];
 
 
 

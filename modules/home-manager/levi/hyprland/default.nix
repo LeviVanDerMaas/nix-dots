@@ -5,7 +5,9 @@ let
 in
 {
   options.modules.home-manager.levi.hyprland = {
-    enable = lib.mkEnableOption "Hyprland Home-Manager Module";
+    enable = lib.mkEnableOption ''
+      Hyprland home-manager module. Make sure to also enable system module for Hyprland!
+    '';
   };
 
   config = lib.mkIf cfg.enable {

@@ -14,6 +14,7 @@ in
     ./nvim
     ./ripgrep
     ./shell
+    ./thefuck
     ./zoxide
   ];
 

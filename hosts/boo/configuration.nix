@@ -46,18 +46,11 @@
     pulse.enable = true;
   };
 
+  # Printing
+  services.printing.enable = true; # Enables printing
+
   # Networking
   networking.networkmanager.enable = true;
-
-  # RGB
-  modules.nixos.openrgb = {
-    enable = true;
-    serverStartDelay = 3;
-    initRunArgs = ''-d "NZXT RGB & Fan Controller" -c 5D0167'';
-    initRunDelay = 10;
-    initRunTries = 10;
-    initRunTryInterval = 5;
-  };
 
   # Locale
   time.timeZone = "Europe/Amsterdam";
@@ -83,29 +76,18 @@
       enable = true;
       numMonitors = 2;
     };
+    hyprland.enable = true;
+    openrgb = {
+      enable = true;
+      serverStartDelay = 3;
+      initRunArgs = ''-d "NZXT RGB & Fan Controller" -c 5D0167'';
+      initRunDelay = 10;
+      initRunTries = 10;
+      initRunTryInterval = 5;
+    };
     plasma.enable = true;
     steam.enable = true;
     zsa.enable = true;
-  };
-
-  services = {
-    printing.enable = true; # Enables printing
-    openssh.enable = true; # SSH daemon
-  };
-
-  # Hyprland
-  programs.hyprland.enable = true;
-  # Set desktop portal, needed for Hyprland.
-  xdg.portal.enable = true;
-  xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
-
-  programs = {
-    nano.enable = false;
-    neovim = {
-      enable = true;
-      defaultEditor = true;
-    };
-
   };
 
 
