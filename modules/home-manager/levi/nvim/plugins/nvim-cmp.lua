@@ -3,7 +3,10 @@ local luasnip = require 'luasnip'
 local lspkind = require 'lspkind'
 
 -- Needed for integrating copilot_cmp with nvim_cmp
-require("copilot").setup({})
+require("copilot").setup({
+    suggestion = { enabled = false },
+    panel = { enabled = false },
+})
 require("copilot_cmp").setup()
 local has_words_before = function()
     if vim.api.nvim_buf_get_option(0, "buftype") == "prompt" then return false end
@@ -62,6 +65,30 @@ cmp.setup({
         { name = 'buffer' },                  -- source current buffer
         { name = 'calc' },                    -- source for math calculation
     }),
+    sorting = {
+
+        -- Prioritize is a custom comperator implemented by copilot,
+        -- by setting it to two and then just using the default (or your own)
+        -- setup for cmp sorting, it prevents copilot from always appearing
+        -- at the top of the list and will instead bump up other cmp
+        -- sources if they are better matches.
+        priority_weight = 2,
+        comparators = {
+            require("copilot_cmp.comparators").prioritize,
+
+            -- Below is the default comparitor list and order for nvim-cmp
+            cmp.config.compare.offset,
+            -- cmp.config.compare.scopes, --this is commented in nvim-cmp too
+            cmp.config.compare.exact,
+            cmp.config.compare.score,
+            cmp.config.compare.recently_used,
+            cmp.config.compare.locality,
+            cmp.config.compare.kind,
+            cmp.config.compare.sort_text,
+            cmp.config.compare.length,
+            cmp.config.compare.order,
+        },
+    },
     window = {
         completion = cmp.config.window.bordered(),
         documentation = cmp.config.window.bordered(),
