@@ -30,8 +30,12 @@
 
 
   # Bootloader
+  # MAKE SURE YOU HAVE READ THE HARDWARE CONFIG BEFORE CHANGING THE BOOTLOADER TO SOMETHING
+  # OTHER THAN SYSTEMD-BOOT OR CHANGING THE MOUNT POINTS!
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
+  boot.loader.efi.efiSysMountPoint = "/efi";
+  boot.loader.systemd-boot.xbootldrMountPoint = "/boot";
 
   # Disk
   zramSwap.enable = true;
