@@ -34,9 +34,9 @@ in
         (genDirectionBinds "$mainMod CTRL" "swapwindow")
 
         [ # Other (non-generated) general binds
-          "$maindMod, F, fullscreen"
-          "$maindMod CTRL, F, togglefloating"
-          "$maindMod, P, pin"
+          "$mainMod, F, fullscreen"
+          "$mainMod CTRL, F, togglefloating"
+          "$mainMod, P, pin"
           
           "$mainMod ALT, C, killactive"
           "$mainMod ALT, BACKSPACE, exit"
