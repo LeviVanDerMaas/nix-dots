@@ -12,8 +12,10 @@ in
 
   config = lib.mkIf cfg.enable {
     programs.hyprland.enable = true;
-    # Set desktop portal, needed for Hyprland.
-    xdg.portal.enable = true;
-    xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
+
+    # I added these options once but I dont know why and it seems to
+    # no longer be necessary.
+    # xdg.portal.enable = true;
+    # xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
   };
 }

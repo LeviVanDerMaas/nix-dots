@@ -1,9 +1,14 @@
-{ pkgs, config, lib, ... }:
+{ config, lib, ... }:
 
 let 
   cfg = config.modules.home-manager.levi.hyprland;
 in
 {
+  imports = [
+    ./keywords.nix
+    ./variables.nix
+  ];
+
   options.modules.home-manager.levi.hyprland = {
     enable = lib.mkEnableOption ''
       Hyprland home-manager module. Make sure to also enable system module for Hyprland!
@@ -14,10 +19,5 @@ in
     wayland.windowManager.hyprland = {
       enable = true;
     };
-
-    qt.enable = true;
-    qt.style.name = "breeze-dark";
-
-    services.dunst.enable = true;
   };
 }
