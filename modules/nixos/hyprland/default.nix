@@ -30,6 +30,6 @@ in
     # does not implement a file picker).
     xdg.portal.enable = cfg.installGTKPortal;
     xdg.portal.extraPortals = 
-      lib.list.optional cfg.installGTKPortal [ pkgs.xdg-desktop-portal-gtk ];
+      lib.optionals cfg.installGTKPortal [ pkgs.xdg-desktop-portal-gtk ];
   };
 }
