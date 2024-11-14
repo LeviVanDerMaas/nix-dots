@@ -12,6 +12,9 @@
     ../../modules/home-manager/levi
   ];
 
+
+  modules.home-manager.levi.hyprland.enable = true;
+
   modules.home-manager.levi.extraPackages = with pkgs; [
   ];
 
