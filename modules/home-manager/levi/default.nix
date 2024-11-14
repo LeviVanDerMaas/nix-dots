@@ -6,6 +6,7 @@ in
 {
   imports = [
     ./bat
+    ./dunst
     ./fd
     ./firefox
     ./git

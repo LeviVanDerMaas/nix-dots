@@ -1,4 +1,4 @@
-{ config, lib, ... }:
+{ pkgs, config, lib, ... }:
 
 let
   cfg = config.modules.home-manager.levi.hyprland;
@@ -64,10 +64,7 @@ in
 
       exec-once = [
         "discord"
-      ];
-
-
-
-
+      ] ++
+      lib.optionals cfg.useDunst [ "${pkgs.dunst}/bin/dunst" ];
     };
 }
