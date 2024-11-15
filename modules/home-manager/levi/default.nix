@@ -8,6 +8,7 @@ in
     ./bat
     ./dunst
     ./fd
+    ./flameshot
     ./firefox
     ./git
     ./hyprland

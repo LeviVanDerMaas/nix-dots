@@ -9,7 +9,7 @@ in
       border_size = 1;
       gaps_in = 5;
       gaps_out = 10;
-      "col.active_border" = "rgba(4e4075ee) rgba(382235ee)";
+      "col.active_border" = "rgba(8620dfee)";
       "col.inactive_border" = "rgba(595959aa)";
       layout = "dwindle";
     };
@@ -34,8 +34,6 @@ in
 
     dwindle = {
       preserve_split = true; # If false, resizing windows can change splits.
-      smart_split = true; # Splits into the direction of the mouse
-
     };
 
     decoration = {
@@ -45,10 +43,6 @@ in
         enabled = true;
         size = 3;
       };
-
-      # shadow = {
-      #   enabled = true;
-      # };
     };
 
     animations = {

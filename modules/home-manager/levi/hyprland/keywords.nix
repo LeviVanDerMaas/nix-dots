@@ -49,7 +49,8 @@ in
           "$mainMod, E, exec, ${pkgs.dolphin}/bin/dolphin"
           "$mainMod, B, exec, ${pkgs.firefox}/bin/firefox"
           "$mainMod, V, togglespecialworkspace, discord"
-          "$mainMod, V, movetoworkspace, special:discord, class:(discord)"
+          "$mainMod, V, movetoworkspace, special:discord,class:(discord)$"
+          "$mainMod, P, exec, XDG_CURRENT_DESKTOP=sway flameshot gui"
         ]
       ];
 
@@ -61,19 +62,19 @@ in
 
       windowrulev2 = [
         "workspace special:discord silent, class:(discord)"
-        "forceinput,class:^(ulauncher)$"
-        "dimaround,class:^(ulauncher)$"
+        # "forceinput,class:^(ulauncher)$"
+        "dimaround, class:(ulauncher)"
       ];
 
       exec-once = [
         # Utilities
-        "${pkgs.ulauncher}/bin/ulauncher --no-window-shadow --hide-window"
+        "systemctl --user start hyprpolkitagent"
         "${pkgs.hyprpaper}/bin/hyprpaper"
-        "${pkgs.systemd}/bin/systemctl --user start ${pkgs.hyprpolkitagent}/bin/hyprpolkitagent"
+        "${pkgs.ulauncher}/bin/ulauncher --no-window-shadow --hide-window"
 
         # Ordinary applications
         "${pkgs.discord}/bin/discord"
       ] ++
-      lib.optionals cfg.useDunst [ "${pkgs.dunst}/bin/dunst" ];
+      lib.optionals cfg.integrateDunst [ "${pkgs.dunst}/bin/dunst" ];
     };
 }
