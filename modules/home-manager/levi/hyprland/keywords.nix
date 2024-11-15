@@ -44,9 +44,10 @@ in
         ]
 
         [ # Application binds
-          "$mainMod, T, exec, kitty"
-          "$mainMod, E, exec, dolphin"
-          "$mainMod, B, exec, firefox"
+          "$mainMod, T, exec, ${pkgs.kitty}/bin/kitty"
+          "$mainMod, SPACE, exec, ${pkgs.ulauncher}/bin/ulauncher-toggle"
+          "$mainMod, E, exec, ${pkgs.dolphin}/bin/dolphin"
+          "$mainMod, B, exec, ${pkgs.firefox}/bin/firefox"
           "$mainMod, V, togglespecialworkspace, discord"
           "$mainMod, V, movetoworkspace, special:discord, class:(discord)"
         ]
@@ -60,10 +61,18 @@ in
 
       windowrulev2 = [
         "workspace special:discord silent, class:(discord)"
+        "forceinput,class:^(ulauncher)$"
+        "dimaround,class:^(ulauncher)$"
       ];
 
       exec-once = [
-        "discord"
+        # Utilities
+        "${pkgs.ulauncher}/bin/ulauncher --no-window-shadow --hide-window"
+        "${pkgs.hyprpaper}/bin/hyprpaper"
+        "${pkgs.systemd}/bin/systemctl --user start ${pkgs.hyprpolkitagent}/bin/hyprpolkitagent"
+
+        # Ordinary applications
+        "${pkgs.discord}/bin/discord"
       ] ++
       lib.optionals cfg.useDunst [ "${pkgs.dunst}/bin/dunst" ];
     };

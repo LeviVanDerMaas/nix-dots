@@ -9,7 +9,7 @@
   environment.systemPackages = with pkgs; [
     (sddm-astronaut.override {
       themeConfig = {
-        background = "${./background.png}";
+        background = "${../../../assets/wallpapers/woodrot.png}";
         FullBlur = "false";
         PartialBlur = "false";
         OverrideTextFieldColor="#FFFFFF";
