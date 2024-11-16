@@ -13,7 +13,12 @@
   ];
 
 
-  modules.home-manager.levi.hyprland.enable = true;
+  modules.home-manager.levi.hyprland = {
+    enable = true;
+    monitors = [
+      "eDP-1, 1920x1080@60, 0x0, 1"
+    ];
+  };
 
   modules.home-manager.levi.extraPackages = with pkgs; [
   ];

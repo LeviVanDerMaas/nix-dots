@@ -8,27 +8,28 @@ in
     ./keywords.nix
     ./variables.nix
     ./hyprpaper.nix
-    ./flameshotIntegration.nix
   ];
 
   options.modules.home-manager.levi.hyprland = {
     enable = lib.mkEnableOption ''
       Hyprland home-manager module. Make sure to also enable system module for Hyprland!
     '';
+    monitors = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
+      default = [];
+      description = ''
+        Just the list that you would pass into 
+        `wayland.windowManager.hyprland.settings.monitor`.
+        Reason it is a seperate model is because this is very much
+        system-dependent, so this lets you configure it at a per-system
+        level.
+      '';
+    };
     integrateDunst = lib.mkOption {
       type = lib.types.bool;
       default = true;
       description = ''
         Enable and autostart Dunst messaging daemon.
-      '';
-    };
-    integrateFlameshot = lib.mkOption {
-      type = lib.types.bool;
-      default = true;
-      description = ''
-        Enable Flameshot screenshot tool and attempt to integrate with
-        Hyprland. This tool was originally created for X11 so experience
-        may be suboptimal.
       '';
     };
   };
@@ -37,16 +38,16 @@ in
     wayland.windowManager.hyprland = {
       enable = true;
       settings = {
-        monitor = "eDP-2, 1920x1080@60, 0x0, 1";
+        monitor = cfg.monitors;
       };
     };
 
     modules.home-manager.levi = {
       dunst.enable = cfg.integrateDunst;
-      flameshot.enable = cfg.integrateFlameshot;
     };
 
     home.packages = with pkgs; [
+      grimblast
       hyprpolkitagent
       ulauncher
     ];

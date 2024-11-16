@@ -50,7 +50,11 @@ in
           "$mainMod, B, exec, ${pkgs.firefox}/bin/firefox"
           "$mainMod, V, togglespecialworkspace, discord"
           "$mainMod, V, movetoworkspace, special:discord,class:(discord)$"
-          "$mainMod, P, exec, XDG_CURRENT_DESKTOP=sway flameshot gui"
+        ]
+
+        [ # Screenshots
+          "$ , PRINT, exec, grimblast copy output"
+          "$ $mainMod, PRINT, exec, grimblast copy area"
         ]
       ];
 
