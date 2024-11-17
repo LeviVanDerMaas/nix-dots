@@ -53,8 +53,9 @@ in
         ]
 
         [ # Screenshots
-          "$ , PRINT, exec, grimblast copy output"
-          "$ $mainMod, PRINT, exec, grimblast copy area"
+          " , PRINT, exec, grimblast copy output"
+          "SHIFT, PRINT, exec, grimblast copy area"
+          "CTRL, PRINT, exec, grimblast copy screen"
         ]
       ];
 
@@ -66,7 +67,6 @@ in
 
       windowrulev2 = [
         "workspace special:discord silent, class:(discord)"
-        # "forceinput,class:^(ulauncher)$"
         "dimaround, class:(ulauncher)"
       ];
 
