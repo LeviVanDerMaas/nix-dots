@@ -44,6 +44,7 @@ in
 
     modules.home-manager.levi = {
       dunst.enable = cfg.integrateDunst;
+      waybar.enable = true;
     };
 
     home.packages = with pkgs; [

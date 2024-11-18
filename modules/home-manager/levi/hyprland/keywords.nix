@@ -75,6 +75,7 @@ in
         "systemctl --user start hyprpolkitagent"
         "${pkgs.hyprpaper}/bin/hyprpaper"
         "${pkgs.ulauncher}/bin/ulauncher --no-window-shadow --hide-window"
+        "${pkgs.waybar}/bin/waybar"
 
         # Ordinary applications
         "${pkgs.discord}/bin/discord"
