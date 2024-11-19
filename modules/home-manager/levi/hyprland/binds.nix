@@ -19,14 +19,14 @@ let
 in
 {
   wayland.windowManager.hyprland.settings = lib.mkIf cfg.enable {
-    "$mainMod" = "Super_L";
-    "$secondaryMod" = "Super_L";
+    "$mainMod" = "SUPER";
+    "$secondaryMod" = "MOD3";
 
     bind = builtins.concatLists [
       # Generated general workspace binds
       (genNumWorkspaceBinds "$mainMod" "focusworkspaceoncurrentmonitor")
       (genNumWorkspaceBinds "$mainMod ALT" "workspace")
-      (genNumWorkspaceBinds "$mainMod SHIFT" "movetoworkspace")
+      (genNumWorkspaceBinds "$secondaryMod" "movetoworkspace")
       (genNumWorkspaceBinds "$mainMod CTRL" "movetoworkspacesilent")
 
       # Generated general window binds

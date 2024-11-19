@@ -52,10 +52,9 @@ in
         monitor = cfg.monitors;
 
         input = {
-          kb_layout = "us";
-          kb_variant = "altgr-intl";
+          kb_layout = "us_super_r_mod3";
           # On us layouts, 
-          # kb_options = "caps:escape, lv3:rwin_switch";
+          kb_options = "caps:escape";
           repeat_rate = 60;
           repeat_delay = 600;
           follow_mouse = 1;
