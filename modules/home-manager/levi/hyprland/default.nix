@@ -102,6 +102,7 @@ in
     home.packages = with pkgs; [
       grimblast
       hyprpolkitagent
+      hyprpicker
       ulauncher
     ];
   };

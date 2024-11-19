@@ -15,53 +15,71 @@ let
     "${mods}, A, ${dispatcher}, l"
     "${mods}, S, ${dispatcher}, d"
     "${mods}, D, ${dispatcher}, r"
+
+    "${mods}, UP, ${dispatcher}, u"
+    "${mods}, LEFT, ${dispatcher}, l"
+    "${mods}, DDOWN, ${dispatcher}, d"
+    "${mods}, RIGHT, ${dispatcher}, r"
+
+    "${mods}, H, ${dispatcher}, l"
+    "${mods}, J, ${dispatcher}, d"
+    "${mods}, K, ${dispatcher}, u"
+    "${mods}, L, ${dispatcher}, r"
   ];
 in
 {
   wayland.windowManager.hyprland.settings = lib.mkIf cfg.enable {
-    "$mainMod" = "SUPER";
-    "$secondaryMod" = "MOD3";
+    # MOD3 is typically not set to any (physically available) key in most every layout.
+    # So you will need a custom layout, e.g. make Super_R trigger MOD3 (instead of MOD4, like Super_L).
+    # This has the convenience of being practically guaranteed to never interfere with any other
+    # mods in programs or software.
+    "$alphaMod" = "SUPER";
+    "$betaMod" = "MOD3";
+    "$extraMod" = "CTRL";
 
     bind = builtins.concatLists [
       # Generated general workspace binds
-      (genNumWorkspaceBinds "$mainMod" "focusworkspaceoncurrentmonitor")
-      (genNumWorkspaceBinds "$mainMod ALT" "workspace")
-      (genNumWorkspaceBinds "$secondaryMod" "movetoworkspace")
-      (genNumWorkspaceBinds "$mainMod CTRL" "movetoworkspacesilent")
+      (genNumWorkspaceBinds "$alphaMod" "focusworkspaceoncurrentmonitor")
+      (genNumWorkspaceBinds "$alphaMod $extrayMod" "workspace")
+      (genNumWorkspaceBinds "$betaMod" "movetoworkspace")
+      (genNumWorkspaceBinds "$betaMod $extraMod" "movetoworkspacesilent")
 
       # Generated general window binds
-      (genDirectionBinds "$mainMod" "movefocus")
-      (genDirectionBinds "$mainMod SHIFT" "movewindow")
-      (genDirectionBinds "$mainMod CTRL" "swapwindow")
+      (genDirectionBinds "$alphaMod" "movefocus")
+      (genDirectionBinds "$betaMod" "movewindow")
+      (genDirectionBinds "$betaMod $extraMod" "swapwindow")
 
-      [ # Other (non-generated) general binds
-        "$mainMod, F, fullscreen"
-        "$mainMod CTRL, F, togglefloating"
-        "$mainMod, P, pin"
+      [ 
+        # Other (non-generated) general binds
+        "$alphaMod, F, fullscreen"
+        "$betaMod, F, togglefloating"
+        "$betaMod, P, pin"
+        "$betaMod, C, centerwindow"
         
-        "$mainMod ALT, C, killactive"
-        "$mainMod ALT, BACKSPACE, exit"
-        "$mainMod ALT, DELETE, exec, poweroff"
+        "$alphaMod $betaMod, C, killactive"
+        "$alphaMod $betaMod $extraMod, E, exit"
+        "$alphaMod $betaMod $extraMod ALT, P, exec, poweroff"
 
         # Application binds
-        "$mainMod, T, exec, ${pkgs.kitty}/bin/kitty"
-        "$mainMod, SPACE, exec, ${pkgs.ulauncher}/bin/ulauncher-toggle"
-        "$mainMod, E, exec, ${pkgs.dolphin}/bin/dolphin"
-        "$mainMod, B, exec, ${pkgs.firefox}/bin/firefox"
-        "$mainMod, V, togglespecialworkspace, discord"
-        "$mainMod, V, movetoworkspace, special:discord,class:(discord)$"
+        "$alphaMod, T, exec, ${pkgs.kitty}/bin/kitty"
+        "$alphaMod, SPACE, exec, ${pkgs.ulauncher}/bin/ulauncher-toggle"
+        "$alphaMod, E, exec, ${pkgs.dolphin}/bin/dolphin"
+        "$alphaMod, B, exec, ${pkgs.firefox}/bin/firefox"
+        "$alphaMod, V, togglespecialworkspace, discord"
+        "$alphaMod, V, movetoworkspace, special:discord,class:(discord)$"
          
         # Screenshots
         " , PRINT, exec, grimblast copy output"
-        "SHIFT, PRINT, exec, grimblast copy area"
-        "CTRL, PRINT, exec, grimblast copy screen"
+        "$alphaMod, PRINT, exec, grimblast copy area"
+        "$alphaMod $extraMod, PRINT, exec, grimblast copy screen"
+        "$betaMod, PRINT, exec, hyprpicker -anf hex"
       ]
     ];
 
     # Mouse movement binds
     bindm = [
-      "$mainMod, mouse:272, movewindow"
-      "$mainMod, mouse:273, resizewindow"
+      "$alphaMod, mouse:272, movewindow"
+      "$alphaMod, mouse:273, resizewindow"
     ];
   };
 }
