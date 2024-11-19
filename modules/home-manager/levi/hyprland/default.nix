@@ -5,9 +5,10 @@ let
 in
 {
   imports = [
-    ./keywords.nix
-    ./variables.nix
+    ./binds.nix
+    ./exec.nix
     ./hyprpaper.nix
+    ./windowrules.nix
   ];
 
   options.modules.home-manager.levi.hyprland = {
@@ -37,8 +38,60 @@ in
   config = lib.mkIf cfg.enable {
     wayland.windowManager.hyprland = {
       enable = true;
+
       settings = {
+        general = {
+          border_size = 1;
+          gaps_in = 5;
+          gaps_out = 10;
+          "col.active_border" = "rgba(8620dfee)";
+          "col.inactive_border" = "rgba(595959aa)";
+          layout = "dwindle";
+        };
+
         monitor = cfg.monitors;
+
+        input = {
+          kb_layout = "us";
+          kb_variant = "altgr-intl";
+          # On us layouts, 
+          # kb_options = "caps:escape, lv3:rwin_switch";
+          repeat_rate = 60;
+          repeat_delay = 600;
+          follow_mouse = 1;
+        };
+
+        dwindle = {
+          preserve_split = true; # If false, resizing windows can change splits.
+        };
+
+        decoration = {
+          rounding = 10;
+          blur = {
+            enabled = true;
+            size = 3;
+          };
+        };
+
+        animations = {
+          enabled = true;
+          bezier = [
+            "standardBezier, 0.05, 0.9, 0.1, 1.05"
+          ];
+          animation = [
+            "windows, 1, 4, standardBezier,"
+            "windowsOut, 1, 4, default, popin 80%"
+            "border, 1, 5, default"
+            "borderangle, 1, 4, default"
+            "fade, 1, 4, default"
+            "workspaces, 1, 4, default"
+          ];
+        };
+
+        misc = {
+          disable_hyprland_logo = true;
+          disable_splash_rendering = true;
+        };
       };
     };
 

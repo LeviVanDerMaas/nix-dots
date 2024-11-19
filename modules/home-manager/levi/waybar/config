@@ -44,7 +44,7 @@
         "format-wifi": "{essid} ({signalStrength}%) ",
         "format-ethernet": "{ifname}: {ipaddr}/{cidr} ",
         "format-disconnected": "Disconnected ⚠",
-        "on-click": "nmtui"
+        "on-click": "kitty nmtui"
     },
     "pulseaudio": {
         //"scroll-step": 1,
