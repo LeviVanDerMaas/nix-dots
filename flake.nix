@@ -22,17 +22,30 @@
     # Catppuccin theme for bat
     batThemeCatppuccin.url = "github:catppuccin/bat/main";
     batThemeCatppuccin.flake = false;
-};
 
-  outputs = { self, nixpkgs, ... }@inputs: {
+    # Vivado Xilinx
+    nix-xilinx = {
+      url = "gitlab:doronbehar/nix-xilinx";
+    };
+  };
+
+  outputs = { self, nixpkgs, nix-xilinx, ... }@inputs: 
+
+  let
+    flake-overlays = [
+      nix-xilinx.overlay
+    ];
+  in
+  {
+    overlays = flake-overlays;
     nixosConfigurations = {
       "boo" = nixpkgs.lib.nixosSystem {
         specialArgs = { inherit inputs; }; # Pass flake inputs to external config files
-	modules = [ ./hosts/boo/configuration.nix ];
+        modules = [ (import ./hosts/boo/configuration.nix flake-overlays) ];
       };
       "lucy" = nixpkgs.lib.nixosSystem {
         specialArgs = { inherit inputs; }; # Pass flake inputs to external config files
-	modules = [ ./hosts/lucy/configuration.nix ];
+        modules = [ (import ./hosts/lucy/configuration.nix flake-overlays) ];
       };
     };
   };
