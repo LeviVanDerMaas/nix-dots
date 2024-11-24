@@ -28,6 +28,8 @@ in
           stdenv.cc.cc.lib
           libkrb5
           keyutils
+
+          gamescope
         ];
         extraLibraries = pkgs: with pkgs;
           lib.optionals cfg.install-gperftools [ gperftools ] ++ [

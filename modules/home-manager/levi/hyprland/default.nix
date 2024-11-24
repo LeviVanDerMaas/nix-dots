@@ -38,8 +38,12 @@ in
   config = lib.mkIf cfg.enable {
     wayland.windowManager.hyprland = {
       enable = true;
-
+       
       settings = {
+        env = [
+          "QT_QPA_PLATFORMTHEME,qt5ct"
+        ];
+
         general = {
           border_size = 1;
           gaps_in = 5;
