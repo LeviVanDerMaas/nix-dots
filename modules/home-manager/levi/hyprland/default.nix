@@ -56,9 +56,9 @@ in
         monitor = cfg.monitors;
 
         input = {
-          kb_layout = "us_super_r_mod3";
+          kb_layout = "us";
           # On us layouts, 
-          kb_options = "caps:escape";
+          kb_options = "caps:escape compose:sclk";
           repeat_rate = 60;
           repeat_delay = 600;
           follow_mouse = 1;
