@@ -8,7 +8,7 @@
 xkb_symbols "basic" {
 
     include "us(basic)"
-    name[Group1] = "US Keyboard, Separate SUPER_L and SUPER_R";
-    modifier_map Mod3 { Super_R };
+    name[Group1] = "US, Super_R and Menu trigger Mod3";
+    modifier_map Mod3 { Super_R, Menu };
     modifier_map Mod4 { Super_L }; 
 };
