@@ -5,6 +5,7 @@
     themeFile = "Catppuccin-Mocha";
 
     settings = {
+      confirm_os_window_close = -1;
       background_blur = 1;
       background_opacity = "0.80";
       enable_audio_bell = false;
