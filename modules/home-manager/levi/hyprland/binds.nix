@@ -34,9 +34,9 @@ in
     bind = builtins.concatLists [
       # Generated general workspace binds
       (genNumBinds "$mainMod" "workspace")
-      (genNumBinds "$mainMod SHIFT" "focusworkspaceoncurrentmonitor")
-      (genNumBinds "$betaMod CTRL" "movetoworkspace")
-      (genNumBinds "$betaMod SHIFT CTRL" "movetoworkspacesilent")
+      (genNumBinds "$mainMod SHIFT" "movetoworkspace")
+      (genNumBinds "$mainMod CTRL" "movetoworkspacesilent")
+      (genNumBinds "$mainMod ALT" "focusworkspaceoncurrentmonitor")
 
       # Generated general window binds
       (genDirectionBinds "$mainMod" "movefocus")
