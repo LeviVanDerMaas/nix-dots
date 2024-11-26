@@ -9,10 +9,7 @@
     "modules-right": ["network", "pulseaudio", "tray", "clock"],
     "hyprland/workspaces": {
         "disable-scroll": false,
-        "all-outputs": false,
-    },
-    "hyprland/mode": {
-        "format": "<span style=\"italic\">{}</span>"
+        "all-outputs": true,
     },
     "tray": {
         // "icon-size": 21,
