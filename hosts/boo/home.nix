@@ -12,7 +12,13 @@
     ../../modules/home-manager/levi
   ];
 
-  modules.home-manager.levi.hyprland.enable = true;
+  modules.home-manager.levi.hyprland = {
+    enable = true;
+    monitors = [
+      "DP-1, 1920x1080, 0x0, 1"
+      "DP-2, 1920x1080, -1920x0, 1"
+    ];
+  };
 
   modules.home-manager.levi.extraPackages = with pkgs; [
     prismlauncher
