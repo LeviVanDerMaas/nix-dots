@@ -12,6 +12,6 @@ pkgs.writeShellScript "ddcutilBrightnessScript" ''
   elif [ $# -eq 2 ]; then
     ${ddcutil} -d $1 setvcp x10 $2;
   else
-    echo "Use either <screen> <brightness> or <brightness>"
+    echo 'INCORRECT INPUT: Use either "<screen> <brightness>" or "<brightness>"'
   fi
 ''

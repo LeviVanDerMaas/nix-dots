@@ -82,7 +82,7 @@ flake-overlays:
       enable = true;
       numMonitors = 2;
     };
-    sddm.setupCommands = "xrandr --output DP-1 --mode 1920x1080 --pos 0x0 --output DP-2 --mode 1920x1080 --pos -1920x0";
+    sddm.setupCommands = "${pkgs.xorg.xrandr}/bin/xrandr --output DP-3 --left-of DP-1";
     hyprland.enable = true;
     openrgb = {
       enable = true;
