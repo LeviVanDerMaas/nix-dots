@@ -20,11 +20,6 @@ let
     "${mods}, LEFT, ${dispatcher}, l"
     "${mods}, DOWN, ${dispatcher}, d"
     "${mods}, RIGHT, ${dispatcher}, r"
-
-    "${mods}, H, ${dispatcher}, l"
-    "${mods}, J, ${dispatcher}, d"
-    "${mods}, K, ${dispatcher}, u"
-    "${mods}, L, ${dispatcher}, r"
   ];
 in
 {
