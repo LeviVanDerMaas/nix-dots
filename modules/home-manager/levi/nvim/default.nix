@@ -102,6 +102,11 @@
       # Code-editing
       vim-sleuth # Automatic heuristic setting of shiftwidth and expandtab
       {
+        # Operator-based inserting and deleting of (, ", <tag>, etc.
+        plugin = nvim-surround;
+        config = toLua "require('nvim-surround').setup()";
+      }
+      {
         # Adds indentation guides
         plugin = indent-blankline-nvim;
         config = toLua "require('ibl').setup()";
