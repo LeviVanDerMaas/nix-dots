@@ -101,6 +101,8 @@
 
       # Code-editing
       vim-sleuth # Automatic heuristic setting of shiftwidth and expandtab
+      rainbow-delimiters-nvim # Rainbow brackets, braces, etc.
+
       {
         # Operator-based inserting and deleting of (, ", <tag>, etc.
         plugin = nvim-surround;
