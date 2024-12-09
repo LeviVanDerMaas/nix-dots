@@ -9,7 +9,7 @@ let
     builtins.genList (i: "${mods}, ${toStr (i + 1)}, ${dispatcher}, ${toStr (i + 1)}") 9 ++
     [ "${mods}, 0, ${dispatcher}, 10"];
 
-  # Generate binds for dispatchers with direction parameters, bound to WASD.
+  # Generate binds for dispatchers with direction parameters.
   genDirectionBinds = mods: dispatcher: [
     "${mods}, W, ${dispatcher}, u"
     "${mods}, A, ${dispatcher}, l"
@@ -20,6 +20,11 @@ let
     "${mods}, LEFT, ${dispatcher}, l"
     "${mods}, DOWN, ${dispatcher}, d"
     "${mods}, RIGHT, ${dispatcher}, r"
+
+    "${mods}, H, ${dispatcher}, l"
+    "${mods}, J, ${dispatcher}, d"
+    "${mods}, K, ${dispatcher}, u"
+    "${mods}, L, ${dispatcher}, r"
   ];
 in
 {
@@ -46,8 +51,8 @@ in
         "$mainMod, P, pin"
         "$mainMod, C, centerwindow"
 
-        "$mainMod, L, togglesplit"
-        "$mainMod SHIFT, L, swapsplit"
+        "$mainMod, Q, togglesplit"
+        "$mainMod SHIFT, Q, swapsplit"
         
         # Screenshots
         " , PRINT, exec, grimblast copy output"
@@ -67,7 +72,6 @@ in
         "$mainMod, B, exec, ${pkgs.firefox}/bin/firefox"
         "$mainMod, V, togglespecialworkspace, discord"
         "$mainMod, V, movetoworkspace, special:discord,class:(discord)$"
-         
       ]
     ];
 
