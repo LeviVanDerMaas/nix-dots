@@ -8,10 +8,23 @@ require("copilot").setup({
     panel = { enabled = false },
 })
 require("copilot_cmp").setup()
+vim.cmd [[ silent! lua require("copilot.command").disable() ]] -- Make copilot be disabled by default
 local has_words_before = function()
     if vim.api.nvim_buf_get_option(0, "buftype") == "prompt" then return false end
     local line, col = unpack(vim.api.nvim_win_get_cursor(0))
     return col ~= 0 and vim.api.nvim_buf_get_text(0, line - 1, 0, line - 1, col, {})[1]:match("^%s*$") == nil
+end
+
+-- A custom nvim-cmp comperator that will always favour non copilot entries.
+local sortcompare_copilot_deprioritize = function(entry1, entry2)
+    if entry1.copilot and not entry2.copilot then
+        return false
+    elseif entry2.copilot and not entry1.copilot then
+        return true
+    elseif entry1.copilot and entry2.copilot then
+        return false
+    end
+    return nil
 end
 
 cmp.setup({
@@ -56,7 +69,8 @@ cmp.setup({
         ),
     }),
     sources = cmp.config.sources({
-        { name = "copilot",                group_index = 2 },
+        -- Allegdly the order of these also affects certain calculations
+        -- when sorting the entries (such as their priority)
         { name = 'path' },                    -- file paths
         { name = 'nvim_lsp' },                -- from language server
         { name = 'nvim_lsp_signature_help' }, -- display function signatures with current parameter emphasized
@@ -64,21 +78,37 @@ cmp.setup({
         { name = 'nvim_lua' },                -- complete neovim's Lua runtime API such vim.lsp.*
         { name = 'buffer' },                  -- source current buffer
         { name = 'calc' },                    -- source for math calculation
+
+        -- Put copilot at bottom to lower its priority
+        { name = "copilot" },
     }),
     sorting = {
-
-        -- Prioritize is a custom comperator implemented by copilot,
-        -- by setting it to two and then just using the default (or your own)
-        -- setup for cmp sorting, it prevents copilot from always appearing
-        -- at the top of the list and will instead bump up other cmp
-        -- sources if they are better matches.
         priority_weight = 2,
         comparators = {
-            require("copilot_cmp.comparators").prioritize,
-
-            -- Below is the default comparitor list and order for nvim-cmp
+            -- If a comperator returns true then the first element comes first,
+            -- false the second element comes first, and if nil then it tries
+            -- the next comperator. Below is the default comparitor list and
+            -- order for nvim-cmp. The cmp default is, in order: offset,
+            -- exact, score, recently used, locality, kind, sort_text, length,
+            -- order.
+            --
+            -- The source code comments for most of thedse defaults explains what
+            -- they do in a way that isn't too vague, but interestingly the three
+            -- highest ones (offset, exact, score) are very vague eventhough they
+            -- are the most commonly used ones. It does not help that these heavily
+            -- rely on properties of each entry that are computed across multiple source
+            -- files. From my understanding of reading the source code:
+            --  * I think offset is at what point an entry actually starts to match
+            --    some of the already typed text (maybe comperatively to other entries?)
+            --    e.g. for "table.fi" the entry "fiield" has a lower offset then "has_field()"
+            --    because the fi appears earlier. This aligns with what the plugin
+            --    maintainer says https://github.com/hrsh7th/nvim-cmp/issues/883.
+            --  * The exactness of an entry is simply wheter it matches the candidate to be completed
+            --    or not (and this also considers offset). The exact comperator will prefer one entry
+            --    over the other if one of them is exact while the other one isn't.
+            --  * I am not sure what score does, it seems to be a more complex calculation based
+            --    on various metrics that breaks a tie in most cases.
             cmp.config.compare.offset,
-            -- cmp.config.compare.scopes, --this is commented in nvim-cmp too
             cmp.config.compare.exact,
             cmp.config.compare.score,
             cmp.config.compare.recently_used,
