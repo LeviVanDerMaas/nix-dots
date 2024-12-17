@@ -29,3 +29,17 @@ function check_other_buf_modifed() -- Check if any buffer other than current is 
     end
     return false
 end
+
+function get_character_under_cursor()
+    local _, col = unpack(vim.api.nvim_win_get_cursor(0))
+    local line = vim.api.nvim_get_current_line()
+    return string.sub(line, col + 1, col + 1)
+end
+
+function character_under_cursor_blank()
+    local char = get_character_under_cursor()
+    -- Vim defines blank characters as being either Space or Tab.
+    -- We also return true for empty lines as the cursor is technically
+    -- on a nonblank character.
+    return char == "" or char == " " or char == "\t"
+end

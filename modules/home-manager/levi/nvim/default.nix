@@ -124,9 +124,11 @@
 
     ];
 
+    # options should come first because some other things may depend on it,
+    # e.g. what key is the leader key.
     extraLuaConfig = ''
-      ${builtins.readFile ./helpers.lua}
       ${builtins.readFile ./options.lua}
+      ${builtins.readFile ./helpers.lua}
       ${builtins.readFile ./keymaps.lua}
       ${builtins.readFile ./commands.lua}
     '';

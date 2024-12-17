@@ -17,9 +17,9 @@ vim.keymap.set('n', '<leader>sd', require('telescope.builtin').diagnostics, { de
 vim.keymap.set('n', '<leader>sr', require('telescope.builtin').resume, { desc = '[S]earch [R]esume' })
 vim.keymap.set('n', '<leader>vo', require('telescope.builtin').vim_options, { desc = 'Search [V]im [O]ptions' })
 
-vim.keymap.set('n', '<leader>cpe', require('copilot.command').enable, { desc = '[C]o[P]ilot [E]nable' })
-vim.keymap.set('n', '<leader>cpd', require('copilot.command').disable, { desc = '[C]o[P]ilot [D]isable' })
-vim.keymap.set('n', '<leader>cps', require('copilot.command').status, { desc = '[C]o[P]ilot [S]tatus' })
-
 -- Custom text object that selects all text in buffer
 vim.keymap.set({'v', 'o'}, 'aa', ':<C-u>normal! ggVG<CR>', { silent = true, desc = 'Select [All] [A]ll' })
+
+vim.keymap.set('n', '<leader>cpe', copilot_enable, { desc = '[C]o[P]ilot [E]nable' })
+vim.keymap.set('n', '<leader>cpd', require('copilot.command').disable, { desc = '[C]o[P]ilot [D]isable' })
+vim.keymap.set('n', '<leader>cps', require('copilot.command').status, { desc = '[C]o[P]ilot [S]tatus' })

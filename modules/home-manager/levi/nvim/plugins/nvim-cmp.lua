@@ -2,13 +2,26 @@ local cmp = require 'cmp'
 local luasnip = require 'luasnip'
 local lspkind = require 'lspkind'
 
--- Needed for integrating copilot_cmp with nvim_cmp
-require("copilot").setup({
-    suggestion = { enabled = false },
-    panel = { enabled = false },
-})
+-- Put the setup and enabling of copilot in a callable function
+-- (that will also reenable copilot if it was disabled after setup
+-- was already done). This lets us
+-- 1. Effectively lazy load copilot (as recommended in the README).
+-- 2. Keep copilot disabled until actually needed (since the
+--    setup will enable it by default with no way to prevent this).
+function copilot_enable()
+    -- Checking the source code shows copilot is smart enough to
+    -- check if setup is already done and if so return immediately
+    require("copilot").setup({
+        suggestion = { enabled = false },
+        panel = { enabled = false },
+    })
+    require("copilot.command").enable()
+end
+-- Call this even if copilot was not yet set up,
+-- as otherwise we cannot register copilot as a cmp source.
 require("copilot_cmp").setup()
-vim.cmd [[ silent! lua require("copilot.command").disable() ]] -- Make copilot be disabled by default
+
+
 local has_words_before = function()
     if vim.api.nvim_buf_get_option(0, "buftype") == "prompt" then return false end
     local line, col = unpack(vim.api.nvim_win_get_cursor(0))
