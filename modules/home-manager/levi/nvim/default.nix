@@ -125,10 +125,11 @@
     ];
 
     # options should come first because some other things may depend on it,
-    # e.g. what key is the leader key.
+    # e.g. what key is the leader key. Similarly util should come right after.
     extraLuaConfig = ''
       ${builtins.readFile ./options.lua}
-      ${builtins.readFile ./helpers.lua}
+      ${builtins.readFile ./util.lua}
+
       ${builtins.readFile ./keymaps.lua}
       ${builtins.readFile ./commands.lua}
     '';

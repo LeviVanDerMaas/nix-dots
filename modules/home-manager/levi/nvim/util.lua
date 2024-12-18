@@ -20,6 +20,8 @@ function autoformatting_status() -- Check if current buffer has formatting
     end
 end
 
+
+
 -- Buffers
 function check_other_buf_modifed() -- Check if any buffer other than current is modified
     for _, buf in ipairs(vim.api.nvim_list_bufs()) do
@@ -30,6 +32,9 @@ function check_other_buf_modifed() -- Check if any buffer other than current is 
     return false
 end
 
+
+
+-- Content
 function get_character_under_cursor()
     local _, col = unpack(vim.api.nvim_win_get_cursor(0))
     local line = vim.api.nvim_get_current_line()
@@ -42,4 +47,19 @@ function character_under_cursor_blank()
     -- We also return true for empty lines as the cursor is technically
     -- on a nonblank character.
     return char == "" or char == " " or char == "\t"
+end
+
+function select_all_inner()
+    -- Select all text in a buffer barring any blanks at the start or end
+    -- This is much less trivial to do than selecting all characters in a
+    -- buffer, hence it is a seperate 
+    vim.cmd[[silent! exec "normal! \e"]] -- Little hack to force normal mode
+    vim.cmd [[silent! normal! gg0"]]
+    if character_under_cursor_blank() then
+        vim.cmd [[silent! exec "normal! /\\S\r"]]
+    end
+    vim.cmd [[silent! normal! vG$"]]
+    if character_under_cursor_blank() then
+        vim.cmd [[silent! exec "normal! ?\\S\r"]]
+    end
 end
