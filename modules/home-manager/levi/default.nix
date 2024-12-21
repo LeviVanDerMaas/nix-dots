@@ -11,12 +11,13 @@ in
     ./firefox
     ./git
     ./hyprland
-    ./waybar
     ./kitty
     ./nvim
     ./ripgrep
     ./shell
     ./thefuck
+    ./theme
+    ./waybar
     ./zoxide
   ];
 
