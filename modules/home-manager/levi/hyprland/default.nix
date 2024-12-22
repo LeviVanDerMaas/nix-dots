@@ -8,6 +8,7 @@ in
     ./binds.nix
     ./exec.nix
     ./hyprpaper.nix
+    ./theming.nix
     ./windowrules.nix
   ];
 
@@ -36,13 +37,16 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    home.packages = with pkgs; [
+      grimblast
+      hyprpolkitagent
+      hyprpicker
+      ulauncher
+    ];
+
     wayland.windowManager.hyprland = {
       enable = true;
       settings = {
-        env = [
-          "QT_QPA_PLATFORMTHEME,qt5ct"
-        ];
-
         general = {
           border_size = 1;
           gaps_in = 5;
@@ -101,12 +105,5 @@ in
       dunst.enable = cfg.integrateDunst;
       waybar.enable = true;
     };
-
-    home.packages = with pkgs; [
-      grimblast
-      hyprpolkitagent
-      hyprpicker
-      ulauncher
-    ];
   };
 }

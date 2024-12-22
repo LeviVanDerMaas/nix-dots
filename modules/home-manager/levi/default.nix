@@ -38,6 +38,8 @@ in
     home.packages = with pkgs; [
       discord
       kdePackages.dolphin
+      kdePackages.qtwayland
+      kdePackages.qtsvg
       fastfetch
       obsidian
       vlc
