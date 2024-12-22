@@ -31,9 +31,5 @@ in
     xdg.portal.enable = cfg.installGTKPortal;
     xdg.portal.extraPortals = 
       lib.optionals cfg.installGTKPortal [ pkgs.xdg-desktop-portal-gtk ];
-
-    # Long story short, this should make sure most every application requiring qt5 or qt6 in
-    # some capacity will work.
-    qt.enable = true;
   };
 }

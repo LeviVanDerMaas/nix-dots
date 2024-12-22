@@ -38,7 +38,6 @@ in
   config = lib.mkIf cfg.enable {
     wayland.windowManager.hyprland = {
       enable = true;
-       
       settings = {
         env = [
           "QT_QPA_PLATFORMTHEME,qt5ct"

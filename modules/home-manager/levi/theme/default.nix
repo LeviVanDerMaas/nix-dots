@@ -32,5 +32,5 @@
         name = "gtk2";
         package = pkgs.kdePackages.breeze;
       };
-    };
+  };
 }

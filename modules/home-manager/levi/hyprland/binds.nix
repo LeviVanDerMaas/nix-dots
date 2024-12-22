@@ -68,7 +68,7 @@ in
         # Application binds
         "$mainMod, T, exec, ${pkgs.kitty}/bin/kitty"
         "$mainMod, SPACE, exec, ${pkgs.ulauncher}/bin/ulauncher-toggle"
-        "$mainMod, E, exec, ${pkgs.dolphin}/bin/dolphin --platformtheme kde"
+        "$mainMod, E, exec, ${pkgs.kdePackages.dolphin}/bin/dolphin"
         "$mainMod, B, exec, ${pkgs.firefox}/bin/firefox"
         "$mainMod, V, togglespecialworkspace, discord"
         "$mainMod, V, movetoworkspace, special:discord,class:(discord)$"

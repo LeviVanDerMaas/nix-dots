@@ -37,6 +37,7 @@ in
     # Non-module programs and packages
     home.packages = with pkgs; [
       discord
+      kdePackages.dolphin
       fastfetch
       obsidian
       vlc
