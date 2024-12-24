@@ -38,6 +38,7 @@ in
     home.packages = with pkgs; [
       discord
       kdePackages.dolphin
+      xfce.thunar
       kdePackages.qtwayland
       kdePackages.qtsvg
       fastfetch
