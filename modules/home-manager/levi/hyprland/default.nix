@@ -46,7 +46,12 @@ in
 
     wayland.windowManager.hyprland = {
       enable = true;
+
       settings = {
+        env = [
+          "QT_QPA_PLATFORMTHEME,gtk2"
+        ];
+
         general = {
           border_size = 1;
           gaps_in = 5;
