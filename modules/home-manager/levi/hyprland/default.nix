@@ -8,7 +8,6 @@ in
     ./binds.nix
     ./exec.nix
     ./hyprpaper.nix
-    ./theming.nix
     ./windowrules.nix
   ];
 

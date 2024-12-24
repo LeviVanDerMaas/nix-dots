@@ -21,10 +21,7 @@
     };
   };
 
-  # It doesn't seem possible to set Breeze Dark to be used directly
-  # through the qt module for nix, however you can make Breeze Dark
-  # the theme of gtk and then coax qt to follow the gtk style, which
-  # should work for most appplications
+  # Setting Breeze Dark to be used is a royal pai
   qt = {
     enable = true;
     # platformTheme.name = "gtk"; # This will be converted to gtk2 and be set as QT_QPA_PLATFORMTHEME. It will also install qtstyleplugins and qt6gtk2 provided platformTheme.package is not set.
