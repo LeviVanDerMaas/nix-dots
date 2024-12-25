@@ -7,6 +7,7 @@ in
   imports = [
     ./bat
     ./dunst
+    ./dolphin
     ./fd
     ./firefox
     ./git
@@ -37,10 +38,6 @@ in
     # Non-module programs and packages
     home.packages = with pkgs; [
       discord
-      kdePackages.dolphin
-      xfce.thunar
-      kdePackages.qtwayland
-      kdePackages.qtsvg
       fastfetch
       obsidian
       vlc

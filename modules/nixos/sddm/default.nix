@@ -26,25 +26,12 @@ in
     
     services.displayManager.sddm = {
       enable = true;
-      # Default uses qt5 version, this package makes it use qt6 version.
+      # Default SDDM package is qt5 based, this packages has qt6 based SDDM.
       # When installing other desktop environments, they may also try to set this option and
-      # cause conflicts even when packages match, so we force this option. This should not be
-      # a problem usually, but if installing another DE does cause issues in SDDM this may be
-      # the cause.
+      # cause conflicts even when packages match, so we force this option.
       package = lib.mkForce pkgs.kdePackages.sddm; 
 
       theme = "sddm-astronaut-theme"; # This theme requires qt6.
-      extraPackages = with pkgs; [
-        (sddm-astronaut.override {
-          themeConfig = {
-            background = "${../../../assets/wallpapers/woodrot.png}";
-            FullBlur = "false";
-            PartialBlur = "false";
-            OverrideTextFieldColor="#FFFFFF";
-            AccentColor="#CF0700";
-          };
-        })
-      ];
     };
 
     environment.systemPackages = with pkgs; [

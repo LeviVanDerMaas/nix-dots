@@ -47,8 +47,15 @@ in
       enable = true;
 
       settings = {
+        # When you set envs with this, Hyprland source code will use `systemctl --user import-environment`
+        # and `dbus-update-activation-environment --systemd` and cpp's `setenv()` to set and propagate these
+        # vars properly. This may cause these env vars to also be imported on start when switching to other DE/WM sessions
+        # during the same boot, depending on what these DE/WM's do when they start up. This can cause issues for certain
+        # DE/WM's depending on what env vars you set, so keep that in mind. Whether this is bad on
+        # Hyprland because of the way it sets things up or other sessions because they expect certain values to be unset,
+        # I don't know. Trying to fix this was a massive headache, and def not worth it, so I gave up on that.
         env = [
-          "QT_QPA_PLATFORMTHEME,gtk2"
+          "QT_QPA_PLATFORMTHEME,gtk2" # Plasma DE will fail to start after setting this to gtk2, restart fixes this.
         ];
 
         general = {
