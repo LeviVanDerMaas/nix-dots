@@ -2,6 +2,15 @@
 
 let
   cfg = config.modules.nixos.sddm;
+  themePkg = pkgs.sddm-astronaut.override {
+    themeConfig = {
+      background = "${../../../assets/wallpapers/woodrot.png}";
+      FullBlur = "false";
+      PartialBlur = "false";
+      OverrideTextFieldColor="#FFFFFF";
+      AccentColor="#CF0700";
+    };
+  };
 in
 {
   options.modules.nixos.sddm = {
@@ -32,18 +41,17 @@ in
       package = lib.mkForce pkgs.kdePackages.sddm; 
 
       theme = "sddm-astronaut-theme"; # This theme requires qt6.
+      extraPackages = with pkgs; [
+        themePkg
+      ];
     };
 
     environment.systemPackages = with pkgs; [
-      (sddm-astronaut.override {
-        themeConfig = {
-          background = "${../../../assets/wallpapers/woodrot.png}";
-          FullBlur = "false";
-          PartialBlur = "false";
-          OverrideTextFieldColor="#FFFFFF";
-          AccentColor="#CF0700";
-        };
-      })
+      # Not sure why, but if the package for theming is not available in BOTH
+      # the extraPackages of sddm and the systemPackages, it will fail to apply.
+      # It seems to have something to do with specifically the qt6 version of SDDM that we
+      # forcefully insert.
+      themePkg
     ];
   };
 }
