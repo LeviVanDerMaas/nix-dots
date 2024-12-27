@@ -14,21 +14,34 @@
       package = pkgs.kdePackages.breeze-gtk;
     };
     iconTheme = {
-      name = "Breeze-Dark";
+      name = "Breeze";
       package = pkgs.kdePackages.breeze-icons;
     };
     cursorTheme = {
-      name = "Breeze-Dark";
-      # Breeze includes its cursor in the global theme
-      package = pkgs.kdePackages.breeze-gtk;
+      name = "Catppuccin-Mocha-Dark-Cursors";
+      package = pkgs.catppuccin-cursors.mochaDark;
     };
     gtk3 = {
       extraConfig.gtk-application-prefer-dark-theme = true;
     };
   };
 
+  dconf.settings = {
+    "org/gnome/desktop/interface" = {
+      gtk-theme = "Breeze-Dark";
+      color-scheme = "prefer-dark";
+    };
+  };
+
   qt = {
     enable = true;
+  };
+
+  home.pointerCursor = {
+    gtk.enable = true;
+    name = "Catppuccin-Mocha-Dark-Cursors";
+    package = pkgs.catppuccin-cursors.mochaDark;
+    size = 24;
   };
 
   home.packages = with pkgs; [
