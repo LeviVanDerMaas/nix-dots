@@ -18,7 +18,7 @@
       package = pkgs.kdePackages.breeze-icons;
     };
     cursorTheme = {
-      name = "Catppuccin-Mocha-Dark-Cursors";
+      name = "catppuccin-mocha-dark-cursors";
       package = pkgs.catppuccin-cursors.mochaDark;
     };
     gtk3 = {
@@ -39,7 +39,7 @@
 
   home.pointerCursor = {
     gtk.enable = true;
-    name = "Catppuccin-Mocha-Dark-Cursors";
+    name = "catppuccin-mocha-dark-cursors";
     package = pkgs.catppuccin-cursors.mochaDark;
     size = 24;
   };
