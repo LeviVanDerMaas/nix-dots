@@ -35,6 +35,7 @@
     "org/gnome/desktop/interface" = {
       gtk-theme = "Breeze-Dark";
       color-scheme = "prefer-dark";
+      icon-theme = "breeze-dark";
     };
   };
 
