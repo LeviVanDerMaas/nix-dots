@@ -8,18 +8,23 @@
 
 {
   gtk = {
+    # THEMING NAMES stolen from whatever KDE sets in xsettingsd/xsettingsd.conf
+    # when setting dark themes via that. Figuring out these inconsistencies are
+    # needed to make it work was painful.
     enable = true;
     theme = {
       name = "Breeze-Dark";
       package = pkgs.kdePackages.breeze-gtk;
     };
     iconTheme = {
-      name = "Breeze";
+      name = "breeze-dark";
       package = pkgs.kdePackages.breeze-icons;
     };
     cursorTheme = {
-      name = "catppuccin-mocha-dark-cursors";
-      package = pkgs.catppuccin-cursors.mochaDark;
+      # name = "catppuccin-mocha-dark-cursors";
+      # package = pkgs.catppuccin-cursors.mochaDark;
+      name = "breeze_cursors";
+      package = pkgs.kdePackages.breeze;
     };
     gtk3 = {
       extraConfig.gtk-application-prefer-dark-theme = true;
@@ -39,8 +44,11 @@
 
   home.pointerCursor = {
     gtk.enable = true;
-    name = "catppuccin-mocha-dark-cursors";
-    package = pkgs.catppuccin-cursors.mochaDark;
+    x11.enable = true;
+    # name = "catppuccin-mocha-dark-cursors";
+    # package = pkgs.catppuccin-cursors.mochaDark;
+      name = "breeze_cursors";
+      package = pkgs.kdePackages.breeze;
     size = 24;
   };
 
@@ -51,7 +59,8 @@
     kdePackages.qt6gtk2
 
     # Still needed because it has some features that certain Qt apps (mainly KDE native ones) need
-    kdePackages.breeze 
+#     kdePackages.breeze 
+# pkgs.kdePackages.breeze-icons
     # libsForQt5.breeze # Unlikely to be needed because breeze6 should be backwards compatible.
   ];
 }
