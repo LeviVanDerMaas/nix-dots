@@ -61,6 +61,15 @@ flake-overlays:
     pulse.enable = true;
   };
 
+  # Screen backlight control
+  programs.light = {
+    enable = true;
+    brightnessKeys = {
+      enable = true;
+      step = 5;
+    };
+  }; 
+
   # Networking
   networking.networkmanager.enable = true;
 
@@ -96,6 +105,7 @@ flake-overlays:
   modules.nixos = {
     hyprland.enable = true;
     plasma.enable = true;
+    thunar.enable = true;
   };
 
 

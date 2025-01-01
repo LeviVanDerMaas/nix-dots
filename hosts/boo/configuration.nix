@@ -92,6 +92,7 @@ flake-overlays:
       initRunTries = 10;
       initRunTryInterval = 5;
     };
+    thunar.enable = true;
     steam.enable = true;
     zsa.enable = true;
   };

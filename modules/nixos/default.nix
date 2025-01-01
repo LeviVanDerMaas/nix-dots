@@ -12,6 +12,7 @@
     ./plasma
     ./sddm
     ./steam
+    ./thunar
     ./zsa
   ];
 }
