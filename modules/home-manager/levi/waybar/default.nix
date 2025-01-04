@@ -11,7 +11,7 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    home.packages = with pkgs; [ waybar pavucontrol blueberry ];
+    home.packages = with pkgs; [ waybar pavucontrol ];
     xdg.configFile.waybar = {
       source = ./config;
       target = "waybar/config";

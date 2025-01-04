@@ -37,6 +37,7 @@ in
 
   config = lib.mkIf cfg.enable {
     home.packages = with pkgs; [
+      blueberry # simple bluetooth control
       grimblast
       hyprpolkitagent
       hyprpicker
