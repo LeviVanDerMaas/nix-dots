@@ -17,6 +17,7 @@ in
     ./shell
     ./thefuck
     ./theme
+    ./udiskie
     ./waybar
     ./zoxide
   ];

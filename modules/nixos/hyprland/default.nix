@@ -31,5 +31,8 @@ in
     xdg.portal.enable = cfg.installGTKPortal;
     xdg.portal.extraPortals = 
       lib.optionals cfg.installGTKPortal [ pkgs.xdg-desktop-portal-gtk ];
+
+    # Needed to let udiskie automount when installed on home-manager side.
+    modules.nixos.udisks2.enable = true;
   };
 }

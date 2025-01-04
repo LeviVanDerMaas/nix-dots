@@ -13,6 +13,7 @@
     ./sddm
     ./steam
     ./thunar
+    ./udisks2
     ./zsa
   ];
 }

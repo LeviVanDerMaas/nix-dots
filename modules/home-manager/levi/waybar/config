@@ -6,7 +6,7 @@
     // Choose the order of the modules
     "modules-left": ["hyprland/workspaces", "hyprland/mode"],
     "modules-center": ["hyprland/window"],
-    "modules-right": ["network", "pulseaudio", "tray", "clock"],
+    "modules-right": ["network", "pulseaudio", "bluetooth", "tray", "battery", "clock"],
     "hyprland/workspaces": {
         "disable-scroll": false,
         "all-outputs": true,
@@ -59,4 +59,15 @@
         },
         "on-click": "pavucontrol"
     },
+     "bluetooth": {
+	// "controller": "controller1", // specify the alias of the controller if there are more than 1 on the system
+	"format": "",
+	"format-off": "", // an empty format will hide the module
+        "format-disabled": "󰂲",
+	"format-connected": " Connected",
+	"tooltip-format": "{controller_alias}\t{controller_address}",
+	"tooltip-format-connected": "{controller_alias}\t{controller_address}\n\n{device_enumerate}",
+	"tooltip-format-enumerate-connected": "{device_alias}\t{device_address}",
+        "on-click": "blueberry"
+    }
 }

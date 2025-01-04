@@ -114,6 +114,7 @@ in
 
     modules.home-manager.levi = {
       dunst.enable = cfg.integrateDunst;
+      udiskie.enable = true; # for auto-mounting
       waybar.enable = true;
     };
   };
