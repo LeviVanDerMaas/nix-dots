@@ -6,51 +6,72 @@
 # within DE's/WM's themselves.
 { pkgs, ... }:
 
+let
+  themePackage = pkgs.kdePackages.breeze-gtk;
+  themeName = "Breeze-Dark";
+
+  iconThemePackage = pkgs.kdePackages.breeze-icons;
+  iconThemeName = "breeze-dark";
+
+  cursorThemePackage = pkgs.capitaine-cursors;
+  cursorThemeName = "capitaine-cursors";
+  cursorSize = 32;
+in
 {
+  # QT by design really likes to assume there is an engine or DE managing
+  # stuff, unfortunately that makes it a pain to make QT-apps use breeze dark
+  # (as the default is breeze light, but there are no qt options to configure
+  # this mode). A hack is to use Breeze-Dark for gtk, then tell QT apps mimic
+  # the GTK style using qtstyleplugins.
+  qt = {
+    enable = true;
+  };
+
   gtk = {
     # THEMING NAMES stolen from whatever KDE sets in xsettingsd/xsettingsd.conf
     # when setting dark themes via that. Figuring out these inconsistencies are
     # needed to make it work was painful.
     enable = true;
     theme = {
-      name = "Breeze-Dark";
-      package = pkgs.kdePackages.breeze-gtk;
+      name = themeName;
+      package = themePackage;
     };
     iconTheme = {
-      name = "breeze-dark";
-      package = pkgs.kdePackages.breeze-icons;
+      name = iconThemeName;
+      package = iconThemePackage;
     };
     cursorTheme = {
-      # name = "catppuccin-mocha-dark-cursors";
-      # package = pkgs.catppuccin-cursors.mochaDark;
-      name = "breeze_cursors";
-      package = pkgs.kdePackages.breeze;
+      # Slightly more fancy than breeze_cursors IMO, plus breeze cursors does not currently have a
+      # stand-alone package on nix, so we'd install the full theme just for the cursors.
+      name = cursorThemeName;
+      package = cursorThemePackage;
     };
     gtk3 = {
       extraConfig.gtk-application-prefer-dark-theme = true;
     };
   };
 
-  dconf.settings = {
-    "org/gnome/desktop/interface" = {
-      gtk-theme = "Breeze-Dark";
-      color-scheme = "prefer-dark";
-      icon-theme = "breeze-dark";
-    };
-  };
-
-  qt = {
-    enable = true;
-  };
-
   home.pointerCursor = {
     gtk.enable = true;
     x11.enable = true;
-    # name = "catppuccin-mocha-dark-cursors";
-    # package = pkgs.catppuccin-cursors.mochaDark;
-      name = "breeze_cursors";
-      package = pkgs.kdePackages.breeze;
-    size = 24;
+    name = cursorThemeName;
+    package = cursorThemePackage;
+    size = cursorSize;
+  };
+
+  # Some software will only behave with theming if you set this, especially
+  # software that has heavy integration with DE's normally (e.g. Dolphin). A
+  # little bird told me that the reason 'the 'gnome' key works for these
+  # settings outside of gnome is because of legacy reasons specifically on
+  # NixOS.
+  dconf.settings = {
+    "org/gnome/desktop/interface" = {
+      color-scheme = "prefer-dark";
+      gtk-theme = themeName;
+      icon-theme = iconThemeName;
+      cursor-theme = cursorThemeName;
+      cursor-size = cursorSize;
+    };
   };
 
   home.packages = with pkgs; [
@@ -58,10 +79,5 @@
     # mimic the gtk style
     libsForQt5.qtstyleplugins
     kdePackages.qt6gtk2
-
-    # Still needed because it has some features that certain Qt apps (mainly KDE native ones) need
-#     kdePackages.breeze 
-# pkgs.kdePackages.breeze-icons
-    # libsForQt5.breeze # Unlikely to be needed because breeze6 should be backwards compatible.
   ];
 }

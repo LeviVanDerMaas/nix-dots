@@ -53,7 +53,7 @@ in
         # during the same boot, depending on what these DE/WM's do when they start up. This can cause issues for certain
         # DE/WM's depending on what env vars you set, so keep that in mind. Whether this is bad on
         # Hyprland because of the way it sets things up or other sessions because they expect certain values to be unset,
-        # I don't know. Trying to fix this was a massive headache, and def not worth it, so I gave up on that.
+        # I don't know. Trying to fix this was a massive headache, and def not worth it as you can just reboot, so I gave up on that.
         env = [
           "QT_QPA_PLATFORMTHEME,gtk2" # Plasma DE will fail to start after setting this to gtk2, restart fixes this.
         ];
