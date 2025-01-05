@@ -19,6 +19,7 @@ in
     ./theme
     ./udiskie
     ./waybar
+    ./yazi
     ./zoxide
   ];
 
