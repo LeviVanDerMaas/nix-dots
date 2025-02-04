@@ -15,13 +15,52 @@ in
     enable = lib.mkEnableOption ''
       Hyprland home-manager module. Make sure to also enable system module for Hyprland!
     '';
-    monitors = lib.mkOption {
-      type = lib.types.listOf lib.types.str;
+    monitorConfig = lib.mkOption {
+      type = lib.types.listOf (lib.types.submodule {
+        options = {
+          name = lib.mkOption {
+            type = lib.types.str;
+            default = "";
+            description = ''
+              The name parameter of Hyprland's "monitor" keyword.
+            '';
+          };
+          resolution = lib.mkOption {
+            type = lib.types.str;
+            default = "";
+            description = ''
+              The resolution parameter of Hyprland's "monitor" keyword.
+            '';
+          };
+          position = lib.mkOption {
+            type = lib.types.str;
+            default = "";
+            description = ''
+              The position parameter of Hyprland's "monitor" keyword.
+            '';
+          };
+          scale = lib.mkOption {
+            type = lib.types.str;
+            default = "";
+            description = ''
+              The scale parameter of Hyprland's "monitor" keyword.
+            '';
+          };
+          bindWorkspaces = lib.mkOption {
+            type = lib.types.listOf lib.types.str;
+            default = [];
+            description = ''
+              Workspaces that are to be bound to this monitor. 
+              The first workspace will also be the default for the
+              monitor.
+            '';
+          };
+        };
+      });
       default = [];
       description = ''
-        Just the list that you would pass into 
-        `wayland.windowManager.hyprland.settings.monitor`.
-        Reason it is a seperate model is because this is very much
+        Monitor configuration, including binding workspaces to them.
+        Reason it is a module-level option is because this is very much
         system-dependent, so this lets you configure it at a per-system
         level.
       '';
@@ -48,6 +87,19 @@ in
       enable = true;
 
       settings = {
+        monitor = builtins.map 
+          (m: "${m.name}, ${m.resolution}, ${m.position}, ${m.scale}")
+          cfg.monitorConfig;
+        
+        # Binds (default) workspaces to monitors as indicated in cfg.bindWorkspaces
+        workspace = builtins.concatMap
+          (m: lib.optionals (m.bindWorkspaces != []) ( # Check cuz builtins.head fails if list empty
+            [ "${builtins.head m.bindWorkspaces}, default:true" ]
+            ++
+            builtins.map (w: "${w}, monitor:${m.name}") m.bindWorkspaces
+          ))
+          cfg.monitorConfig;
+
         # When you set envs with this, Hyprland source code will use `systemctl --user import-environment`
         # and `dbus-update-activation-environment --systemd` and cpp's `setenv()` to set and propagate these
         # vars properly. This may cause these env vars to also be imported on start when switching to other DE/WM sessions
@@ -67,8 +119,6 @@ in
           "col.inactive_border" = "rgba(595959aa)";
           layout = "dwindle";
         };
-
-        monitor = cfg.monitors;
 
         input = {
           kb_layout = "us";
