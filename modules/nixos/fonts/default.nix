@@ -11,7 +11,7 @@
       fira-code
       fira-code-symbols
 
-      (nerdfonts.override { fonts = [ "NerdFontsSymbolsOnly" ]; })
+      nerd-fonts.symbols-only
     ];
 
     fontconfig = {

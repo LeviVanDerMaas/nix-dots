@@ -2,13 +2,27 @@
 
 let
   cfg = config.modules.nixos.sddm;
+
+  # Note to future me: this theme actually has a lot of config support to allow you
+  # to do things like play videos for the background as well, so if you ever want to
+  # snazz things up you should first check if this already supports it instead of
+  # picking a different theme altogether.
   themePkg = pkgs.sddm-astronaut.override {
     themeConfig = {
       background = "${../../../assets/wallpapers/woodrot.png}";
       FullBlur = "false";
       PartialBlur = "false";
-      OverrideTextFieldColor="#FFFFFF";
-      AccentColor="#CF0700";
+      HideVirtualKeyboard="true";
+      HideLoginButton="true";
+
+      HighlightBorderColor="#CF0700";
+      HighlightBackgroundColor="#CF0700";
+      DropdownSelectedBackgroundColor="#CF0700";
+      HoverUserIconColor="#CF0700";
+      HoverPasswordIconColor="#CF0700";
+      HoverSystemButtonsIconsColor="#CF0700";
+      HoverSessionButtonTextColor="#CF0700";
+      HoverVirtualKeyboardButtonTextColor="#CF0700";
     };
   };
 in
