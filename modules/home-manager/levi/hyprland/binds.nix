@@ -70,8 +70,6 @@ in
         "$mainMod, SPACE, exec, ${pkgs.ulauncher}/bin/ulauncher-toggle"
         "$mainMod, E, exec, ${pkgs.xfce.thunar}/bin/thunar"
         "$mainMod, B, exec, ${pkgs.firefox}/bin/firefox"
-        "$mainMod, V, togglespecialworkspace, discord"
-        "$mainMod, V, movetoworkspace, special:discord,class:(discord)$"
       ]
     ];
 

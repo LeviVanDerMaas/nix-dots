@@ -21,6 +21,8 @@
         bindWorkspaces = [ "1" "2" "3" "4" "5" "6" "7" "8" "9" "10" ];
       }
     ];
+
+    integrations.applications.discord.autoStart = false;
   };
 
   modules.home-manager.levi.extraPackages = with pkgs; [

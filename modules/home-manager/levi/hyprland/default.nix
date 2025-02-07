@@ -5,6 +5,7 @@ let
 in
 {
   imports = [
+    ./integrations
     ./binds.nix
     ./exec.nix
     ./hyprpaper.nix
