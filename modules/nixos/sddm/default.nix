@@ -9,7 +9,9 @@ let
   # picking a different theme altogether.
   themePkg = pkgs.sddm-astronaut.override {
     themeConfig = {
-      background = "${../../../assets/wallpapers/woodrot.png}";
+      # If this doesn't work decaptilazing `Background` may.
+      Background = "${../../../assets/wallpapers/woodrot.png}";
+
       FullBlur = "false";
       PartialBlur = "false";
       HideVirtualKeyboard="true";
