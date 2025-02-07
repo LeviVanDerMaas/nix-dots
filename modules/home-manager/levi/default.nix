@@ -7,6 +7,7 @@ in
   imports = [
     ./bat
     ./dunst
+    ./dolphin
     ./fd
     ./firefox
     ./git
