@@ -22,7 +22,7 @@
       }
     ];
 
-    integrations.applications.discord.autoStart = false;
+    integrations.discord.autoStart = false;
   };
 
   modules.home-manager.levi.extraPackages = with pkgs; [

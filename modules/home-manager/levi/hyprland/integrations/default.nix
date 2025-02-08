@@ -1,5 +1,5 @@
 {
   imports = [
-    ./applications
+    ./discord
   ];
 }
