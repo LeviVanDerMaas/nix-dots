@@ -35,16 +35,18 @@
     flake-overlays = [
       nix-xilinx.overlay
     ];
+    overlays = import ./overlays;
   in
   {
-    overlays = flake-overlays;
+    inherit overlays;
+
     nixosConfigurations = {
       "boo" = nixpkgs.lib.nixosSystem {
-        specialArgs = { inherit inputs; }; # Pass flake inputs to external config files
+        specialArgs = { inherit inputs overlays; }; # Pass flake inputs to external config files
         modules = [ (import ./hosts/boo/configuration.nix flake-overlays) ];
       };
       "lucy" = nixpkgs.lib.nixosSystem {
-        specialArgs = { inherit inputs; }; # Pass flake inputs to external config files
+        specialArgs = { inherit inputs overlays; }; # Pass flake inputs to external config files
         modules = [ (import ./hosts/lucy/configuration.nix flake-overlays) ];
       };
     };

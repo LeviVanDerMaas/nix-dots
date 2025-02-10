@@ -1,6 +1,6 @@
 flake-overlays:
 
-{ inputs, pkgs, ... }:
+{ inputs, pkgs, overlays, ... }:
 
 {
   networking.hostName = "boo";
@@ -12,7 +12,7 @@ flake-overlays:
   ];
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
   nixpkgs.config.allowUnfree = true;
-  nixpkgs.overlays = flake-overlays;
+  nixpkgs.overlays = flake-overlays ++ [overlays.hello-test overlays.cowsay-test];
 
   # Don't forget to set a password with ‘passwd’.
   users.users.levi = {
@@ -96,6 +96,11 @@ flake-overlays:
     steam.enable = true;
     zsa.enable = true;
   };
+
+  environment.systemPackages = with pkgs; [
+    hello
+    cowsay
+  ];
 
 
 
