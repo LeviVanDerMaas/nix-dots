@@ -10,8 +10,6 @@
   ];
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
   nixpkgs.config.allowUnfree = true;
-  nixpkgs.overlays = [overlays.hello-test overlays.cowsay-test];
-
 
   # Don't forget to set a password with ‘passwd’.
   users.users.levi = {
@@ -21,7 +19,7 @@
   };
 
   home-manager = {
-    extraSpecialArgs = { inherit inputs; };
+    extraSpecialArgs = { inherit inputs overlays; };
     users = {
       levi = import ./home.nix;
     };
@@ -99,7 +97,7 @@
 
   modules.nixos = {
     hyprland.enable = true;
-    plasma.enable = true;
+    plasma.enable = false;
     thunar.enable = true;
   };
 
