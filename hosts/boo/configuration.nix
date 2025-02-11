@@ -1,5 +1,3 @@
-flake-overlays:
-
 { inputs, pkgs, overlays, ... }:
 
 {
@@ -12,7 +10,7 @@ flake-overlays:
   ];
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
   nixpkgs.config.allowUnfree = true;
-  nixpkgs.overlays = flake-overlays ++ [overlays.hello-test overlays.cowsay-test];
+  nixpkgs.overlays = [overlays.hello-test overlays.cowsay-test overlays.xilinx];
 
   # Don't forget to set a password with ‘passwd’.
   users.users.levi = {

@@ -1,6 +1,4 @@
-flake-overlays:
-
-{ inputs, pkgs, ... }:
+{ inputs, pkgs, overlays, ... }:
 
 {
   networking.hostName = "lucy";
@@ -12,7 +10,7 @@ flake-overlays:
   ];
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
   nixpkgs.config.allowUnfree = true;
-  nixpkgs.overlays = flake-overlays;
+  nixpkgs.overlays = [overlays.hello-test overlays.cowsay-test overlays.xilinx];
 
 
   # Don't forget to set a password with ‘passwd’.

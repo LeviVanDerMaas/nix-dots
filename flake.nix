@@ -32,10 +32,7 @@
   outputs = { self, nixpkgs, nix-xilinx, ... }@inputs: 
 
   let
-    flake-overlays = [
-      nix-xilinx.overlay
-    ];
-    overlays = import ./overlays;
+    overlays = (import ./overlays) // { xilinx = nix-xilinx.overlay; } ;
   in
   {
     inherit overlays;
@@ -43,11 +40,11 @@
     nixosConfigurations = {
       "boo" = nixpkgs.lib.nixosSystem {
         specialArgs = { inherit inputs overlays; }; # Pass flake inputs to external config files
-        modules = [ (import ./hosts/boo/configuration.nix flake-overlays) ];
+        modules = [ (import ./hosts/boo/configuration.nix) ];
       };
       "lucy" = nixpkgs.lib.nixosSystem {
         specialArgs = { inherit inputs overlays; }; # Pass flake inputs to external config files
-        modules = [ (import ./hosts/lucy/configuration.nix flake-overlays) ];
+        modules = [ (import ./hosts/lucy/configuration.nix) ];
       };
     };
   };
