@@ -10,7 +10,7 @@
   ];
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
   nixpkgs.config.allowUnfree = true;
-  nixpkgs.overlays = [overlays.hello-test overlays.cowsay-test overlays.xilinx];
+  nixpkgs.overlays = [overlays.hello-test overlays.cowsay-test];
 
 
   # Don't forget to set a password with ‘passwd’.
@@ -96,9 +96,6 @@
 
 
 
-  environment.shellAliases = {
-    vivado-flake = "nix run gitlab:doronbehar/nix-xilinx#vivado";
-  };
 
   modules.nixos = {
     hyprland.enable = true;

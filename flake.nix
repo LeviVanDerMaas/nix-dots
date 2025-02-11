@@ -39,11 +39,11 @@
 
     nixosConfigurations = {
       "boo" = nixpkgs.lib.nixosSystem {
-        specialArgs = { inherit inputs overlays; }; # Pass flake inputs to external config files
+        specialArgs = { inherit inputs overlays; };
         modules = [ (import ./hosts/boo/configuration.nix) ];
       };
       "lucy" = nixpkgs.lib.nixosSystem {
-        specialArgs = { inherit inputs overlays; }; # Pass flake inputs to external config files
+        specialArgs = { inherit inputs overlays; };
         modules = [ (import ./hosts/lucy/configuration.nix) ];
       };
     };
