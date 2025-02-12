@@ -20,7 +20,7 @@
   };
 
   home-manager = {
-    extraSpecialArgs = { inherit inputs; };
+    extraSpecialArgs = { inherit inputs overlays; };
     users = {
       levi = import ./home.nix;
     };

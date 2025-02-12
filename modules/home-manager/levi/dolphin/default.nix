@@ -1,14 +1,15 @@
-{ pkgs, ... }:
+{ pkgs, overlays, ... }:
 
 {
+  nixpkgs.overlays = [ overlays.dolphin-out-of-plasma ];
   home.packages = with pkgs; [
     kdePackages.dolphin
 
     # Dolphin can run without these packages, but it may or may not run into
     # issues or look very borked. The nixos wiki recommends installing these
     # alongside Dolphin as well.
-    kdePackages.qtwayland
-    kdePackages.qtsvg
+    # kdePackages.qtwayland
+    # kdePackages.qtsvg
     # kdePackages.kservice
 
     # These are needed if you want to mount remote filesystems.
