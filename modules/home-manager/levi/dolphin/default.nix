@@ -4,26 +4,48 @@
   nixpkgs.overlays = [ overlays.dolphin-out-of-plasma ];
   home.packages = with pkgs; [
     kdePackages.dolphin
-
-    # Dolphin can run without these packages, but it may or may not run into
-    # issues or look very borked. The nixos wiki recommends installing these
-    # alongside Dolphin as well.
-    # kdePackages.qtwayland
-    # kdePackages.qtsvg
-    # kdePackages.kservice
-
-    # These are needed if you want to mount remote filesystems.
-    # kdePackages.kio-fuse #to mount remote filesystems via FUSE
-    # kdePackages.kio-extras #extra protocols support (sftp, fish and more)
-    cowsay
   ];
+
+  xdg.configFile = {
+    "kdeglobals".source = ./kdeglobals;
+    "menus/plasma-applications.menu".source = ./plasma-applications.menu;
+
+    # Dolphin relies on .config/kdeglobals to tell it what kind of default apps
+    # to use when a MIMEtype is not enough or absent (this file is also what gets
+    # modified when changing "Default Applications" in Plasma Settings); for
+    # example opening a .txt file with nvim as a MIMEtype also requires a default
+    # terminal. If some default application is not specified by kdeglobals,
+    # depending on the file-type either:
+    # - Dolphin makes a (seemingly) hard-coded assumption (e.g. konsole for terminal).
+    # - It will use the first suitable app KService has found, if any (e.g. vlc for video media).
+    # However, mimeapps.list does take priority over kdeglobals, which can deal
+    # with issues with the latter case.
+
+    # The plasma-applications.menu file is copied directly from
+    # https://github.com/KDE/plasma-workspace/commits/master/menu/desktop/plasma-applications.menu
+    # at hash 11e7f5306fa013ec5c2b894a28457dabf5c42bad 
+    # It would certainly be more desirable to just have this file be a
+    # flake-input, but alas, flake inputs do not support sparse repo checkouts,
+    # and I don't wanna pull in half of the Plasma source (100+ MiB) for a single
+    # few KiB file. In any case, even if this file gets outdated compared to the
+    # newer version it is VERY unlikely this would actually break anything
+    # (unless we go from Plasma 6 to 7 or something).
+  };
+
 }
+
+
+
+
+
+
+# NOTES ON GETTING MIME-TYPES TO WORK OUTSIDE of PLASMA: 
 
 # Below is my understanding of why Dolphin has trouble with MIMEtypes when running
 # outside of Plasma and what you can do to fix it. If you don't care about the
 # why, the bottom paragraph contains all the info you need to fix it. This explanation
 # is mainly here because I was curious and didn't want my findings to be "forgotten" to
-# myself, plus it might actually be useful when dealing with similair issues when 
+# myself, plus it might actually be useful when dealing with similar issues when 
 # installing other DE-integrated apps.
 #
 # In order to obtain MIME-types and construct the "open with" menu that Dolphin
@@ -50,7 +72,7 @@
 # still produce a cache file. For whatever reason, outside of Plasma,
 # kbuildsyscoca6 will then never correct the wrong/missing information in the
 # cache when updating it, even if a correct applications.menu file is provided
-# later. Whenver this happens, Dolphin can no longer deal with MIMEtypes because
+# later. Whenever this happens, Dolphin can no longer deal with MIMEtypes because
 # it also seems to require the "open with" menu to be created correctly to do so
 # (or perhaps the ksycoca cache is simply corrupted in this state?).
 #
@@ -71,7 +93,7 @@
 # it. However, if we then want to use software that relies on application.menu
 # files from different DE's outside of said DE's, that may break stuff as well. A
 # better alternative is to instead overlay Dolphin with a wrapper that always sets 
-# `$XDG_MENU_PREFIX=plasma-` (whcih is unlikely to cause any issues for other
+# `$XDG_MENU_PREFIX=plasma-` (which is unlikely to cause any issues for other
 # packages as Dolphin is evidently built under the assumption that this is the
 # case anyway). It is not necessary to install kdePackages.kservice seperately
 # since it is a dependency of Dolphin, but if you do want to manually update/build
@@ -92,7 +114,6 @@
 #     rebuild with the --noincremental flag. Note that if your directory
 #     structure has not changed then the SHA-1 hash in the name of the cache
 #     file stays the same, but it does actually modify file.
-#    
 #    
 #     *** A default one is provided by Plasma Workspace (pkgs.plasma-workspace)
 #     under plasma-applications.menu. This is also used to structure the

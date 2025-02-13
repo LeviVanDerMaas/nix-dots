@@ -98,7 +98,6 @@
   modules.nixos = {
     hyprland.enable = true;
     plasma.enable = false;
-    thunar.enable = true;
   };
 
 

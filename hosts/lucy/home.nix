@@ -2,7 +2,6 @@
 
 {
   programs.home-manager.enable = true;
-  nixpkgs.overlays = [overlays.hello-test overlays.cowsay-test];
 
   home = {
     username = "levi";
