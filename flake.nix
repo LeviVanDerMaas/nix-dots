@@ -19,6 +19,10 @@
     openrgb.url = "github:CalcProgrammer1/OpenRGB?rev=b5638eee126234ebfe8eb7fe240d7b732f5d5dc3";
     openrgb.flake = false;
 
+    # A patched qt6ct version from the AUR to work better with Breeze and KDE apps.
+    qt6ct-kde.url = "github:ilya-fedin/qt6ct";
+    qt6ct-kde.flake = false;
+
     # Catppuccin theme for bat
     batThemeCatppuccin.url = "github:catppuccin/bat/main";
     batThemeCatppuccin.flake = false;
@@ -32,7 +36,7 @@
   outputs = { self, nixpkgs, nix-xilinx, ... }@inputs: 
 
   let
-    overlays = (import ./overlays) // { xilinx = nix-xilinx.overlay; } ;
+    overlays = (import ./overlays { inherit inputs; }) // { xilinx = nix-xilinx.overlay; } ;
   in
   {
     inherit overlays;

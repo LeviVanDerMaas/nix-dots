@@ -10,7 +10,7 @@
   ];
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
   nixpkgs.config.allowUnfree = true;
-  nixpkgs.overlays = [overlays.hello-test overlays.cowsay-test overlays.xilinx];
+  nixpkgs.overlays = [overlays.xilinx];
 
   # Don't forget to set a password with ‘passwd’.
   users.users.levi = {

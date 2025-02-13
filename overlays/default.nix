@@ -1,3 +1,5 @@
+{ inputs, ... }:
+
 {
   # Wraps Dolphin to include some extra dependencies to make the UI render
   # correctly (normally these are installed alongside Plasma. The wrapper also
@@ -27,21 +29,11 @@
     });
   };
 
-
-  hello-test = final: prev: {
-    hello = final.symlinkJoin {
-      name = "hello";
-      buildInputs = [ final.makeWrapper ];
-      paths = [ prev.hello ];
-      postBuild = ''
-        wrapProgram $out/bin/hello \
-          --add-flags "-t"
-      '';
-    };
-  };
-  cowsay-test = final: prev: {
-    cowsay = final.writeShellScriptBin "cowsay" ''
-      exec ${prev.cowsay}/bin/cowsay $(${final.hello}/bin/hello)
-'';
+  qt6ct-kde = final: prev: {
+    kdePackages = prev.kdePackages.overrideScope (kfinal: kprev: {
+      qt6ct-kde = prev.qt6ct.overrideAttrs (prevAttrs: {
+        src = inputs.qt6ct-kde;
+      });
+    });
   };
 }
