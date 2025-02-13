@@ -2,6 +2,7 @@
 
 let
   cfg = config.modules.nixos.sddm;
+  red = "#CF0700";
 
   # Note to future me: this theme actually has a lot of config support to allow you
   # to do things like play videos for the background as well, so if you ever want to
@@ -14,17 +15,18 @@ let
 
       FullBlur = "false";
       PartialBlur = "false";
-      HideVirtualKeyboard="true";
-      HideLoginButton="true";
+      HideVirtualKeyboard = "true";
+      HideLoginButton = "true";
 
-      HighlightBorderColor="#CF0700";
-      HighlightBackgroundColor="#CF0700";
-      DropdownSelectedBackgroundColor="#CF0700";
-      HoverUserIconColor="#CF0700";
-      HoverPasswordIconColor="#CF0700";
-      HoverSystemButtonsIconsColor="#CF0700";
-      HoverSessionButtonTextColor="#CF0700";
-      HoverVirtualKeyboardButtonTextColor="#CF0700";
+      HighlightBorderColor = red;
+      HighlightBackgroundColor = red;
+      DropdownSelectedBackgroundColor = red;
+      HoverUserIconColor = red;
+      HoverPasswordIconColor = red;
+      HoverSystemButtonsIconsColor = red;
+      HoverSessionButtonTextColor = red;
+      HoverVirtualKeyboardButtonTextColor = red;
+      WarningColor = red;
     };
   };
 in
@@ -52,10 +54,10 @@ in
     services.displayManager.sddm = {
       enable = true;
       # Default SDDM package is qt5 based, this packages has qt6 based SDDM.
-      # When installing other desktop environments, they may also try to set this option and
-      # cause conflicts even when packages match, so we force this option.
+      # Force cuz some DE modules will also try to set this and conflict even if packages match.
       package = lib.mkForce pkgs.kdePackages.sddm; 
 
+      # Preview with `sddm-greeter-qt6 --test-mode --theme /run/current-system/sw/share/sddm/themes/sddm-astronaut-theme/`
       theme = "sddm-astronaut-theme"; # This theme requires qt6.
       extraPackages = with pkgs; [
         themePkg
@@ -63,10 +65,8 @@ in
     };
 
     environment.systemPackages = with pkgs; [
-      # Not sure why, but if the package for theming is not available in BOTH
-      # the extraPackages of sddm and the systemPackages, it will fail to apply.
-      # It seems to have something to do with specifically the qt6 version of SDDM that we
-      # forcefully insert.
+      # If theme is not in both extraPackages and systemPackages it will fail to apply for some reason
+      # May have to do with using a qt6 based SDDM package.
       themePkg
     ];
   };
