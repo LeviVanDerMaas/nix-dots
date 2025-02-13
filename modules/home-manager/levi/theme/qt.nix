@@ -2,16 +2,16 @@
 
 
 {
+  # nixpkgs.overlays = [ overlays.qt6ct-kde ];
 
   qt = {
     enable = true;
-    platformTheme.name = "qtct";
-    # style.package = pkgs.kdePackages.breeze;
+    platformTheme.name = "kde";
+    style.package = pkgs.kdePackages.breeze;
+    style.name = "breeze";
   };
 
   home.packages = [
-    pkgs.libsForQt5.breeze-qt5
-    # pkgs.kdePackages.breeze
-    # pkgs.libsForQt5.qt5ct
+    pkgs.kdePackages.breeze
   ];
 }

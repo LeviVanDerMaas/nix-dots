@@ -30,7 +30,7 @@ in
 
       # If not using Breeze for qt and we don't wanna pull down all of Breeze
       # just for the cursors, capitaine-cursors (32) is a good alternative.
-      package = pkgs.libsForQt5.breeze-qt5;
+      package = pkgs.kdePackages.breeze;
       name = "breeze_cursors";
       size = 24;
     };
