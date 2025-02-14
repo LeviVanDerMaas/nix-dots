@@ -1,8 +1,8 @@
 { pkgs, config, ... }:
 
 let
-  themePackage = pkgs.kdePackages.breeze-gtk;
-  themeName = "Breeze-Dark";
+  themePackage = pkgs.gnome-themes-extra;
+  themeName = "Adwaita-dark";
 
   iconPackage = pkgs.kdePackages.breeze-icons;
   iconName = "breeze-dark";
