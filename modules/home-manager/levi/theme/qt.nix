@@ -6,7 +6,9 @@
 
   qt = {
     enable = true;
-    platformTheme.name = "qtct";
+    platformTheme.name = "kde";
+    style.name = "breeze";
+    style.package = pkgs.kdePackages.breeze;
   };
 
   home.packages = with pkgs; [
