@@ -2,11 +2,13 @@
 TerminalApplication=kitty
 
 [ColorEffects:Disabled]
+ChangeSelectionColor=
 Color=56,56,56
 ColorAmount=0
 ColorEffect=0
 ContrastAmount=0.65
 ContrastEffect=1
+Enable=
 IntensityAmount=0.1
 IntensityEffect=2
 
@@ -23,7 +25,7 @@ IntensityEffect=0
 
 [Colors:Button]
 BackgroundAlternate=30,87,116
-BackgroundNormal=41,44,48
+BackgroundNormal=49,54,59
 DecorationFocus=61,174,233
 DecorationHover=61,174,233
 ForegroundActive=61,174,233
@@ -37,7 +39,7 @@ ForegroundVisited=155,89,182
 
 [Colors:Complementary]
 BackgroundAlternate=30,87,116
-BackgroundNormal=32,35,38
+BackgroundNormal=42,46,50
 DecorationFocus=61,174,233
 DecorationHover=61,174,233
 ForegroundActive=61,174,233
@@ -50,8 +52,8 @@ ForegroundPositive=39,174,96
 ForegroundVisited=155,89,182
 
 [Colors:Header]
-BackgroundAlternate=32,35,38
-BackgroundNormal=41,44,48
+BackgroundAlternate=42,46,50
+BackgroundNormal=49,54,59
 DecorationFocus=61,174,233
 DecorationHover=61,174,233
 ForegroundActive=61,174,233
@@ -64,8 +66,8 @@ ForegroundPositive=39,174,96
 ForegroundVisited=155,89,182
 
 [Colors:Header][Inactive]
-BackgroundAlternate=41,44,48
-BackgroundNormal=32,35,38
+BackgroundAlternate=49,54,59
+BackgroundNormal=42,46,50
 DecorationFocus=61,174,233
 DecorationHover=61,174,233
 ForegroundActive=61,174,233
@@ -92,8 +94,8 @@ ForegroundPositive=23,104,57
 ForegroundVisited=155,89,182
 
 [Colors:Tooltip]
-BackgroundAlternate=32,35,38
-BackgroundNormal=41,44,48
+BackgroundAlternate=42,46,50
+BackgroundNormal=49,54,59
 DecorationFocus=61,174,233
 DecorationHover=61,174,233
 ForegroundActive=61,174,233
@@ -106,8 +108,8 @@ ForegroundPositive=39,174,96
 ForegroundVisited=155,89,182
 
 [Colors:View]
-BackgroundAlternate=29,31,34
-BackgroundNormal=20,22,24
+BackgroundAlternate=35,38,41
+BackgroundNormal=27,30,32
 DecorationFocus=61,174,233
 DecorationHover=61,174,233
 ForegroundActive=61,174,233
@@ -120,8 +122,8 @@ ForegroundPositive=39,174,96
 ForegroundVisited=155,89,182
 
 [Colors:Window]
-BackgroundAlternate=41,44,48
-BackgroundNormal=32,35,38
+BackgroundAlternate=49,54,59
+BackgroundNormal=42,46,50
 DecorationFocus=61,174,233
 DecorationHover=61,174,233
 ForegroundActive=61,174,233
@@ -133,71 +135,16 @@ ForegroundNormal=252,252,252
 ForegroundPositive=39,174,96
 ForegroundVisited=155,89,182
 
-[General]
-ColorScheme=BreezeDark
-Name=Breeze Dark
-Name[ar]=نسيم داكن
-Name[az]=Breeze - Tünd
-Name[bg]=Breeze Тъмен
-Name[bs]=Breeze tamna
-Name[ca]=Brisa fosca
-Name[ca@valencia]=Brisa fosca
-Name[cs]=Breeze Tmavé
-Name[da]=Breeze Dark
-Name[de]=Breeze Dunkel
-Name[el]=Breeze σκούρο
-Name[en_GB]=Breeze Dark
-Name[eo]=Breeze Dark
-Name[es]=Brisa oscuro
-Name[et]=Breeze tume
-Name[eu]=Breeze iluna
-Name[fi]=Tumma Breeze
-Name[fr]=Brise sombre
-Name[gl]=Brisa escura
-Name[he]=בריזה כהה
-Name[hi]=ब्रीज़ गहरा
-Name[hu]=Breeze Dark
-Name[ia]=Brisa obscure
-Name[id]=Breeze Gelap
-Name[is]=Breeze dökkt
-Name[it]=Brezza scuro
-Name[ja]=Breeze ダーク
-Name[ka]=Breeze მუქი
-Name[ko]=어두운 Breeze
-Name[lt]=Breeze tamsus
-Name[lv]=Breeze Dark
-Name[nb]=Breeze mørk
-Name[nl]=Breeze Dark
-Name[nn]=Breeze mørk
-Name[pa]=ਬਰੀਜ਼ ਗੂੜ੍ਹਾ
-Name[pl]=Ciemna Bryza
-Name[pt]=Brisa Escura
-Name[pt_BR]=Breeze Dark
-Name[ro]=Briză, întunecat
-Name[ru]=Breeze, тёмный вариант
-Name[sa]=वायुः अन्धकारः
-Name[sk]=Tmavý vánok
-Name[sl]=Sapica, temna
-Name[sr]=Поветарац тамни
-Name[sr@ijekavian]=Поветарац тамни
-Name[sr@ijekavianlatin]=Povetarac tamni
-Name[sr@latin]=Povetarac tamni
-Name[sv]=Breeze mörk
-Name[tg]=Насими торик
-Name[tr]=Esinti Koyu
-Name[uk]=Темна Breeze
-Name[x-test]=xxBreeze Darkxx
-Name[zh_CN]=Breeze 微风深色
-Name[zh_TW]=Breeze Dark
-shadeSortColumn=true
+[UiSettings]
+ColorScheme=*
 
 [KDE]
-contrast=4
+LookAndFeelPackage=org.kde.breezedark.desktop
 
 [WM]
-activeBackground=39,44,49
+activeBackground=49,54,59
 activeBlend=252,252,252
 activeForeground=252,252,252
-inactiveBackground=32,36,40
+inactiveBackground=42,46,50
 inactiveBlend=161,169,177
 inactiveForeground=161,169,177

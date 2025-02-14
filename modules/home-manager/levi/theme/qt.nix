@@ -2,26 +2,19 @@
 
 
 {
-  # nixpkgs.overlays = [ overlays.qt6ct-kde ];
+  # nixpkgs.overlays = with overlays; [ qt5ct-kde qt6ct-kde ];
 
   qt = {
     enable = true;
     platformTheme.name = "qtct";
-    style.name = "kvantum";
   };
 
   home.packages = with pkgs; [
-    libsForQt5.qtstyleplugin-kvantum
-    kdePackages.qtstyleplugin-kvantum
-    libsForQt5.qt5ct
-    kdePackages.qt6ct
-    (catppuccin-kvantum.override {
-      accent = "blue";
-      variant = "macchiato";
-    })
-  ];
+    # The HM qt module does not actually seem to ship wayland support by default.
+    libsForQt5.qtwayland
+    kdePackages.qtwayland
 
-  xdg.configFile."Kvantum/kvantum.kvconfig".source = (pkgs.formats.ini { }).generate "kvantum.kvconfig" {
-    General.theme = "catppuccin-macchiato-blue";
-  };
+    # libsForQt5.breeze-qt5
+    kdePackages.breeze
+  ];
 }

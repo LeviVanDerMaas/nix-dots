@@ -7,7 +7,7 @@
   ];
 
   xdg.configFile = {
-    "kdeglobals".source = ./kdeglobals;
+    "kdeglobals".source = ./kdeglobalstest;
     "menus/plasma-applications.menu".source = ./plasma-applications.menu;
 
     # Dolphin relies on .config/kdeglobals to tell it what kind of default apps
