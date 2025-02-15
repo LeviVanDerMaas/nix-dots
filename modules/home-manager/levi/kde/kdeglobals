@@ -135,16 +135,6 @@ ForegroundNormal=252,252,252
 ForegroundPositive=39,174,96
 ForegroundVisited=155,89,182
 
+# Without this, Breeze will not apply kdeglobals colors to most Qt apps.
 [UiSettings]
 ColorScheme=*
-
-[KDE]
-LookAndFeelPackage=org.kde.breezedark.desktop
-
-[WM]
-activeBackground=49,54,59
-activeBlend=252,252,252
-activeForeground=252,252,252
-inactiveBackground=42,46,50
-inactiveBlend=161,169,177
-inactiveForeground=161,169,177

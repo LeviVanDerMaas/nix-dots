@@ -1,38 +1,20 @@
 { pkgs, overlays, ... }:
 
+# NOTE: Read the lengthy comment below on how this makes MIME-types work
+# outside of Dolphin with plasma. Furthermore, note that Dolphin relies on
+# kdeglobals to tell it what default apps to use in cases where MIME-types are
+# insufficient: e.g. if a MIMEtype tells Dolphin to open something with Neovim,
+# then kdeglobals will tell it what terminal to open it with. In cases where
+# Dolphin cannot determine a default application it will, depending on the
+# file-type, either:
+# - Make a hard-coded assumption and fail if that application is not installed.
+# - Use the first app KService has found to be suitable, if any, or fail.
 {
   nixpkgs.overlays = [ overlays.dolphin-out-of-plasma ];
   home.packages = with pkgs; [
     kdePackages.dolphin
     kdePackages.ark # File archiver by KDE, very integrated with Dolphin.
   ];
-
-  xdg.configFile = {
-    "kdeglobals".source = ./kdeglobals;
-    "menus/plasma-applications.menu".source = ./plasma-applications.menu;
-
-    # Dolphin relies on .config/kdeglobals to tell it what kind of default apps
-    # to use when a MIMEtype is not enough or absent (this file is also what gets
-    # modified when changing "Default Applications" in Plasma Settings); for
-    # example opening a .txt file with nvim as a MIMEtype also requires a default
-    # terminal. If some default application is not specified by kdeglobals,
-    # depending on the file-type either:
-    # - Dolphin makes a (seemingly) hard-coded assumption (e.g. konsole for terminal).
-    # - It will use the first suitable app KService has found, if any (e.g. vlc for video media).
-    # However, mimeapps.list does take priority over kdeglobals, which can deal
-    # with issues with the latter case.
-
-    # The plasma-applications.menu file is copied directly from
-    # https://github.com/KDE/plasma-workspace/commits/master/menu/desktop/plasma-applications.menu
-    # at hash 11e7f5306fa013ec5c2b894a28457dabf5c42bad 
-    # It would certainly be more desirable to just have this file be a
-    # flake-input, but alas, flake inputs do not support sparse repo checkouts,
-    # and I don't wanna pull in half of the Plasma source (100+ MiB) for a single
-    # few KiB file. In any case, even if this file gets outdated compared to the
-    # newer version it is VERY unlikely this would actually break anything
-    # (unless we go from Plasma 6 to 7 or something).
-  };
-
 }
 
 

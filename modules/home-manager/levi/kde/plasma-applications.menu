@@ -1,6 +1,18 @@
  <!DOCTYPE Menu PUBLIC "-//freedesktop//DTD Menu 1.0//EN"
   "http://www.freedesktop.org/standards/menu-spec/1.0/menu.dtd">
 
+<!--
+  The plasma-applications.menu file is copied directly from
+  https://github.com/KDE/plasma-workspace/commits/master/menu/desktop/plasma-applications.menu
+  at hash 11e7f5306fa013ec5c2b894a28457dabf5c42bad 
+  It would certainly be more desirable to just have this file be a
+  flake-input, but alas, flake inputs do not support sparse repo checkouts,
+  and I don't wanna pull in half of the Plasma source (100+ MiB) for a single
+  few KiB file. In any case, even if this file gets outdated compared to the
+  newer version it is VERY unlikely this would actually break anything
+  (unless we go from Plasma 6 to 7 or something).
+-->
+
 <Menu>
 	<Name>Applications</Name>
 	<Directory>kde-main.directory</Directory>

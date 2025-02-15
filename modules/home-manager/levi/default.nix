@@ -7,11 +7,11 @@ in
   imports = [
     ./bat
     ./dunst
-    ./dolphin
     ./fd
     ./firefox
     ./git
     ./hyprland
+    ./kde
     ./kitty
     ./nvim
     ./ripgrep

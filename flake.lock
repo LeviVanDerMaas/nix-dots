@@ -120,30 +120,13 @@
         "type": "github"
       }
     },
-    "qt6ct-kde": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1738699480,
-        "narHash": "sha256-ePY+BEpEcAq11+pUMjQ4XG358x3bXFQWwI1UAi+KmLo=",
-        "owner": "ilya-fedin",
-        "repo": "qt6ct",
-        "rev": "26b539af69cf997c6878d41ba75ad7060b20e56e",
-        "type": "github"
-      },
-      "original": {
-        "owner": "ilya-fedin",
-        "repo": "qt6ct",
-        "type": "github"
-      }
-    },
     "root": {
       "inputs": {
         "batThemeCatppuccin": "batThemeCatppuccin",
         "home-manager": "home-manager",
         "nix-xilinx": "nix-xilinx",
         "nixpkgs": "nixpkgs_2",
-        "openrgb": "openrgb",
-        "qt6ct-kde": "qt6ct-kde"
+        "openrgb": "openrgb"
       }
     }
   },
