@@ -12,24 +12,26 @@
     ../../modules/home-manager/levi
   ];
 
-  modules.home-manager.levi.hyprland = {
-    enable = true;
-    monitorConfig = [
-      { 
-        name = "DP-1"; resolution = "1920x1080"; position = "0x0"; scale = "1";
-        bindWorkspaces = [ "1" "2" "3" "4" "5" ];
-      }
-      { 
-        name = "DP-3"; resolution = "1920x1080"; position = "-1920x0"; scale = "1";
-        bindWorkspaces = [ "6" "7" "8" "9" "10" ];
-      }
+  modules.home-manager.levi = {
+    hyprland = {
+      enable = true;
+      monitorConfig = [
+        { 
+          name = "DP-1"; resolution = "1920x1080"; position = "0x0"; scale = "1";
+          bindWorkspaces = [ "1" "2" "3" "4" "5" ];
+        }
+        { 
+          name = "DP-3"; resolution = "1920x1080"; position = "-1920x0"; scale = "1";
+          bindWorkspaces = [ "6" "7" "8" "9" "10" ];
+        }
+      ];
+    };
+
+    extraPacakges = with pkgs; [
+      prismlauncher
+      r2modman
     ];
   };
-
-  modules.home-manager.levi.extraPackages = with pkgs; [
-    prismlauncher
-    r2modman
-  ];
 
 
 

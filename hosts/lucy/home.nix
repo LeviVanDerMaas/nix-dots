@@ -13,20 +13,24 @@
   ];
 
 
-  modules.home-manager.levi.hyprland = {
-    enable = true;
-    monitorConfig = [
-      { 
-        name = ""; resolution = "1920x1080@60"; position = "0x0"; scale = "1";
-        bindWorkspaces = [ "1" "2" "3" "4" "5" "6" "7" "8" "9" "10" ];
-      }
+  modules.home-manager.levi = {
+    hyprland = {
+      enable = true;
+      monitorConfig = [
+        { 
+          name = ""; resolution = "1920x1080@60"; position = "0x0"; scale = "1";
+          bindWorkspaces = [ "1" "2" "3" "4" "5" "6" "7" "8" "9" "10" ];
+        }
+      ];
+
+      integrations.discord.autoStart = false;
+    };
+
+    kde.symlink-kdeglobals = false;
+
+    extraPackages = with pkgs; [
     ];
-
-    integrations.discord.autoStart = false;
   };
-
-  modules.home-manager.levi.extraPackages = with pkgs; [
-  ];
 
 
 

@@ -97,7 +97,7 @@
 
   modules.nixos = {
     hyprland.enable = true;
-    plasma.enable = false;
+    plasma.enable = true;
   };
 
 
