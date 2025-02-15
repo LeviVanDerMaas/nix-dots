@@ -4,6 +4,7 @@
   nixpkgs.overlays = [ overlays.dolphin-out-of-plasma ];
   home.packages = with pkgs; [
     kdePackages.dolphin
+    kdePackages.ark # File archiver by KDE, very integrated with Dolphin.
   ];
 
   xdg.configFile = {

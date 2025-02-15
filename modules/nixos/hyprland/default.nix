@@ -8,29 +8,26 @@ in
     enable = lib.mkEnableOption ''
       Hyprland system module. Use Home-Mamanger module for configuration.
     '';
-    installGTKPortal = lib.mkOption {
-      type = lib.types.bool;
-      default = true;
-      description = ''
-        Enables and makes available integration with the xdg-desktop-portal-gtk.
-        Hyprland implements its own portal but uses this one as fallback by default.
-        Notably, Hyprland's portal does not implement a file picker, and since Hyprland
-        is still in active early development it is not unlikely something may break at
-        some point, so having this as a fallback is useful.
-      '';
-    };
   };
 
   config = lib.mkIf cfg.enable {
     programs.hyprland.enable = true;
 
-    # Hyprland has its own desktop portal that comes preinstalled with the
-    # nix module, however it will use the gtk portal by default as fallback
-    # when it cannot perform a certain task (most notably, Hyprlands portal
-    # does not implement a file picker).
-    xdg.portal.enable = cfg.installGTKPortal;
-    xdg.portal.extraPortals = 
-      lib.optionals cfg.installGTKPortal [ pkgs.xdg-desktop-portal-gtk ];
+    # Hyprland has its own xdg-desktop-portal-hyprland that the NixOS module
+    # automatically installs. However, it does not implement a file picker and
+    # is still in development, so Hyprland represent gtk portal as fallback.
+    xdg.portal = {
+      enable = true;
+      extraPortals = with pkgs; [ xdg-desktop-portal-gtk xdg-desktop-portal-kde ];
+      config.hyprland = {
+        default = "hyprland;gtk";
+        "org.freedesktop.impl.portal.FileChooser" = "kde";
+      };
+    };
+
+    environment.systemPackages = with pkgs; [
+      kdePackages.kdialog
+    ];
 
     # Needed to let udiskie automount when installed on home-manager side.
     modules.nixos.udisks2.enable = true;
