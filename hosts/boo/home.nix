@@ -27,7 +27,7 @@
       ];
     };
 
-    extraPacakges = with pkgs; [
+    extraPackages = with pkgs; [
       prismlauncher
       r2modman
     ];
