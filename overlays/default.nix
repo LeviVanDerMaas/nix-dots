@@ -6,8 +6,8 @@
   # ensures Dolphin will always execute with XDG_MENU_PREFIX=plasma- in its
   # environment: this allows a user to then configure mimeapps and other
   # default applications (specified in kdeglobals file) for Dolphin by simply
-  # providing a correctly configured plasma-applications.menu.
-  # Thus, this overlay should let Dolphin work properly outside of Plasma with little
+  # providing a correctly configured plasma-applications.menu. Thus, this
+  # overlay should let Dolphin work properly outside of Plasma with little
   # extra user config.
   dolphin-out-of-plasma = final: prev: {
     kdePackages = prev.kdePackages.overrideScope (kfinal: kprev: {
@@ -26,14 +26,6 @@
             --set XDG_MENU_PREFIX plasma-
         '';
       };
-    });
-  };
-
-  qt6ct-kde = final: prev: {
-    kdePackages = prev.kdePackages.overrideScope (kfinal: kprev: {
-      qt6ct-kde = prev.qt6ct.overrideAttrs (prevAttrs: {
-        src = inputs.qt6ct-kde;
-      });
     });
   };
 }

@@ -7,7 +7,6 @@ let
   iconPackage = pkgs.kdePackages.breeze-icons;
   iconName = "breeze-dark";
 
-  cursorPackage = config.home.pointerCursor.package;
   cursorName =  config.home.pointerCursor.name;
   cursorSize = config.home.pointerCursor.size;
 in

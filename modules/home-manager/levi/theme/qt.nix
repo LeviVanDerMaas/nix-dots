@@ -23,6 +23,7 @@
     kdePackages.breeze.qt5
 
     # plasma-integration should make most KDE-native apps render correctly.
+    # and also make some aspects of Breeze look nicer.
     kdePackages.plasma-integration
     kdePackages.plasma-integration.qt5
   ];
