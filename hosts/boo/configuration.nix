@@ -10,7 +10,6 @@
   ];
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
   nixpkgs.config.allowUnfree = true;
-  nixpkgs.overlays = [overlays.xilinx];
 
   # Don't forget to set a password with ‘passwd’.
   users.users.levi = {
@@ -71,9 +70,6 @@
 
 
 
-  environment.shellAliases = {
-    vivado-flake = "nix run gitlab:doronbehar/nix-xilinx#vivado";
-  };
 
   modules.nixos = {
     ddcutil = {

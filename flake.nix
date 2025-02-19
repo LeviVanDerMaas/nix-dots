@@ -22,17 +22,12 @@
     # Catppuccin theme for bat
     batThemeCatppuccin.url = "github:catppuccin/bat/main";
     batThemeCatppuccin.flake = false;
-
-    # Vivado Xilinx
-    nix-xilinx = {
-      url = "gitlab:doronbehar/nix-xilinx";
-    };
   };
 
-  outputs = { self, nixpkgs, nix-xilinx, ... }@inputs: 
+  outputs = { self, nixpkgs, ... }@inputs: 
 
   let
-    overlays = (import ./overlays { inherit inputs; }) // { xilinx = nix-xilinx.overlay; } ;
+    overlays = import ./overlays { inherit inputs; };
   in
   {
     inherit overlays;
