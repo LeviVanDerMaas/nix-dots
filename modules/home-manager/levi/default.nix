@@ -13,7 +13,7 @@ in
     ./hyprland
     ./kde
     ./kitty
-    ./nvim
+    ./neovim
     ./ripgrep
     ./shell
     ./thefuck

@@ -24,8 +24,9 @@
       # Language servers
       clang-tools
       lua-language-server
-      nixd
       metals
+      nixd
+      typescript-language-server
     ];
 
     plugins = with pkgs.vimPlugins; [

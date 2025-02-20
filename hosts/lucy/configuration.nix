@@ -1,23 +1,26 @@
 { inputs, pkgs, overlays, ... }:
 
 {
-  networking.hostName = "lucy";
-
+  # General
   imports = [
       ./hardware-configuration.nix
       ../../modules/nixos
       inputs.home-manager.nixosModules.home-manager
   ];
+  networking.hostName = "lucy";
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
   nixpkgs.config.allowUnfree = true;
 
-  # Don't forget to set a password with ‘passwd’.
+
+
+
+
+  # Users
   users.users.levi = {
     isNormalUser = true;
     description = "Levi";
     extraGroups = [ "networkmanager" "wheel" ];
   };
-
   home-manager = {
     extraSpecialArgs = { inherit inputs overlays; };
     users = {
@@ -40,7 +43,7 @@
   # Disk
   zramSwap.enable = true;
 
-  # No hibernation
+  # No hibernation, too risky with Windows dual booting.
   systemd.sleep.extraConfig = ''
     AllowHibernation=no
     AllowHybridSleep=no

@@ -6,7 +6,7 @@
     ./docker
     ./fonts
     ./hyprland
-    ./nvim
+    ./neovim
     ./openrgb
     ./openssh
     ./plasma
