@@ -51,8 +51,8 @@ in
         "$mainMod, P, pin"
         "$mainMod, C, centerwindow"
 
-        "$mainMod, Q, togglesplit"
-        "$mainMod SHIFT, Q, swapsplit"
+        "$mainMod, Q, swapsplit"
+        "$mainMod SHIFT, Q, togglesplit"
         
         # Screenshots
         " , PRINT, exec, grimblast copy output"
@@ -70,6 +70,7 @@ in
         "$mainMod, SPACE, exec, ${pkgs.ulauncher}/bin/ulauncher-toggle"
         "$mainMod, E, exec, ${pkgs.kdePackages.dolphin}/bin/dolphin"
         "$mainMod, B, exec, ${pkgs.firefox}/bin/firefox"
+        "$mainMod SHIFT, B, exec, ${pkgs.firefox}/bin/firefox --private-window"
       ]
     ];
 
