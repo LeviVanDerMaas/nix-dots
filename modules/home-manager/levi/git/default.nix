@@ -5,7 +5,6 @@ in
   programs.git = {
     enable = true;
     userName = "Levi van der Maas";
-    userEmail = "";
     difftastic.enable = true;
     aliases = {
       l = "log --graph --abbrev-commit --decorate --format=format:'${commit-fstr}'";
