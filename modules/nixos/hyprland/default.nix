@@ -21,7 +21,7 @@ in
     # not running under a DE.
     xdg.portal = {
       enable = true;
-      extraPortals = with pkgs; [ xdg-desktop-portal-gtk xdg-desktop-portal-kde ];
+      extraPortals = with pkgs; [ xdg-desktop-portal-gtk ];
       config.hyprland = {
         default = "hyprland;gtk";
       };

@@ -40,16 +40,16 @@ in
       enable = true;
     };
 
-    home.packages = with pkgs; [
+    home.packages = with pkgs.kdePackages; [
       # Install both breeze5 and breeze6 since qt5 is still very commonplace.
       # Use the qt5 output instead of libsForQt5 to prevent package collisions.
-      kdePackages.breeze
-      kdePackages.breeze.qt5
+      breeze
+      breeze.qt5
 
       # plasma-integration should make most KDE-native apps render correctly.
       # and also make some aspects of Breeze look nicer.
-      kdePackages.plasma-integration
-      kdePackages.plasma-integration.qt5
+      plasma-integration
+      plasma-integration.qt5
     ];
 
     # In practice this does not cause much issue if you have the kde portal

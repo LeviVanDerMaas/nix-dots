@@ -1,20 +1,31 @@
 { pkgs, overlays, ... }:
 
 # NOTE: Read the lengthy comment below on how this makes MIME-types work
-# outside of Dolphin with plasma. Furthermore, note that Dolphin relies on
-# kdeglobals to tell it what default apps to use in cases where MIME-types are
-# insufficient: e.g. if a MIMEtype tells Dolphin to open something with Neovim,
-# then kdeglobals will tell it what terminal to open it with. In cases where
-# Dolphin cannot determine a default application it will, depending on the
-# file-type, either:
+# outside of Dolphin with Plasma. Also note that without
+# xdg-desktop-portal-kde, Dolphin will not be able to pop-up a "choose
+# application to open with" menu when trying to open a file if the QT
+# platformtheme has also been forced to KDE. Furthermore, note
+# that Dolphin relies on kdeglobals to tell it what default apps to use in
+# cases where MIME-types are insufficient: e.g. if a MIMEtype tells Dolphin to
+# open something with Neovim, then kdeglobals will tell it what terminal to
+# open it with. In cases where Dolphin cannot determine a default application
+# it will, depending on the file-type, either:
 # - Make a hard-coded assumption and fail if that application is not installed.
 # - Use the first app KService has found to be suitable, if any, or fail.
+# Which case applies seems to depend on whether Plasma comes with a default app
+# for case 1.
 {
   nixpkgs.overlays = [ overlays.dolphin-out-of-plasma ];
   home.packages = with pkgs; [
     kdePackages.dolphin
     kdePackages.ark # File archiver by KDE, very integrated with Dolphin.
   ];
+
+  # This is needed to make the "open with" features of Dolphin work properly
+  # when the platformtheme is forced to kde. Unfortunately it does depend
+  # on plasma-workspace, so you may want to consider commenting this out and
+  # setting all your MIMEtypes manually to work around this.
+  xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-kde ];
 }
 
 
