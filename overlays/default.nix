@@ -28,4 +28,31 @@
       };
     });
   };
+
+  catppuccinThemes = final: prev: {
+    catppuccin-bat-mocha = final.fetchgit {
+      name = "catppuccin-bat-mocha";
+      url = "https://github.com/catppuccin/bat.git";
+      rev = "699f60fc8ec434574ca7451b444b880430319941";
+      hash = "sha256-HonuDBZfXz5pXFsi88YzrWfIO6UwB7HoRLAwRKHGFCQ=";
+      sparseCheckout = [ "themes" ];
+    };
+
+    catppuccin-yazi-mocha-blue = final.stdenvNoCC.mkDerivation {
+      name = "catppuccin-yazi-mocha";
+      src = final.fetchgit {
+        url = "https://github.com/catppuccin/yazi.git";
+        rev = "5d3a1eecc304524e995fe5b936b8e25f014953e8";
+        hash = "sha256-kBJ5pGaicrZy6rqHXTh2pvN7MvcbWYNhbUANLwZTul0=";
+        sparseCheckout = [ "themes/mocha" ];
+      };
+      buildPhase = '' # This makes it so that the catppucchin theme also applies to the bat preview.
+        mv themes/mocha/catppuccin-mocha-blue.toml theme.toml
+        rm -rf themes # Discard all other themes.
+        substituteInPlace theme.toml \
+          --replace-warn 'syntect_theme = "~/.config/yazi/Catppuccin-mocha.tmTheme"' 'syntect_theme = "${final.catppuccin-bat-mocha}/themes/Catppuccin Mocha.tmTheme"'
+      '';
+      installPhase = "mkdir -p $out; cp theme.toml $out/theme.toml";
+    };
+  };
 }
