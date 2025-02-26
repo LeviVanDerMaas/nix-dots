@@ -4,7 +4,7 @@
 # - The way Plasma is set up it really likes to take control over your theming when
 #   in other DE's or WM's if you do not set certain things explictly.
 
-{ lib, config, ... }:
+{ pkgs, lib, config, ... }:
 
 let
   cfg = config.modules.nixos.plasma;
@@ -17,5 +17,9 @@ in
   config = lib.mkIf cfg.enable {
     services.displayManager.sddm.enable = true;
     services.desktopManager.plasma6.enable = true;
+
+    environment.systemPackages = with pkgs; [
+      (catppuccin-kde.override { flavour = ["mocha"]; accents = ["blue"]; })
+    ];
   };
 }

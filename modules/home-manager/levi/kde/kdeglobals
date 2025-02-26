@@ -1,140 +1,135 @@
 [General]
 TerminalApplication=kitty
 
+[UiSettings]
+# Without this, Breeze will not apply kdeglobals colors to most Qt apps.
+ColorScheme=*
+
+
+# ================================THEME-COLORS=================================
+# The colors used here are the Catppuccin Mocha Blue colors. More specifically,
+# I stole them directly from the values the offical Catppuccin-KDE distribution
+# sets when you apply that theme inside KDE.
+
 [ColorEffects:Disabled]
 ChangeSelectionColor=
-Color=56,56,56
-ColorAmount=0
-ColorEffect=0
-ContrastAmount=0.65
-ContrastEffect=1
+Color=30, 30, 46
+ColorAmount=0.30000000000000004
+ColorEffect=2
+ContrastAmount=0.1
+ContrastEffect=0
 Enable=
-IntensityAmount=0.1
-IntensityEffect=2
+IntensityAmount=-1
+IntensityEffect=0
 
 [ColorEffects:Inactive]
 ChangeSelectionColor=true
-Color=112,111,110
-ColorAmount=0.025
-ColorEffect=2
-ContrastAmount=0.1
-ContrastEffect=2
-Enable=false
+Color=30, 30, 46
+ColorAmount=0.5
+ColorEffect=3
+ContrastAmount=0
+ContrastEffect=0
+Enable=true
 IntensityAmount=0
 IntensityEffect=0
 
 [Colors:Button]
-BackgroundAlternate=30,87,116
-BackgroundNormal=49,54,59
-DecorationFocus=61,174,233
-DecorationHover=61,174,233
-ForegroundActive=61,174,233
-ForegroundInactive=161,169,177
-ForegroundLink=29,153,243
-ForegroundNegative=218,68,83
-ForegroundNeutral=246,116,0
-ForegroundNormal=252,252,252
-ForegroundPositive=39,174,96
-ForegroundVisited=155,89,182
+BackgroundAlternate=137,180,250
+BackgroundNormal=49, 50, 68
+DecorationFocus=137,180,250
+DecorationHover=49, 50, 68
+ForegroundActive=250, 179, 135
+ForegroundInactive=166, 173, 200
+ForegroundLink=137,180,250
+ForegroundNegative=243, 139, 168
+ForegroundNeutral=249, 226, 175
+ForegroundNormal=205, 214, 244
+ForegroundPositive=166, 227, 161
+ForegroundVisited=203, 166, 247
 
 [Colors:Complementary]
-BackgroundAlternate=30,87,116
-BackgroundNormal=42,46,50
-DecorationFocus=61,174,233
-DecorationHover=61,174,233
-ForegroundActive=61,174,233
-ForegroundInactive=161,169,177
-ForegroundLink=29,153,243
-ForegroundNegative=218,68,83
-ForegroundNeutral=246,116,0
-ForegroundNormal=252,252,252
-ForegroundPositive=39,174,96
-ForegroundVisited=155,89,182
+BackgroundAlternate=17, 17, 27
+BackgroundNormal=24, 24, 37
+DecorationFocus=137,180,250
+DecorationHover=49, 50, 68
+ForegroundActive=250, 179, 135
+ForegroundInactive=166, 173, 200
+ForegroundLink=137,180,250
+ForegroundNegative=243, 139, 168
+ForegroundNeutral=249, 226, 175
+ForegroundNormal=205, 214, 244
+ForegroundPositive=166, 227, 161
+ForegroundVisited=203, 166, 247
 
 [Colors:Header]
-BackgroundAlternate=42,46,50
-BackgroundNormal=49,54,59
-DecorationFocus=61,174,233
-DecorationHover=61,174,233
-ForegroundActive=61,174,233
-ForegroundInactive=161,169,177
-ForegroundLink=29,153,243
-ForegroundNegative=218,68,83
-ForegroundNeutral=246,116,0
-ForegroundNormal=252,252,252
-ForegroundPositive=39,174,96
-ForegroundVisited=155,89,182
-
-[Colors:Header][Inactive]
-BackgroundAlternate=49,54,59
-BackgroundNormal=42,46,50
-DecorationFocus=61,174,233
-DecorationHover=61,174,233
-ForegroundActive=61,174,233
-ForegroundInactive=161,169,177
-ForegroundLink=29,153,243
-ForegroundNegative=218,68,83
-ForegroundNeutral=246,116,0
-ForegroundNormal=252,252,252
-ForegroundPositive=39,174,96
-ForegroundVisited=155,89,182
+BackgroundAlternate=17, 17, 27
+BackgroundNormal=24, 24, 37
+DecorationFocus=137,180,250
+DecorationHover=49, 50, 68
+ForegroundActive=250, 179, 135
+ForegroundInactive=166, 173, 200
+ForegroundLink=137,180,250
+ForegroundNegative=243, 139, 168
+ForegroundNeutral=249, 226, 175
+ForegroundNormal=205, 214, 244
+ForegroundPositive=166, 227, 161
+ForegroundVisited=203, 166, 247
 
 [Colors:Selection]
-BackgroundAlternate=30,87,116
-BackgroundNormal=61,174,233
-DecorationFocus=61,174,233
-DecorationHover=61,174,233
-ForegroundActive=252,252,252
-ForegroundInactive=161,169,177
-ForegroundLink=253,188,75
-ForegroundNegative=176,55,69
-ForegroundNeutral=198,92,0
-ForegroundNormal=252,252,252
-ForegroundPositive=23,104,57
-ForegroundVisited=155,89,182
+BackgroundAlternate=137,180,250
+# Specifically this BackgroundNormal is also what controls color of certain
+# Breeze icons (like the folder icon). Not sure why they chose this field
+# to control that.
+BackgroundNormal=137,180,250
+DecorationFocus=137,180,250
+DecorationHover=49, 50, 68
+ForegroundActive=250, 179, 135
+ForegroundInactive=24, 24, 37
+ForegroundLink=137,180,250
+ForegroundNegative=243, 139, 168
+ForegroundNeutral=249, 226, 175
+ForegroundNormal=17, 17, 27
+ForegroundPositive=166, 227, 161
+ForegroundVisited=203, 166, 247
 
 [Colors:Tooltip]
-BackgroundAlternate=42,46,50
-BackgroundNormal=49,54,59
-DecorationFocus=61,174,233
-DecorationHover=61,174,233
-ForegroundActive=61,174,233
-ForegroundInactive=161,169,177
-ForegroundLink=29,153,243
-ForegroundNegative=218,68,83
-ForegroundNeutral=246,116,0
-ForegroundNormal=252,252,252
-ForegroundPositive=39,174,96
-ForegroundVisited=155,89,182
+BackgroundAlternate=27,25,35
+BackgroundNormal=30, 30, 46
+DecorationFocus=137,180,250
+DecorationHover=49, 50, 68
+ForegroundActive=250, 179, 135
+ForegroundInactive=166, 173, 200
+ForegroundLink=137,180,250
+ForegroundNegative=243, 139, 168
+ForegroundNeutral=249, 226, 175
+ForegroundNormal=205, 214, 244
+ForegroundPositive=166, 227, 161
+ForegroundVisited=203, 166, 247
 
 [Colors:View]
-BackgroundAlternate=35,38,41
-BackgroundNormal=27,30,32
-DecorationFocus=61,174,233
-DecorationHover=61,174,233
-ForegroundActive=61,174,233
-ForegroundInactive=161,169,177
-ForegroundLink=29,153,243
-ForegroundNegative=218,68,83
-ForegroundNeutral=246,116,0
-ForegroundNormal=252,252,252
-ForegroundPositive=39,174,96
-ForegroundVisited=155,89,182
+BackgroundAlternate=24, 24, 37
+BackgroundNormal=30, 30, 46
+DecorationFocus=137,180,250
+DecorationHover=49, 50, 68
+ForegroundActive=250, 179, 135
+ForegroundInactive=166, 173, 200
+ForegroundLink=137,180,250
+ForegroundNegative=243, 139, 168
+ForegroundNeutral=249, 226, 175
+ForegroundNormal=205, 214, 244
+ForegroundPositive=166, 227, 161
+ForegroundVisited=203, 166, 247
 
 [Colors:Window]
-BackgroundAlternate=49,54,59
-BackgroundNormal=42,46,50
-DecorationFocus=61,174,233
-DecorationHover=61,174,233
-ForegroundActive=61,174,233
-ForegroundInactive=161,169,177
-ForegroundLink=29,153,243
-ForegroundNegative=218,68,83
-ForegroundNeutral=246,116,0
-ForegroundNormal=252,252,252
-ForegroundPositive=39,174,96
-ForegroundVisited=155,89,182
-
-# Without this, Breeze will not apply kdeglobals colors to most Qt apps.
-[UiSettings]
-ColorScheme=*
+BackgroundAlternate=17, 17, 27
+BackgroundNormal=24, 24, 37
+DecorationFocus=137,180,250
+DecorationHover=49, 50, 68
+ForegroundActive=250, 179, 135
+ForegroundInactive=166, 173, 200
+ForegroundLink=137,180,250
+ForegroundNegative=243, 139, 168
+ForegroundNeutral=249, 226, 175
+ForegroundNormal=205, 214, 244
+ForegroundPositive=166, 227, 161
+ForegroundVisited=203, 166, 247
