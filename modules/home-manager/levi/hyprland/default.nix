@@ -81,6 +81,7 @@ in
       grimblast
       hyprpolkitagent
       hyprpicker
+      wl-clipboard # Hyprland needs this
       ulauncher
     ];
 

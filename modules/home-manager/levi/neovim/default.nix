@@ -80,7 +80,7 @@
       # UI
       {
         plugin = catppuccin-nvim;
-        config = "colorscheme catppuccin-macchiato";
+        config = "colorscheme catppuccin-mocha";
       }
       {
         # Statusline
