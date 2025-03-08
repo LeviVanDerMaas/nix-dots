@@ -16,10 +16,10 @@
   modules.home-manager.levi = {
     hyprland = {
       enable = true;
-      monitorConfig = [
+      monitors.rules = [
         { 
-          name = ""; resolution = "1920x1080@60"; position = "0x0"; scale = "1";
-          bindWorkspaces = [ "1" "2" "3" "4" "5" "6" "7" "8" "9" "10" ];
+          name = "eDP-1"; resolution = "1920x1080@60"; position = "0x0"; scale = "1";
+          bindWorkspaces = [ "1" ];
         }
       ];
 
