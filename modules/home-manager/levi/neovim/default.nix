@@ -27,6 +27,7 @@
       metals
       nixd
       typescript-language-server
+      pyright
     ];
 
     plugins = with pkgs.vimPlugins; [
