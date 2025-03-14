@@ -40,26 +40,3 @@ function get_character_under_cursor()
     local line = vim.api.nvim_get_current_line()
     return string.sub(line, col + 1, col + 1)
 end
-
-function character_under_cursor_blank()
-    local char = get_character_under_cursor()
-    -- Vim defines blank characters as being either Space or Tab.
-    -- We also return true for empty lines as the cursor is technically
-    -- on a nonblank character.
-    return char == "" or char == " " or char == "\t"
-end
-
-function select_all_inner()
-    -- Select all text in a buffer barring any blanks at the start or end
-    -- This is much less trivial to do than selecting all characters in a
-    -- buffer, hence it is a seperate 
-    vim.cmd[[silent! exec "normal! \e"]] -- Little hack to force normal mode
-    vim.cmd [[silent! normal! gg0"]]
-    if character_under_cursor_blank() then
-        vim.cmd [[silent! exec "normal! /\\S\r"]]
-    end
-    vim.cmd [[silent! normal! vG$"]]
-    if character_under_cursor_blank() then
-        vim.cmd [[silent! exec "normal! ?\\S\r"]]
-    end
-end
