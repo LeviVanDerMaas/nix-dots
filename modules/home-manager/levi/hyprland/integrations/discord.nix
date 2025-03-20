@@ -2,6 +2,7 @@
 
 let 
   cfg = config.modules.home-manager.levi.hyprland.integrations.discord;
+  discordExe = "${pkgs.discord}/bin/discord";
 in
 {
   options.modules.home-manager.levi.hyprland.integrations.discord = {
@@ -22,9 +23,7 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    wayland.windowManager.hyprland.settings = let
-      discordExe = "${pkgs.discord}/bin/discord";
-    in {
+    wayland.windowManager.hyprland.settings = {
       workspace = [
         "special:discord, on-created-empty:${discordExe}"
       ];
@@ -33,13 +32,11 @@ in
         "workspace special:discord silent, class:(discord)"
       ];
 
-      exec-once = lib.optionals cfg.autoStart [
-        discordExe
-      ];
+      exec-once = lib.optionals cfg.autoStart [ discordExe ];
 
       bind = [
         "$mainMod, V, togglespecialworkspace, discord"
-        "$mainMod, V, movetoworkspace, special:discord,class:(discord)$"
+        "$mainMod, V, movetoworkspace, special:discord,class:(discord)"
       ];
     };
   };

@@ -26,7 +26,10 @@
         }
       ];
 
-      integrations.discord.autoStart = true;
+      integrations = {
+        discord.autoStart = true;
+        games.enable = true;
+      };
     };
 
     extraPackages = with pkgs; [
