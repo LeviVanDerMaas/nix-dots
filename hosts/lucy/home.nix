@@ -22,8 +22,6 @@
           bindWorkspaces = [ "1" ];
         }
       ];
-
-      integrations.discord.autoStart = false;
     };
 
     kde.symlink-kdeglobals = false;

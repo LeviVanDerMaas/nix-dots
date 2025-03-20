@@ -14,7 +14,7 @@ in
     };
     autoStart = lib.mkOption {
       type = lib.types.bool;
-      default = true;
+      default = false;
       description = ''
         Starts Discord alongside Hyprland.
       '';
@@ -22,19 +22,24 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    wayland.windowManager.hyprland.settings = {
-      bind = [
-        "$mainMod, V, togglespecialworkspace, discord"
-        "$mainMod, V, movetoworkspace, special:discord,class:(discord)$"
-      ];
-
-      exec-once = lib.optionals cfg.autoStart [
-        "${pkgs.discord}/bin/discord"
+    wayland.windowManager.hyprland.settings = let
+      discordExe = "${pkgs.discord}/bin/discord";
+    in {
+      workspace = [
+        "special:discord, on-created-empty:${discordExe}"
       ];
 
       windowrulev2 = [
-        # Make discord start on its special workspace silently.
         "workspace special:discord silent, class:(discord)"
+      ];
+
+      exec-once = lib.optionals cfg.autoStart [
+        discordExe
+      ];
+
+      bind = [
+        "$mainMod, V, togglespecialworkspace, discord"
+        "$mainMod, V, movetoworkspace, special:discord,class:(discord)$"
       ];
     };
   };
