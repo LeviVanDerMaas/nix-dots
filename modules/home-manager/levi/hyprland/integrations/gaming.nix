@@ -43,6 +43,7 @@ in
             hyprctl dispatch togglespecialworkspace ${sws}
           fi
         ''}"
+        "$mainMod, G, movetoworkspace, special:${sws},class:(steam)"
       ];
     };
   };
