@@ -1,9 +1,10 @@
-{ config, lib, ... }:
+{ pkgs, config, lib, ... }:
 
 let
   cfg = config.modules.home-manager.levi.hyprland.integrations.games;
+  gws = "game";
+  sws = "steam";
   initialGameClasses = [
-    "steam" # Remove this if that bug with special workspaces is ever fixed.
     "steam_app_.*"
     "gamescope"
     ".*prismlauncher.*"
@@ -13,29 +14,36 @@ in
 {
   options.modules.home-manager.levi.hyprland.integrations.games = {
     enable = lib.mkEnableOption ''
-      Set up a workspace on which games go by default. 
-      Also I commented out some stuff that would assign steam to its own workspace,
-      the problem is that there is a bug with either steam or Hyprland that causes
-      certain xwayland sub-windows in steam to spawn on the focussed workspace instead
-      of the open special workspace; right now this basically just opens everything specified
-      in workspace 5.
+      Makes a special gaming workspace for games and puts Steam on a
+      special workspace. Both workspaces are controlled with the same key,
+      where the Steam workspace will open if the gaming workspace is already open
+      or there is nothing on the gaming workspace.
     '';
   };
 
   config = lib.mkIf cfg.enable {
     wayland.windowManager.hyprland.settings = {
-      # workspace = [
-      #   "special:steam, on-created-empty:steam"
-      # ];
+      workspace = [
+        "name:${gws}, on-created-empty:hyprctl dispatch workspace special:${sws}"
+        "special:${sws}, on-created-empty:steam"
+      ];
 
       windowrulev2 = [
-        # "workspace special:steam silent, initialClass:(steam)"
-      ] ++ builtins.map (c: "workspace 5 silent, initialClass:(${c})") initialGameClasses;
+        "workspace special:${sws}, initialClass:(steam)"
+        "pin, title:(), class:(steam)" # Hack for steam subwindows refusing to go on special ws.
+      ] ++ builtins.map (c: "workspace name:${gws}, initialClass:(${c})") initialGameClasses;
 
-      # bind = [
-      #   "$mainMod, G, togglespecialworkspace, steam"
-      #   "$mainMod, G, movetoworkspace, special:steam,class:(steam)$"
-      # ];
+
+      bind = [
+        # If our gaming workspace is already active we toggle the steam workspace
+        "$mainMod, G, exec, ${pkgs.writeShellScript "hyprGameWorkspaceToggler" ''
+          if [ "$(hyprctl -j activeworkspace | ${pkgs.jq}/bin/jq -r .name)" != "${gws}" ]; then
+            hyprctl dispatch workspace name:${gws}
+          else
+            hyprctl dispatch togglespecialworkspace ${sws}
+          fi
+        ''}"
+      ];
     };
   };
 }

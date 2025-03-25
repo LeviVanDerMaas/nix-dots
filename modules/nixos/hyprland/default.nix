@@ -6,7 +6,9 @@ in
 {
   options.modules.nixos.hyprland = {
     enable = lib.mkEnableOption ''
-      Hyprland system module. Use Home-Mamanger module for configuration.
+      Hyprland system module. Enabling this module will also set up some things
+      on the system-side which we can use on the Home-Manager side to add DE
+      features to Hyprland. 
     '';
   };
 
@@ -15,10 +17,7 @@ in
 
     # Hyprland has its own xdg-desktop-portal-hyprland that the NixOS module
     # automatically installs. However, it does not implement a file picker and
-    # is still in development, so Hyprland represent gtk portal as fallback.
-    # We also add the kde portal because some KDE apps (Dolphin) will ignore
-    # portal spec under certain circumstances and only look for kde portal when
-    # not running under a DE.
+    # is still in development, so Hyprland recommends gtk portal as fallback.
     xdg.portal = {
       enable = true;
       extraPortals = with pkgs; [ xdg-desktop-portal-gtk ];

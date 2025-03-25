@@ -25,14 +25,14 @@ in
   config = lib.mkIf cfg.enable {
     wayland.windowManager.hyprland.settings = {
       workspace = [
-        "special:discord, on-created-empty:${discordExe}"
+        "special:discord, on-created-empty: ${discordExe}"
       ];
 
       windowrulev2 = [
         "workspace special:discord silent, class:(discord)"
       ];
 
-      exec-once = lib.optionals cfg.autoStart [ discordExe ];
+      exec-once = lib.optionals cfg.autoStart [ "${discordExe}" ];
 
       bind = [
         "$mainMod, V, togglespecialworkspace, discord"
