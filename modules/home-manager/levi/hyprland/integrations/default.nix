@@ -1,6 +1,6 @@
 {
   imports = [
     ./discord.nix
-    ./games.nix
+    ./gaming.nix
   ];
 }
