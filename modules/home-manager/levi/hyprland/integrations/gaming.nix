@@ -1,7 +1,7 @@
 { pkgs, config, lib, ... }:
 
 let
-  cfg = config.modules.home-manager.levi.hyprland.integrations.games;
+  cfg = config.modules.home-manager.levi.hyprland.integrations.gaming;
   gws = "game";
   sws = "steam";
   initialGameClasses = [
@@ -12,7 +12,7 @@ let
   ];
 in
 {
-  options.modules.home-manager.levi.hyprland.integrations.games = {
+  options.modules.home-manager.levi.hyprland.integrations.gaming = {
     enable = lib.mkEnableOption ''
       Makes a special gaming workspace for games and puts Steam on a
       special workspace. Both workspaces are controlled with the same key,
@@ -29,9 +29,9 @@ in
       ];
 
       windowrulev2 = [
-        "workspace special:${sws}, initialClass:(steam)"
+        "workspace special:${sws} silent, initialClass:(steam)"
         "pin, title:(), class:(steam)" # Hack for steam subwindows refusing to go on special ws.
-      ] ++ builtins.map (c: "workspace name:${gws}, initialClass:(${c})") initialGameClasses;
+      ] ++ builtins.map (c: "workspace name:${gws} silent, initialClass:(${c})") initialGameClasses;
 
 
       bind = [

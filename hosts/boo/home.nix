@@ -28,7 +28,7 @@
 
       integrations = {
         discord.autoStart = true;
-        games.enable = true;
+        gaming.enable = true;
       };
     };
 
