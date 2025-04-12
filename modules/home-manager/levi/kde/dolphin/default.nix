@@ -25,7 +25,7 @@
   # when the platformtheme is forced to kde. Unfortunately it does depend
   # on plasma-workspace, so you may want to consider commenting this out and
   # setting all your MIMEtypes manually to work around this.
-  xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-kde ];
+  xdg.portal.extraPortals = [ pkgs.kdePackages.xdg-desktop-portal-kde ];
 }
 
 

@@ -28,7 +28,7 @@ in
         "special:discord, on-created-empty: ${discordExe}"
       ];
 
-      windowrulev2 = [
+      windowrule = [
         "workspace special:discord silent, class:(discord)"
       ];
 

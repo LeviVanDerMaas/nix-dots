@@ -28,7 +28,7 @@ in
         "special:${sws}, on-created-empty:steam"
       ];
 
-      windowrulev2 = [
+      windowrule = [
         "workspace special:${sws} silent, initialClass:(steam)"
         "pin, title:(), class:(steam)" # Hack for steam subwindows refusing to go on special ws.
       ] ++ builtins.map (c: "workspace name:${gws} silent, initialClass:(${c})") initialGameClasses;

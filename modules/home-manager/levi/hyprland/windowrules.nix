@@ -5,7 +5,7 @@ let
 in
 {
   wayland.windowManager.hyprland.settings = lib.mkIf cfg.enable {
-      windowrulev2 = [
+      windowrule = [
         "dimaround, class:(ulauncher)"
       ];
     };
