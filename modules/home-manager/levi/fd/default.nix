@@ -1,10 +1,13 @@
 {
   programs.fd = {
     enable = true;
-    hidden = true;
+    extraOptions = [
+      "--hidden"
+    ];
     ignores = [
       ".git/"
       "/nix/store"
+      ".nix-profile"
     ];
   };
 }
