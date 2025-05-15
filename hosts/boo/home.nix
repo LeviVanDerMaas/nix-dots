@@ -18,11 +18,11 @@
       monitors.rules = [
         { 
           name = "DP-1"; resolution = "1920x1080"; position = "0x0"; scale = "1";
-          bindWorkspaces = [ "1" "2" "3" "4" "5" ];
+          bindWorkspaces = [ 1 2 3 4 5 ];
         }
         { 
           name = "DP-3"; resolution = "1920x1080"; position = "-1920x0"; scale = "1";
-          bindWorkspaces = [ "6" "7" "8" "9" "10" ];
+          bindWorkspaces = [ 6 7 8 9 10 ];
         }
       ];
 

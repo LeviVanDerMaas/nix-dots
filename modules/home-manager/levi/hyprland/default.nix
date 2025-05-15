@@ -73,7 +73,7 @@ in
                   '';
                 };
                 bindWorkspaces = lib.mkOption {
-                  type = lib.types.listOf lib.types.str;
+                  type = lib.types.listOf (lib.types.either lib.types.int lib.types.str);
                   default = [];
                   description = ''
                     Workspaces that are to be bound to this monitor. The
@@ -119,9 +119,9 @@ in
         # Binds (default) workspaces to monitors as indicated in cfg.bindWorkspaces
         workspace = builtins.concatMap
           (mr: lib.optionals (mr.bindWorkspaces != []) (
-            [ "${builtins.head mr.bindWorkspaces}, default:true" ]
+            [ "${builtins.toString (builtins.head mr.bindWorkspaces)}, default:true" ]
             ++
-            builtins.map (w: "${w}, monitor:${mr.name}") mr.bindWorkspaces
+            builtins.map (w: "${builtins.toString w}, monitor:${mr.name}") mr.bindWorkspaces
           ))
           cfg.monitors.rules;
 
