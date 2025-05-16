@@ -15,7 +15,6 @@
 # Which case applies seems to depend on whether Plasma comes with a default app
 # for case 1.
 {
-  nixpkgs.overlays = [ overlays.dolphin-out-of-plasma ];
   home.packages = with pkgs; [
     kdePackages.dolphin
     kdePackages.ark # File archiver by KDE, very integrated with Dolphin.

@@ -1,8 +1,6 @@
 { pkgs, overlays, ... }:
 
 {
-  nixpkgs.overlays = [ overlays.catppuccinThemes ];
-
   programs.bat = {
     enable = true;
     themes = {

@@ -1,4 +1,4 @@
-{ inputs, pkgs, lib, config, ...}:
+{ flake-inputs, pkgs, lib, config, ...}:
 
 let
   cfg = config.modules.nixos.openrgb;
@@ -57,7 +57,7 @@ in
       # Compiles newer (experimental) version because that supports a bunch more hardware that
       # I have.
       package = (pkgs.openrgb.overrideAttrs (oldAttrs: {
-        src = inputs.openrgb;
+        src = flake-inputs.openrgb;
         postPatch = ''
           patchShebangs scripts/build-udev-rules.sh
           substituteInPlace scripts/build-udev-rules.sh \

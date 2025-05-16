@@ -1,15 +1,16 @@
-{ inputs, pkgs, overlays, ... }:
+{ flake-inputs, pkgs, overlays, ... }:
 
 {
   # General
   imports = [
       ./hardware-configuration.nix
       ../../modules/nixos
-      inputs.home-manager.nixosModules.home-manager
+      flake-inputs.home-manager.nixosModules.home-manager
   ];
   networking.hostName = "boo";
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
   nixpkgs.config.allowUnfree = true;
+  nixpkgs.overlays = import ../../overlays;
 
 
 
@@ -22,7 +23,7 @@
     extraGroups = [ "networkmanager" "wheel" ];
   };
   home-manager = {
-    extraSpecialArgs = { inherit inputs overlays; };
+    extraSpecialArgs = { inherit flake-inputs overlays; };
     users = {
       levi = import ./home.nix;
     };
