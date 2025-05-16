@@ -86,8 +86,7 @@
       serverStartDelay = 3;
       initRunArgs = ''-d "NZXT RGB & Fan Controller" -c 5D0167'';
       initRunDelay = 10;
-      initRunTries = 10;
-      initRunTryInterval = 5;
+      initRunTries = 20;
     };
     steam.enable = true;
     zsa.enable = true;

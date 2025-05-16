@@ -3,7 +3,6 @@
 let
   cfg = config.modules.nixos.openrgb;
   toStr = builtins.toString;
-  openrgbInitRun = import ./initRunScript.nix { inherit pkgs; inherit config; };
 in
 {
   options.modules.nixos.openrgb = {
@@ -15,7 +14,9 @@ in
       description = ''
         By how many seconds to delay the OpenRGB server daemon on start.
         Can be useful when some hardware takes (unusually long) to ready
-        when booting, meaning the server will not detect them.
+        when booting: if the OpenRGB server starts while hardware is not ready
+        it seems that the server will never detect that hardware for the duration
+        of its run, so this can prevent that.
     '';
     };
     initRunArgs = lib.mkOption {
@@ -30,11 +31,13 @@ in
     };
     initRunDelay = lib.mkOption {
       type = lib.types.int;
-      default = 0;
+      default = 5;
       description = ''
-        By how many seconds to delay the oneshot service created by the 'initRunArgs'
-        option on start. Can for example be used to give the server enough time
-        to completely set up.
+        Time to wait in seconds before attempting to run the arguments
+        provided in 'initRunArgs'. This delay is applied on each try. This is
+        useful since it might take a while after a system boot before all
+        hardware is actually fully known to the OpenRGB server (not sure if
+        that has to do with OpenRGB implementation or the hardware itself).
     '';
     };
     initRunTries = lib.mkOption {
@@ -42,17 +45,8 @@ in
       default = 1;
       description = ''
         How often to try to execute the oneshot service set-up by 'initRunArgs'
-        to complete with exit code 0. Can for example be useful if the OpenRGB server daemon
-        might not have detected all hardware yet.
-    '';
-    };
-    initRunTryInterval = lib.mkOption {
-      type = lib.types.int;
-      default = 5;
-      description = ''
-          Time to wait in seconds before reattempting to run the arguments provided in
-          'initRunArgs' if they failed on a previous try (and there are still tries remaining).
-    '';
+        to complete with exit code 0.
+      '';
     };
   };
 
@@ -83,15 +77,19 @@ in
     # This means that once systemd begins starting other services after boot, it will take 
     # at least the delay of this service and openrgb.service until this service actually
     # runs the openrgb arguments.
-    systemd.services.openrgbInitSet = lib.mkIf (cfg.initRunArgs != "") {
+    systemd.services.openrgbInitRun = lib.mkIf (cfg.initRunArgs != "") {
       enable = true;
       description =  "Custom OpenRGB initial argument runner";
       wantedBy = [ "openrgb.service" ];
       after = [ "openrgb.service" ];
       preStart = "${pkgs.coreutils}/bin/sleep ${toStr cfg.initRunDelay}";
+      startLimitBurst = cfg.initRunTries;
       serviceConfig = {
-         Type = "oneshot";
-         ExecStart = openrgbInitRun;
+        Type = "oneshot";
+        ExecStart = "${pkgs.openrgb}/bin/openrgb ${cfg.initRunArgs}";
+        Restart = "on-failure";
+        StartLimitIntervalSec = "infinity";
+        # RestartSec = cfg.initRunTryInterval; # same as preStart def above, but has no initial delay.
       };
     };
   };
