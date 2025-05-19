@@ -1,8 +1,6 @@
-{ pkgs, overlays, config, lib, ... }:
+{ pkgs, config, lib, ... }:
 
 {
-  nixpkgs.overlays = [ overlays.catppuccinThemes ];
-
   programs.yazi = {
     enable = true;
     enableBashIntegration = true;

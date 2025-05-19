@@ -1,5 +1,11 @@
 {
-  description = "Top-level flake for my NixOS and home-manager configs";
+  description = ''
+    Top-level flake for my NixOS and home-manager configs. This is a config
+    designed to be usuable by multiple systems: modules are designed to be
+    always imported, and their configs are made to be toggleable (using
+    lib.mkIf) for more fine-grained control per system when desired. As such,
+    this flake is not desigend to be consumed by other flakes.
+  '';
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
@@ -15,18 +21,19 @@
     };
   };
 
-  outputs = { self, nixpkgs, ... }@inputs: rec {
-    overlays = import ./overlays { inherit inputs; };
+  outputs = { self, nixpkgs, ... }@flake-inputs: let
+    system = "x86_64-linux";
+    pkgs = nixpkgs.legacyPackages.${system};
+    lib = nixpkgs.lib;
 
-    nixosConfigurations = {
-      "boo" = nixpkgs.lib.nixosSystem {
-        specialArgs = { inherit inputs overlays; };
-        modules = [ (import ./hosts/boo/configuration.nix) ];
-      };
-      "lucy" = nixpkgs.lib.nixosSystem {
-        specialArgs = { inherit inputs overlays; };
-        modules = [ (import ./hosts/lucy/configuration.nix) ];
-      };
-    };
+    systemConfigsFor = hosts: lib.genAttrs hosts (host: lib.nixosSystem {
+      specialArgs = { inherit flake-inputs; };
+      modules = [ (import ./hosts/${host}/configuration.nix) ];
+    });
+  in {
+    nixosConfigurations = systemConfigsFor [ 
+      "boo" 
+      "lucy"
+    ];
   };
 }

@@ -1,4 +1,4 @@
-{ pkgs, overlays, ... }:
+{ pkgs, ... }:
 
 # NOTE: Read the lengthy comment below on how this makes MIME-types work
 # outside of Dolphin with Plasma. Also note that without
@@ -15,7 +15,6 @@
 # Which case applies seems to depend on whether Plasma comes with a default app
 # for case 1.
 {
-  nixpkgs.overlays = [ overlays.dolphin-out-of-plasma ];
   home.packages = with pkgs; [
     kdePackages.dolphin
     kdePackages.ark # File archiver by KDE, very integrated with Dolphin.
