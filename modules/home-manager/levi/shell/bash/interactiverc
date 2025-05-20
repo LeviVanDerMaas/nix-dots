@@ -1,5 +1,0 @@
-launch() {
-    if [ "$#" -gt 0 ]; then 
-        "$@" &> /dev/null & disown
-    fi
-}

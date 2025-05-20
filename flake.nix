@@ -1,10 +1,6 @@
 {
   description = ''
-    Top-level flake for my NixOS and home-manager configs. This is a config
-    designed to be usuable by multiple systems: modules are designed to be
-    always imported, and their configs are made to be toggleable (using
-    lib.mkIf) for more fine-grained control per system when desired. As such,
-    this flake is not desigend to be consumed by other flakes.
+    Lorem Ipsum
   '';
 
   inputs = {
@@ -26,9 +22,9 @@
     pkgs = nixpkgs.legacyPackages.${system};
     lib = nixpkgs.lib;
 
-    systemConfigsFor = hosts: lib.genAttrs hosts (host: lib.nixosSystem {
+    systemConfigsFor = systems: lib.genAttrs systems (system: lib.nixosSystem {
       specialArgs = { inherit flake-inputs; };
-      modules = [ (import ./hosts/${host}/configuration.nix) ];
+      modules = [ (import ./systems/${system}/configuration.nix) ];
     });
   in {
     nixosConfigurations = systemConfigsFor [ 
