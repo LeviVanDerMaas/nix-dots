@@ -1,3 +1,5 @@
+{ rootRel, ... }:
+
 {
   nix.settings = {
     experimental-features = [ "nix-command" "flakes" ];
@@ -5,5 +7,5 @@
     keep-outputs = true;
   };
   nixpkgs.config.allowUnfree = true;
-  nixpkgs.overlays = import ../../overlays;
+  nixpkgs.overlays = import (rootRel /overlays);
 }

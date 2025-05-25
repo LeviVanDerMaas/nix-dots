@@ -1,4 +1,4 @@
-{ lib, flake-inputs, config, ... }:
+{ lib, flake-inputs, config, rootRel, ... }:
 
 let
   cfg = config.common.users.levi;
@@ -32,10 +32,10 @@ in
 
     home-manager = {
       useGlobalPkgs = true;
-      extraSpecialArgs = { inherit flake-inputs; };
+      extraSpecialArgs = { inherit flake-inputs rootRel; };
       users.levi = { ... }: {
         # Doing it like this lets the extra hm config get merged properly.
-        imports = [ ../../homes/levi ];
+        imports = [ (rootRel /homes/levi) ];
         config = cfg.extraHMConfig;
       };
     };

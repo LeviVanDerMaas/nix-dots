@@ -1,7 +1,7 @@
-{ lib, ... }:
+{ lib, rootRel, ... }:
 
 let
-  outskirts = "${../../../assets/wallpapers/outskirts.jpg}";
+  outskirts = "${rootRel /assets/wallpapers/outskirts.jpg}";
 in
 {
   services.hyprpaper = {

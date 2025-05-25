@@ -1,10 +1,10 @@
-{ config, ... }:
+{ config, rootRel, ... }:
 
 {
   # General
   imports = [
-      ./hardware-configuration.nix
-      ../../common
+    ./hardware-configuration.nix
+    (rootRel /common)
   ];
 
   # System name

@@ -1,4 +1,4 @@
-{ pkgs, config, lib, ... }:
+{ pkgs, config, lib, rootRel,  ... }:
 
 let
   cfg = config.common.sddm;
@@ -11,7 +11,7 @@ let
   themePkg = pkgs.sddm-astronaut.override {
     themeConfig = {
       # If this doesn't work decaptilazing `Background` may.
-      Background = "${../../assets/wallpapers/woodrot.png}";
+      Background = "${rootRel /assets/wallpapers/woodrot.png}";
 
       FullBlur = "false";
       PartialBlur = "false";

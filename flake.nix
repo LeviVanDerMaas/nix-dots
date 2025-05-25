@@ -18,12 +18,15 @@
   };
 
   outputs = { self, nixpkgs, ... }@flake-inputs: let
-    system = "x86_64-linux";
-    pkgs = nixpkgs.legacyPackages.${system};
+    arch = "x86_64-linux";
+    pkgs = nixpkgs.legacyPackages.${arch};
     lib = nixpkgs.lib;
 
     systemConfigsFor = systems: lib.genAttrs systems (system: lib.nixosSystem {
-      specialArgs = { inherit flake-inputs; };
+      specialArgs = { 
+        inherit flake-inputs;
+        rootRel = subPath: ./. + subPath;
+      };
       modules = [ (import ./systems/${system}/configuration.nix) ];
     });
   in {
