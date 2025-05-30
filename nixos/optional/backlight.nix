@@ -1,9 +1,9 @@
 { lib, config, ... }:
 let
-  cfg = config.common.backlight;
+  cfg = config.modules.backlight;
 in
 {
-  options.common.backlight = {
+  options.modules.backlight = {
     enable = lib.mkEnableOption "Enable backlight control";
   };
 

@@ -1,10 +1,10 @@
 { pkgs, lib, config, ... }:
 
 let
-  cfg = config.common.zsa;
+  cfg = config.modules.zsa;
 in
 {
-  options.common.zsa = {
+  options.modules.zsa = {
     enable = lib.mkEnableOption "Set up ZSA udev rules and keymapp";
   };
 

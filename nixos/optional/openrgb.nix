@@ -1,11 +1,11 @@
 { flake-inputs, pkgs, lib, config, ...}:
 
 let
-  cfg = config.common.openrgb;
+  cfg = config.modules.openrgb;
   toStr = builtins.toString;
 in
 {
-  options.common.openrgb = {
+  options.modules.openrgb = {
     enable = 
       lib.mkEnableOption "OpenRGB module";
     serverStartDelay = lib.mkOption {

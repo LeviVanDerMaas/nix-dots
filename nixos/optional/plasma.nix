@@ -7,10 +7,10 @@
 { pkgs, lib, config, ... }:
 
 let
-  cfg = config.common.plasma;
+  cfg = config.modules.plasma;
 in
 {
-  options.common.plasma = {
+  options.modules.plasma = {
     enable = lib.mkEnableOption "Install and configure Plasma";
   };
 

@@ -1,9 +1,9 @@
 { pkgs, lib, config, ... }:
 let
-  cfg = config.common.ddcutil;
+  cfg = config.modules.ddcutil;
 in
 {
-  options.common.ddcutil = {
+  options.modules.ddcutil = {
     enable = lib.mkEnableOption "Enable ddcutil service.";
     numMonitors = lib.mkOption {
       type = lib.types.int;

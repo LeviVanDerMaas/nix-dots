@@ -1,14 +1,14 @@
 { lib, flake-inputs, config, rootRel, ... }:
 
 let
-  cfg = config.common.users.levi;
+  cfg = config.modules.users.levi;
 in
 {
   imports = [
     flake-inputs.home-manager.nixosModules.home-manager
   ];
 
-  options.common.users.levi = {
+  options.modules.users.levi = {
     enable = lib.mkEnableOption "Set up levi as user";
 
     extraHMConfig = lib.mkOption {
@@ -31,8 +31,11 @@ in
     };
 
     home-manager = {
+      # Set these since we need em to be like this for this user, so
+      # that they will conflict if they are changed elsewhere.
       useGlobalPkgs = true;
       extraSpecialArgs = { inherit flake-inputs rootRel; };
+
       users.levi = { ... }: {
         # Doing it like this lets the extra hm config get merged properly.
         imports = [ (rootRel /homes/levi) ];

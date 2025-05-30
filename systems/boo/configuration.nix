@@ -4,7 +4,7 @@
   # General
   imports = [
     ./hardware-configuration.nix
-    (rootRel /common)
+    (rootRel /nixos)
   ];
 
   # System Name
@@ -28,7 +28,7 @@
 
 
   # Configuration derived from common config.
-  common = {
+  modules = {
     ddcutil = {
       enable = true;
       numMonitors = 2;
@@ -51,8 +51,8 @@
 
 
   # User specific config
-  common.users.levi.enable = true;
-  common.users.levi.extraHMConfig = {
+  modules.users.levi.enable = true;
+  modules.users.levi.extraHMConfig = {
     modules = {
       hyprland = {
         enable = true;

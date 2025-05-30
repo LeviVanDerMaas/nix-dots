@@ -1,20 +1,10 @@
 { pkgs, lib, config, ... }:
 
 let
-  cfg = config.common.steam;
-  gamescope-3_16_2 = (pkgs.gamescope.overrideAttrs (oldAttrs: {
-    version = "3.16.2";
-    src = pkgs.fetchFromGitHub {
-      owner = "ValveSoftware";
-      repo = "gamescope";
-      tag = "3.16.2";
-      fetchSubmodules = true;
-      hash = "sha256-vKl2wYAt051+1IaCGB1ylGa83WTS+neqZwtQ/4MyCck=";
-    };
-  }));
+  cfg = config.modules.gaming.steam;
 in
 {
-  options.common.steam = {
+  options.modules.gaming.steam = {
     enable = lib.mkEnableOption ''
       Install Steam and configure and install things needed to run games and Proton.
     '';
@@ -38,18 +28,11 @@ in
           stdenv.cc.cc.lib
           libkrb5
           keyutils
-
-          gamescope-3_16_2
         ];
         extraLibraries = pkgs: with pkgs;
           lib.optionals cfg.install-gperftools [ gperftools ] ++ [
         ];
       };
-    };
-
-    programs.gamescope = {
-      enable = true;
-      package = gamescope-3_16_2;
     };
   };
 }

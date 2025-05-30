@@ -4,7 +4,7 @@
   # General
   imports = [
     ./hardware-configuration.nix
-    (rootRel /common)
+    (rootRel /nixos)
   ];
 
   # System name
@@ -43,7 +43,7 @@
 
 
   # Configuration derived from common config.
-  common = {
+  modules = {
     hyprland.enable = true;
     plasma.enable = true;
     backlight.enable = true;
@@ -53,10 +53,10 @@
 
 
   # User specific config.
-  common.users.levi.enable = true;
-  common.users.levi.extraHMConfig = {
+  modules.users.levi.enable = true;
+  modules.users.levi.extraHMConfig = {
     hyprland.enable = true;
-    kde.symlink-kdeglobals = !config.common.plasma.enable;
+    kde.symlink-kdeglobals = !config.modules.plasma.enable;
   };
 
 

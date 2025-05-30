@@ -1,22 +1,26 @@
 { pkgs, lib, config, ... }:
 
 let
-  cfg = config.common.gaming;
+  cfg = config.modules.gaming;
 in
 {
   imports = [
     ./steam.nix
+    ./gamescope.nix
   ];
 
-  options.common.gaming = {
+  options.modules.gaming = {
     enable = lib.mkEnableOption ''
       Configures the system for gaming, including installing games/launchers
-      themselves. By default will also enable the steam config.
+      and other gaming-related programs such as gamescope by default.
     '';
   };
 
   config = lib.mkIf cfg.enable {
-    common.steam.enable = lib.mkDefault true;
+    modules.gaming = {
+      steam.enable = lib.mkDefault true;
+      gamescope.enable = lib.mkDefault true;
+    };
 
     environment.systemPackages = with pkgs; [
       prismlauncher

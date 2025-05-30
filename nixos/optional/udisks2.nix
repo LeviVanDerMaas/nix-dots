@@ -1,10 +1,10 @@
 { pkgs, lib, config, ... }:
 
 let
-  cfg = config.common.udisks2;
+  cfg = config.modules.udisks2;
 in
 {
-  options.common.udisks2 = {
+  options.modules.udisks2 = {
     enable = lib.mkEnableOption ''
       Enables the udisks2 module, a DBUS service that allows applications
       to query and manipulate storage devices. Mainly useful when there is

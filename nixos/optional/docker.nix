@@ -1,10 +1,10 @@
 { pkgs, lib, config, ... }:
 
 let
-  cfg = config.common.docker;
+  cfg = config.modules.docker;
 in
 {
-  options.common.docker = {
+  options.modules.docker = {
     enable = 
       lib.mkEnableOption "Docker module";
     dockerGroupMembers = lib.mkOption {

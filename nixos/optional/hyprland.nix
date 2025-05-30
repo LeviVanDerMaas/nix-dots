@@ -1,10 +1,10 @@
 { pkgs, lib, config, ... }:
 
 let
-  cfg = config.common.hyprland;
+  cfg = config.modules.hyprland;
 in
 {
-  options.common.hyprland = {
+  options.modules.hyprland = {
     enable = lib.mkEnableOption ''
       Hyprland system module. Enabling this module will also set up some things
       on the system-side which we can use on the Home-Manager side to add DE
@@ -27,6 +27,6 @@ in
     };
 
     # Needed to let udiskie automount when installed on home-manager side.
-    common.udisks2.enable = true;
+    modules.udisks2.enable = true;
   };
 }

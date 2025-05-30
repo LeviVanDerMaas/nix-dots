@@ -1,7 +1,7 @@
 { pkgs, config, lib, rootRel,  ... }:
 
 let
-  cfg = config.common.sddm;
+  cfg = config.modules.sddm;
   red = "#CF0700";
 
   # Note to future me: this theme actually has a lot of config support to allow you
@@ -31,7 +31,7 @@ let
   };
 in
 {
-  options.common.sddm = {
+  options.modules.sddm = {
     enable = lib.mkOption {
       type = lib.types.bool;
       default = true;
