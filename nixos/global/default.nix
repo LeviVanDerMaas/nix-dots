@@ -1,12 +1,10 @@
 {
   imports = [
-    ./audio.nix
-    ./editor.nix
+    ./nix
+    ./programs
+    ./services
+
     ./fonts.nix
-    ./home-manager.nix
     ./locale.nix
-    ./nix.nix
-    ./openssh.nix
-    ./x.nix
   ];
 }
