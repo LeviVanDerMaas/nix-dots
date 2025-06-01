@@ -55,8 +55,10 @@
   # User specific config.
   modules.users.levi.enable = true;
   modules.users.levi.extraHMConfig = {
-    hyprland.enable = true;
-    kde.symlink-kdeglobals = !config.modules.plasma.enable;
+    modules = {
+      hyprland.enable = true;
+      kde.symlink-kdeglobals = !config.modules.plasma.enable;
+    };
   };
 
 

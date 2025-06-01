@@ -2,25 +2,10 @@
 
 {
   imports = [
-    ./hyprland
-    ./kde
-    ./neovim
-    ./theme
-    ./waybar
-
-    ./bash.nix
-    ./bat.nix
-    ./dunst.nix
-    ./fd.nix
-    ./firefox.nix
-    ./git.nix
-    ./kitty.nix
-    ./kitty.nix
-    ./ripgrep.nix
-    ./starship.nix
-    ./udiskie.nix
-    ./yazi.nix
-    ./zoxide.nix
+    ./cli
+    ./tui
+    ./services
+    ./desktop
   ];
 
   config = { 
@@ -29,14 +14,6 @@
     home = {
       username = "levi";
       homeDirectory = "/home/levi";
-
-      # Non-module packages
-      packages = with pkgs; [
-        discord
-        fastfetch
-        obsidian
-        vlc
-      ];
     };
 
 

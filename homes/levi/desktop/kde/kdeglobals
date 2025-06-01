@@ -1,4 +1,5 @@
 [General]
+# KDE native apps will use this as the default terminal, fallback to Konsole if not set.
 TerminalApplication=kitty
 
 [UiSettings]

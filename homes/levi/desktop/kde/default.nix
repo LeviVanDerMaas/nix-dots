@@ -4,11 +4,6 @@ let
   cfg = config.modules.kde;
 in
 {
-  imports = [
-    ./breeze
-    ./dolphin
-  ];
-
   options.modules.kde = { 
     symlink-kdeglobals = lib.mkOption {
       type = lib.types.bool;

@@ -1,7 +1,8 @@
 { pkgs, config, lib, ... }:
 
 let
-  themePackage = pkgs.catppuccin-gtk.override {  # WARNING: Offical theme, but archived since Jun 2024.
+  # WARNING: Offical theme, but archived since Jun 2024.
+  themePackage = pkgs.catppuccin-gtk.override {
     accents = [ "blue" ];
     size = "standard";
     variant = "mocha";

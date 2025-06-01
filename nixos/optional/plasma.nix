@@ -18,8 +18,20 @@ in
     services.displayManager.sddm.enable = true;
     services.desktopManager.plasma6.enable = true;
 
-    environment.systemPackages = with pkgs; [
-      (catppuccin-kde.override { flavour = ["mocha"]; accents = ["blue"]; })
-    ];
+    environment = {
+      systemPackages = with pkgs; [
+        (catppuccin-kde.override { flavour = ["mocha"]; accents = ["blue"]; })
+      ];
+      plasma6.excludePackages = with pkgs.kdePackages; [
+        plasma-browser-integration
+        okular
+        kate
+
+        # I don't want to have Dolphin Plugins anyway, but just in case for future me:
+        # the derivation for this may fail to build if you overlay dolphin.
+        # Also even when this was installed it didn't seem to work anyway.
+        dolphin-plugins
+      ];
+    };
   };
 }
