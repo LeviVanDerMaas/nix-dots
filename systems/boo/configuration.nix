@@ -56,7 +56,7 @@
     modules = {
       hyprland = {
         enable = true;
-        monitors.rules = [
+        monitors = [
           { 
             name = "DP-1"; resolution = "1920x1080"; position = "0x0"; scale = "1";
             bindWorkspaces = [ 1 2 3 4 5 ];

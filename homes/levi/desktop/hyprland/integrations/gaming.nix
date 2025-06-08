@@ -2,6 +2,7 @@
 
 let
   cfg = config.modules.hyprland.integrations.gaming;
+  hyprlandEnabled = config.modules.hyprland.enable;
   gws = "game";
   sws = "steam";
   initialGameClasses = [
@@ -21,7 +22,7 @@ in
     '';
   };
 
-  config = lib.mkIf cfg.enable {
+  config = lib.mkIf (hyprlandEnabled && cfg.enable) {
     wayland.windowManager.hyprland.settings = {
       workspace = [
         "name:${gws}, on-created-empty:hyprctl dispatch workspace special:${sws}"

@@ -10,7 +10,7 @@ in
         "systemctl --user start hyprpolkitagent"
         "${pkgs.ulauncher}/bin/ulauncher --no-window-shadow --hide-window"
         "${pkgs.waybar}/bin/waybar"
-      ] ++
-      lib.optionals cfg.integrateDunst [ "${pkgs.dunst}/bin/dunst" ];
+        "${pkgs.dunst}/bin/dunst"
+      ];
     };
 }

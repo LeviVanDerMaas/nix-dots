@@ -1,9 +1,10 @@
-{ lib, rootRel, ... }:
+{ config, lib, rootRel, ... }:
 
 let
+  cfg = config.modules.hyprland;
   outskirts = "${rootRel /assets/wallpapers/outskirts.jpg}";
 in
-{
+lib.mkIf cfg.enable {
   services.hyprpaper = {
     enable = true;
     settings = {

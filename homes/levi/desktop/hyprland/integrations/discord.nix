@@ -2,6 +2,7 @@
 
 let 
   cfg = config.modules.hyprland.integrations.discord;
+  hyprlandEnabled = config.modules.hyprland.enable;
   discordExe = "${pkgs.discord}/bin/discord";
 in
 {
@@ -22,7 +23,7 @@ in
     };
   };
 
-  config = lib.mkIf cfg.enable {
+  config = lib.mkIf (hyprlandEnabled && cfg.enable) {
     wayland.windowManager.hyprland.settings = {
       workspace = [
         "special:discord, on-created-empty: ${discordExe}"

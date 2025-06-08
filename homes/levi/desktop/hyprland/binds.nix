@@ -54,12 +54,6 @@ in
         "$mainMod, Q, swapsplit"
         "$mainMod SHIFT, Q, togglesplit"
         
-        # Screenshots
-        " , PRINT, exec, grimblast copy output"
-        "$mainMod, PRINT, exec, grimblast copy area"
-        "$mainMod SHIFT, PRINT, exec, grimblast copy screen"
-        "$mainMod CTRL, PRINT, exec, hyprpicker -anf hex"
-
         # Killing binds
         "$mainMod ALT, C, killactive"
         "$mainMod SHIFT CTRL ALT, E, exit"

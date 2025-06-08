@@ -1,4 +1,4 @@
-{ pkgs, config, lib, ... }:
+{ config, lib, ... }:
 
 let 
   cfg = config.modules.hyprland;
@@ -56,19 +56,18 @@ in
 
   config = lib.mkIf cfg.enable {
     wayland.windowManager.hyprland.settings = {
-      monitor = 
-        lib.optionals (cfg.monitors.useRecommendedFallbackRule)  [ ", preferred, auto, 1" ]
-        ++ 
-        builtins.map  (mr: "${mr.name}, ${mr.resolution}, ${mr.position}, ${mr.scale}") cfg.monitors.rules;
+      # The first rule will be a fallback rule, so that hotplugging unknown monitors should still work.
+      monitor = [ ", preferred, auto, 1" ] ++
+        builtins.map (mon: "${mon.name}, ${mon.resolution}, ${mon.position}, ${mon.scale}") cfg.monitors;
       
-      # Binds (default) workspaces to monitors as indicated in cfg.bindWorkspaces
-      workspace = builtins.concatMap
-        (mr: lib.optionals (mr.bindWorkspaces != []) (
-          [ "${builtins.toString (builtins.head mr.bindWorkspaces)}, default:true" ]
-          ++
-          builtins.map (w: "${builtins.toString w}, monitor:${mr.name}") mr.bindWorkspaces
-        ))
-        cfg.monitors.rules;
+      # Binds workspaces to monitors as indicated in cfg.bindWorkspaces,
+      # and set the first workspace for a monitor as the default workspace.
+      workspace = builtins.concatMap (mon: let
+        wss = mon.bindWorkspaces;
+        defaultRule = lib.optionals (mon.bindWorkspaces != []) 
+          [ "${builtins.toString (builtins.head wss)}, default:true" ];
+        bindRules = builtins.map (ws: "${builtins.toString ws}, monitor:${mon.name}") wss;
+      in defaultRule ++ bindRules) cfg.monitors;
     };
   };
 }
