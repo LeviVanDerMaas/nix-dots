@@ -40,16 +40,17 @@ in
         kb_options = "caps:escape, compose:sclk";
         repeat_rate = 60;
         repeat_delay = 600;
-        follow_mouse = 1;
       };
 
       general = {
-        border_size = 1;
+        border_size = 2;
         gaps_in = 5;
         gaps_out = 10;
-        "col.active_border" = "rgba(8620dfee)";
-        "col.inactive_border" = "rgba(595959aa)";
+        "col.active_border" = "rgba(701bbbee)";
+        "col.inactive_border" = "rgba(35293dcc)";
+
         layout = "dwindle";
+        no_focus_fallback = true;
       };
 
       dwindle = {
@@ -57,7 +58,7 @@ in
       };
 
       decoration = {
-        rounding = 10;
+        rounding = 3;
         blur = {
           enabled = true;
           size = 3;
