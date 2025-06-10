@@ -17,7 +17,7 @@ lib.mkIf hyprlandEnabled {
         "SHIFT, PRINT, exec, ${grimPre} copy area"
         "CTRL, PRINT, exec, ${grimPre} copy screen"
 
-        "$ALT, PRINT, exec, hyprpicker -anf hex"
+        "ALT, PRINT, exec, hyprpicker -anf hex"
       ];
   };
 }

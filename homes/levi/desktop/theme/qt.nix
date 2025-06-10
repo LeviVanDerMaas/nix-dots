@@ -1,5 +1,12 @@
 { pkgs, ... }:
 
+#NOTE: To decouple this from the kde platformtheme, look into
+# qt6ct, setting the theme to breeze and the font size to 10 and
+# the color to 'Style's colors' (which seems to be reading from
+# kdeglobals and will also seemingly parse the background normal
+# correctly.) Alternatively look into catppuccin-qt with darkly
+# (you will need to update nixpkgs to get darkly)
+
 # NOTE: BREEZE RELIES ON .config/kdeglobals TO TELL IT WHAT COLORS TO ACTUALLY USE.
 # IN FACT, THE ONLY REALLY IMPORANT THING THAT SELECTING "BREEZE DARK" AS THEME IN
 # PLASMA DOES IS SWITCHING THE RGB VALUES IN THAT FILE TO THOSE OF BREEZE DARK.

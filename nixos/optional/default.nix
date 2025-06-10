@@ -1,7 +1,7 @@
 {
   imports = [
-    ./desktop-environment
-    ./gaming
+    ./cli
+    ./desktop
     ./peripherals
     ./services
   ];
