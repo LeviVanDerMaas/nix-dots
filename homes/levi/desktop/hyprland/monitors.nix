@@ -11,7 +11,7 @@ in
       lets us configure different monitor setups for different systems while keeping the
       rest of our config uniform between systems.
     '';
-    default = {};
+    default = [];
     type = lib.types.listOf (lib.types.submodule {
       options = {
         name = lib.mkOption {
