@@ -17,5 +17,11 @@
       "ctrl+shift+n" = "new_os_window_with_cwd"; #New OS window in same dir
     };
   };
+
+  modules.kde.kdeglobals = {
+    General = {
+      TerminalApplication = "kitty";
+    };
+  };
 }
 

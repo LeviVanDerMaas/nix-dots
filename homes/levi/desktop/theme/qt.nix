@@ -1,33 +1,23 @@
 { pkgs, ... }:
 
-#NOTE: To decouple this from the kde platformtheme, look into
-# qt6ct, setting the theme to breeze and the font size to 10 and
-# the color to 'Style's colors' (which seems to be reading from
-# kdeglobals and will also seemingly parse the background normal
-# correctly.) Alternatively look into catppuccin-qt with darkly
-# (you will need to update nixpkgs to get darkly)
-
-# NOTE: BREEZE RELIES ON .config/kdeglobals TO TELL IT WHAT COLORS TO ACTUALLY USE.
-# IN FACT, THE ONLY REALLY IMPORANT THING THAT SELECTING "BREEZE DARK" AS THEME IN
-# PLASMA DOES IS SWITCHING THE RGB VALUES IN THAT FILE TO THOSE OF BREEZE DARK.
-# THIS ALSO MEANS YOU CAN COMPLETY CUSTOMIZE BREEZE'S COLORS TO YOUR LIKING.
 {
-  # Do not use the qt submodule to install Breeze, it does not install Breeze 6,
-  # we should handle installing breeze 6 (and 5) ourselves.
+
+  # NOTE: Do not use the hm qt-module to install Breeze, it does not install
+  # Breeze 6, we should handle installing Breeze 6 (and 5) ourselves.
   qt = {
     enable = true;
+    platformTheme.name = "qtct";
   };
 
-
   home.packages = with pkgs.kdePackages; [
-    # The HM qt module does not actually seem to ship wayland support by default.
-    qtwayland # For Breeze 6
-    pkgs.libsForQt5.qtwayland # For Breeze 5
-
     # Install both breeze5 and breeze6 since qt5 is still very commonplace.
     # Use the qt5 output instead of libsForQt5 to prevent package collisions.
     breeze
     breeze.qt5
+
+    # The HM qt module does not actually seem to ship wayland support by default.
+    qtwayland # For Qt6
+    pkgs.libsForQt5.qtwayland # for Qt5
 
     # plasma-integration should make Breeze work and look better in some places,
     # and especially with KDE native apps.
@@ -35,21 +25,145 @@
     plasma-integration.qt5
   ];
 
-  # Force Qt apps to actually use Breeze (if these apps are set to use "system
-  # default" theme) and force them to assume they are runnng under KDE/Plasma.
-  # This fixes some instances where Breeze might not be applied entirely
-  # properly, and the latter should also fix the issue where some applications
-  # will not or only partially read from KDE globals. This has the potential to
-  # cause issues for Qt apps specifically designed for running under a
-  # different platform, and it may also cause some functions of KDE-native apps
-  # to ignore XDG config and just use the KDE-specific config (e.g. it will
-  # ignore what is set in XDG-desktop portal and only look for the KDE portal).
-  # In practice this does not cause much issue if you have the kde portal
-  # installed beyond getting some janky-looking (but still serviceable) file
-  # pickers or app selectors. Trade-off for not being stuck with Breeze
-  # defaults.
-  home.sessionVariables = {
-    QT_QPA_PLATFORMTHEME = "kde";
-    QT_STYLE_OVRRIDE = "breeze";
+
+  modules.kde.kdeglobals = {
+    UiSettings = {
+      # Without setting specifically this key to this value, many config
+      # values for Breeze both from kdeglobals and the qt colorscheme
+      # are ignored when running outside of Plasma.
+      ColorScheme = "*";
+    };
+
+    # The colors used here are the Catppuccin Mocha Blue colors. More specifically,
+    # I stole them directly from the values the offical Catppuccin-KDE distribution
+    # sets when you apply that theme inside KDE.
+    "ColorEffects:Disabled" = {
+      ChangeSelectionColor = "";
+      Color = "30, 30, 46";
+      ColorAmount = "0.3";
+      ColorEffect = "2";
+      ContrastAmount = "0.1";
+      ContrastEffect = "0";
+      Enable = "";
+      IntensityAmount = "-1";
+      IntensityEffect = "0";
+    };
+
+    "ColorEffects:Inactive" = {
+      ChangeSelectionColor = "true";
+      Color = "30, 30, 46";
+      ColorAmount = "0.5";
+      ColorEffect = "3";
+      ContrastAmount = "0";
+      ContrastEffect = "0";
+      Enable = "true";
+      IntensityAmount = "0";
+      IntensityEffect = "0";
+    };
+
+    "Colors:Button" = {
+      BackgroundAlternate = "137,180,250";
+      BackgroundNormal = "49, 50, 68";
+      DecorationFocus = "137,180,250";
+      DecorationHover = "49, 50, 68";
+      ForegroundActive = "250, 179, 135";
+      ForegroundInactive = "166, 173, 200";
+      ForegroundLink = "137,180,250";
+      ForegroundNegative = "243, 139, 168";
+      ForegroundNeutral = "249, 226, 175";
+      ForegroundNormal = "205, 214, 244";
+      ForegroundPositive = "166, 227, 161";
+      ForegroundVisited = "203, 166, 247";
+    };
+
+    "Colors:Complementary" = {
+      BackgroundAlternate = "17, 17, 27";
+      BackgroundNormal = "24, 24, 37";
+      DecorationFocus = "137,180,250";
+      DecorationHover = "49, 50, 68";
+      ForegroundActive = "250, 179, 135";
+      ForegroundInactive = "166, 173, 200";
+      ForegroundLink = "137,180,250";
+      ForegroundNegative = "243, 139, 168";
+      ForegroundNeutral = "249, 226, 175";
+      ForegroundNormal = "205, 214, 244";
+      ForegroundPositive = "166, 227, 161";
+      ForegroundVisited = "203, 166, 247";
+    };
+
+    "Colors:Header" = {
+      BackgroundAlternate = "17, 17, 27";
+      BackgroundNormal = "24, 24, 37";
+      DecorationFocus = "137,180,250";
+      DecorationHover = "49, 50, 68";
+      ForegroundActive = "250, 179, 135";
+      ForegroundInactive = "166, 173, 200";
+      ForegroundLink = "137,180,250";
+      ForegroundNegative = "243, 139, 168";
+      ForegroundNeutral = "249, 226, 175";
+      ForegroundNormal = "205, 214, 244";
+      ForegroundPositive = "166, 227, 161";
+      ForegroundVisited = "203, 166, 247";
+    };
+
+    "Colors:Selection" = {
+      BackgroundAlternate = "137,180,250";
+      BackgroundNormal = "137,180,250";
+      DecorationFocus = "137,180,250";
+      DecorationHover = "49, 50, 68";
+      ForegroundActive = "250, 179, 135";
+      ForegroundInactive = "24, 24, 37";
+      ForegroundLink = "137,180,250";
+      ForegroundNegative = "243, 139, 168";
+      ForegroundNeutral = "249, 226, 175";
+      ForegroundNormal = "17, 17, 27";
+      ForegroundPositive = "166, 227, 161";
+      ForegroundVisited = "203, 166, 247";
+    };
+
+    "Colors:Tooltip" = {
+      BackgroundAlternate = "27,25,35";
+      BackgroundNormal = "30, 30, 46";
+      DecorationFocus = "137,180,250";
+      DecorationHover = "49, 50, 68";
+      ForegroundActive = "250, 179, 135";
+      ForegroundInactive = "166, 173, 200";
+      ForegroundLink = "137,180,250";
+      ForegroundNegative = "243, 139, 168";
+      ForegroundNeutral = "249, 226, 175";
+      ForegroundNormal = "205, 214, 244";
+      ForegroundPositive = "166, 227, 161";
+      ForegroundVisited = "203, 166, 247";
+    };
+
+    "Colors:View" = {
+      BackgroundAlternate = "24, 24, 37";
+      BackgroundNormal = "30, 30, 46";
+      DecorationFocus = "137,180,250";
+      DecorationHover = "49, 50, 68";
+      ForegroundActive = "250, 179, 135";
+      ForegroundInactive = "166, 173, 200";
+      ForegroundLink = "137,180,250";
+      ForegroundNegative = "243, 139, 168";
+      ForegroundNeutral = "249, 226, 175";
+      ForegroundNormal = "205, 214, 244";
+      ForegroundPositive = "166, 227, 161";
+      ForegroundVisited = "203, 166, 247";
+    };
+
+    "Colors:Window" = {
+      BackgroundAlternate = "17, 17, 27";
+      BackgroundNormal = "24, 24, 37";
+      DecorationFocus = "137,180,250";
+      DecorationHover = "49, 50, 68";
+      ForegroundActive = "250, 179, 135";
+      ForegroundInactive = "166, 173, 200";
+      ForegroundLink = "137,180,250";
+      ForegroundNegative = "243, 139, 168";
+      ForegroundNeutral = "249, 226, 175";
+      ForegroundNormal = "205, 214, 244";
+      ForegroundPositive = "166, 227, 161";
+      ForegroundVisited = "203, 166, 247";
+    };
   };
 }

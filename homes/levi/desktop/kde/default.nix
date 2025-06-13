@@ -5,23 +5,40 @@ let
 in
 {
   options.modules.kde = { 
-    symlink-kdeglobals = lib.mkOption {
+    enable = lib.mkOption {
       type = lib.types.bool;
       default = true;
       description = ''
-        Whether to symlink this config's kdeglobals file into .config/kdeglobals.
-        You will want to turn this off if you are also installing Plasma, as
-        Plasma does not handle it well if it does not have write access to this file.
+        A module to manually configure KDE-related settings. We would want to
+        be able to disable this module as a whole in cases where we also
+        install Plasma on the device, because Plasma will freak out if it does
+        not have proper access to KDE-related config files.
+      '';
+    };
+
+    kdeglobals = lib.mkOption {
+      type = lib.types.attrs;
+      default = null;
+      description = ''
+        Uses `lib.generators.toINI` to generate a kde configuration file that
+        is symlinked to `kdeglobals` inside the XDG configuration home. Do NOT
+        enable this module and set this when your system is running Plasma, this
+        can cause issues including inability to boot the DE properly.
+
+        Configuring this can be useful when running KDE applications or the
+        Breeze theme outside of Plasma because some of their features rely on
+        settings defined in this file (e.g. custom coloring in Breeze partially
+        relies on values defined here, applications like Dolphin read the
+        default terminal from this file).
       '';
     };
   };
 
-  config = {
+  config = lib.mkIf cfg.enable {
     xdg.configFile = {
-      # Various KDE apps (and the Breeze theme) need further configuration
-      # via these files, and if they are not present or properly configed some
-      # of their features might not work.
-      ${if cfg.symlink-kdeglobals then "kdeglobals" else null}.source = ./kdeglobals;
+      ${if cfg.kdeglobals != null then "kdeglobals" else null}.text = 
+        lib.generators.toINI {} cfg.kdeglobals;
+
       "menus/plasma-applications.menu".source = ./plasma-applications.menu;
     };
   };

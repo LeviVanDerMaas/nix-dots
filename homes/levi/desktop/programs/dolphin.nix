@@ -1,11 +1,6 @@
 { pkgs, ... }:
 
-# NOTE: Read the lengthy comment below on how this makes MIME-types work
-# outside of Dolphin with Plasma. Also note that without
-# xdg-desktop-portal-kde, Dolphin will not be able to pop-up a "choose
-# application to open with" menu when trying to open a file if the QT
-# platformtheme has also been forced to KDE. Furthermore, note
-# that Dolphin relies on kdeglobals to tell it what default apps to use in
+# NOTE: Dolphin relies on kdeglobals to tell it what default apps to use in
 # cases where MIME-types are insufficient: e.g. if a MIMEtype tells Dolphin to
 # open something with Neovim, then kdeglobals will tell it what terminal to
 # open it with. In cases where Dolphin cannot determine a default application
@@ -13,18 +8,12 @@
 # - Make a hard-coded assumption and fail if that application is not installed.
 # - Use the first app KService has found to be suitable, if any, or fail.
 # Which case applies seems to depend on whether Plasma comes with a default app
-# for case 1.
+# for opening a given filetype.
 {
   home.packages = with pkgs; [
     kdePackages.dolphin
     kdePackages.ark # File archiver by KDE, very integrated with Dolphin.
   ];
-
-  # This is needed to make the "open with" features of Dolphin work properly
-  # when the platformtheme is forced to kde. Unfortunately it does depend
-  # on plasma-workspace, so you may want to consider commenting this out and
-  # setting all your MIMEtypes manually to work around this.
-  xdg.portal.extraPortals = [ pkgs.kdePackages.xdg-desktop-portal-kde ];
 }
 
 
@@ -56,18 +45,20 @@
 # of Plasma)**. But even if this does go wrong and the cache gets outdated, this
 # should not stop Dolphin from being able to open files using MIMEtypes.
 #
-# What is the problem with MIME-types in Dolphin then? Well, in order to structure
-# the "open with" menu, an applications.menu file as described by the XDG Menu
-# Specification is required***: kbuildsycoca6 will cache the menu structure in
-# applications.menu into the ksycoca file, and KService then uses this to actually
-# construct the menu for Dolphin. If application.menu cannot be found or is
-# structured erroneously, a warning will be emitted by kbuildsycoca6 but it will
-# still produce a cache file. For whatever reason, outside of Plasma,
-# kbuildsyscoca6 will then never correct the wrong/missing information in the
-# cache when updating it, even if a correct applications.menu file is provided
-# later. Whenever this happens, Dolphin can no longer deal with MIMEtypes because
-# it also seems to require the "open with" menu to be created correctly to do so
-# (or perhaps the ksycoca cache is simply corrupted in this state?).
+# What is the problem with MIME-types in Dolphin then? Well, in order to
+# structure the "open with" menu, an applications.menu file as described by the
+# XDG Menu Specification is required***: kbuildsycoca6 will cache the menu
+# structure in applications.menu into the ksycoca file, and KService then uses
+# this to actually construct the menu for Dolphin. If application.menu cannot
+# be found or is structured erroneously, a warning will be emitted by
+# kbuildsycoca6 but it will still produce a cache file. For whatever reason,
+# outside of Plasma, kbuildsyscoca6 will then never correct the wrong/missing
+# information in the cache when updating it, even if a correct
+# applications.menu file is provided later (installing and ensuring KDEd is
+# active may fix this). Whenever this happens, Dolphin can no longer deal with
+# MIMEtypes because it also seems to require the "open with" menu to be created
+# correctly to do so (or perhaps the ksycoca cache is simply corrupted in this
+# state?).
 #
 # It is obvious why this goes wrong when installing Dolphin without installing
 # Plasma, since there is no applications.menu file provided by default. But even
@@ -83,20 +74,12 @@
 #
 # An easy fix would be to download the default plasma-applications.menu from
 # Plasma Workspace, and then symlink `$XDG_CONFIG_DIRS/menus/applications.menu` to
-# it. However, if we then want to use software that relies on application.menu
-# files from different DE's outside of said DE's, that may break stuff as well. A
-# better alternative is to instead overlay Dolphin with a wrapper that always sets 
-# `$XDG_MENU_PREFIX=plasma-` (which is unlikely to cause any issues for other
-# packages as Dolphin is evidently built under the assumption that this is the
-# case anyway). It is not necessary to install kdePackages.kservice seperately
-# since it is a dependency of Dolphin, but if you do want to manually update/build
-# ksycoca then you should also ensure `$XDG_MENU_PREFIX=plasma-` is always set
-# when executing kbuildsyscoca6 (which you could also do with an overlaid
-# wrapper). Also, MAKE SURE THERE EXISTS NO ksycoca CACHE IN YOUR $XDG_CACHE_HOME
+# it.  It is not necessary to install kdePackages.kservice seperately
+# since it is a dependency of Dolphin.
+# Also, MAKE SURE THERE EXISTS NO ksycoca CACHE IN YOUR $XDG_CACHE_HOME
 # PRIOR TO THIS, just rm -rf it if it does: that can also be used as an
 # alternative method to trigger a full rebuild of the cache if you do not wish to
 # install kdePackages.kservice to your environment.
-#
 #
 #     * Also known as 'KDE SYstem COnfiguration CAche', which is where the name
 #     ksycoca comes from; although the man names it as the former, which also

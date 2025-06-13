@@ -45,9 +45,10 @@
   # Configuration derived from common config.
   modules = {
     hyprland.enable = true;
-    plasma.enable = true;
+    plasma.enable = false;
     backlight.enable = true;
   };
+
 
 
 
@@ -57,7 +58,7 @@
   modules.users.levi.extraHMConfig = {
     modules = {
       hyprland.enable = true;
-      kde.symlink-kdeglobals = !config.modules.plasma.enable;
+      kde.enable = !config.modules.plasma.enable;
     };
   };
 
