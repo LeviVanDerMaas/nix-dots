@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, lib, config, ... }:
 
 {
 
@@ -24,6 +24,79 @@
     plasma-integration
     plasma-integration.qt5
   ];
+
+  xdg.configFile = let
+    toStr = builtins.toString;
+    toINI = lib.generators.toINI {};
+    confDir = v: "qt${toStr v}ct";
+    confFile = v: "${confDir v}/qt${toStr v}ct.conf";
+    colorsFile = v: "${confDir v}/colors/catppuccin-mocha-blue-breeze";
+    absColorsFile = v: "${config.xdg.configHome}/${colorsFile v}";
+
+    sharedConf = {
+      Appearance = {
+        custom_palette = "true";
+        icon_theme = "breeze-dark";
+        standard_dialogs = "default";
+        style = "Breeze";
+      };
+      Interface = {
+        activate_item_on_single_click = "1";
+        buttonbox_layout = "0";
+        cursor_flash_time = "1000";
+        dialog_buttons_have_icons = "1";
+        double_click_interval = "400";
+        keyboard_scheme = "2";
+        menus_have_icons = "true";
+        show_shortcuts_in_context_menus = "true";
+        toolbutton_style = "4";
+        underline_shortcut = "1";
+        wheel_scroll_lines = "3";
+      };
+      Troubleshooting = {
+        force_raster_widgets = "1";
+      };
+    };
+
+    # qt6 expects more and slightly different color values compared to qt5, but it so
+    # happens these changing values are only at the end of color strings, so we can
+    # just write nice functions that append the differences.
+    # (Not entirely sure why there is a difference between the two but it does also align
+    # with what happens in Breeze5 and 6 and Catppucin KDE 5 and 6 themselves, so whatever)
+    colorsConf = v: { 
+      ColorScheme = {
+        ColorScheme = {
+          active_colors = "#ffcdd6f4, #ff313244, #ff3d3d5e, #ff2f2f48, #ff0c0c12, #ff151520, #ffcdd6f4, #ffcdd6f4, #ffcdd6f4, #ff1e1e2e, #ff181825, #ff09090d, #ff89b4fa, #ff11111b, #ff89b4fa, #ffcba6f7, #ff181825, #ffffffff, #ff1e1e2e, #ffcdd6f4, "
+            + "${if v == 5 then "#806c7086" else "#ffa6adc8, #ff89b4fa"}";
+          disabled_colors = "#ff6c7086, #ff313244, #ff45475a, #ff313244, #ff11111b, #ff181825, #ff6c7086, #ffcdd6f4, #ff6c7086, #ff1e1e2e, #ff181825, #ff11111b, #ff181825, #ff6c7086, #ffa9bcdb, #ffc7cceb, #ff181825, #ffffffff, #ff1e1e2e, #ffcdd6f4, #806c7086"
+            + "${if v == 5 then "" else ", #ff181825"}";
+          inactive_colors = "#ffcdd6f4, #ff313244, #ff3d3d5e, #ff2f2f48, #ff0c0c12, #ff151520, #ffcdd6f4, #ffcdd6f4, #ffcdd6f4, #ff1e1e2e, #ff181825, #ff09090d, #ff89b4fa, #ff11111b, #ff89b4fa, #ffcba6f7, #ff181825, #ffffffff, #ff1e1e2e, #ffcdd6f4, #806c7086, "
+            + "${if v == 5 then "#806c7086" else "#ffa6adc8, #ff89b4fa"}";
+        };
+      };
+    }; 
+  in {
+    "${confFile 5}".text = toINI (sharedConf // {
+      Appearance = {
+        color_scheme_path = absColorsFile 5;
+      };
+      Fonts = {
+        fixed = "\"Noto Sans,10,-1,5,50,0,0,0,0,0,Regular\"";
+        general = "\"Noto Sans,10,-1,5,50,0,0,0,0,0,Regular\"";
+      };
+    });
+    "${confFile 6}".text = toINI (sharedConf // {
+      Appearance = {
+        color_scheme_path = absColorsFile 6;
+      };
+      Fonts = {
+        fixed = "\"Noto Sans,10,-1,5,400,0,0,0,0,0,0,0,0,0,0,1,Regular\"";
+        general = "\"Noto Sans,10,-1,5,400,0,0,0,0,0,0,0,0,0,0,1,Regular\"";
+      };
+    }); 
+    "${colorsFile 5}".text = toINI (colorsConf 5);
+    "${colorsFile 6}".text = toINI (colorsConf 6);
+  };
 
 
   modules.kde.kdeglobals = {
