@@ -38,8 +38,6 @@ in
     xdg.configFile = {
       ${if cfg.kdeglobals != null then "kdeglobals" else null}.text = 
         lib.generators.toINI {} cfg.kdeglobals;
-
-      "menus/plasma-applications.menu".source = ./plasma-applications.menu;
     };
   };
 }
