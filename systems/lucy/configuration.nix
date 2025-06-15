@@ -1,4 +1,4 @@
-{ config, rootRel, ... }:
+{ config, lib, rootRel, ... }:
 
 {
   # General
@@ -56,12 +56,15 @@
   # User specific config.
   modules.users.levi.enable = true;
   modules.users.levi.extraHMConfig = let
-    usingPlasma = !config.modules.plasma.enable;
+    usingPlasma = config.modules.plasma.enable;
   in {
     modules = {
-      hyprland.enable = true;
       kde.enable = !usingPlasma;
       qt.enable = !usingPlasma;
+      hyprland.enable = true;
+      hyprland.extraEnv = lib.optionals usingPlasma [
+        "QT_QPA_PLATFORMTHEME,kde" # QT theming now also managed by kde on Hyprland
+      ];
     };
   };
 

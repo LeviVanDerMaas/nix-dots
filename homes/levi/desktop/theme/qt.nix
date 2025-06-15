@@ -19,7 +19,7 @@ in
 
   # NOTE: Do not use the hm qt-module to install Breeze, it does not install
   # Breeze 6, we should handle installing Breeze 6 (and 5) ourselves.
-  config = { 
+  config = lib.mkIf cfg.enable { 
     qt = {
       enable = true;
       platformTheme.name = "qtct";
@@ -34,11 +34,6 @@ in
       # The HM qt module does not actually seem to ship wayland support by default.
       qtwayland # for qt6
       pkgs.libsForQt5.qtwayland # for qt5
-
-      # plasma-integration should make Breeze work and look better in some places,
-      # and especially with KDE native apps.
-      # plasma-integration
-      # plasma-integration.qt5
     ];
 
     xdg.configFile = let

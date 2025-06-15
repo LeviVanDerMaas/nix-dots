@@ -18,6 +18,15 @@ in
     enable = lib.mkEnableOption ''
       Hyprland home-manager module. Make sure to also enable system module for Hyprland!
     '';
+    extraEnv = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
+      default = [];
+      description = ''
+        Extra values for the `env` keyword to be added to the config. May be useful for
+        things like conditionally setting an envvar for a service that is managed
+        differently between two devices sharing the same config.
+      '';
+    };
   };
 
   config = lib.mkIf cfg.enable {
@@ -35,6 +44,8 @@ in
 
     wayland.windowManager.hyprland.enable = true;
     wayland.windowManager.hyprland.settings = {
+      env = cfg.extraEnv;
+
       input = {
         kb_layout = "us";
         kb_options = "caps:escape, compose:sclk";
