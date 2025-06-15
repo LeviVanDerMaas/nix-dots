@@ -45,7 +45,7 @@
   # Configuration derived from common config.
   modules = {
     hyprland.enable = true;
-    plasma.enable = false;
+    plasma.enable = true;
     backlight.enable = true;
   };
 
@@ -55,10 +55,13 @@
 
   # User specific config.
   modules.users.levi.enable = true;
-  modules.users.levi.extraHMConfig = {
+  modules.users.levi.extraHMConfig = let
+    usingPlasma = !config.modules.plasma.enable;
+  in {
     modules = {
       hyprland.enable = true;
-      kde.enable = !config.modules.plasma.enable;
+      kde.enable = !usingPlasma;
+      qt.enable = !usingPlasma;
     };
   };
 
