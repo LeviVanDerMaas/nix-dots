@@ -14,12 +14,14 @@ in
       shortabout = "show --shortstat --format=format:'${commit-fstr}%n%b'";
 
       a = "add";
-      amend = "commit --amend";
       c = "commit";
       d = "diff";
       ds = "diff --staged";
       s = "status";
+
+      amend = "commit --amend";
       softmerge = "merge --no-ff --no-commit";
+      unstage = "restore --staged";
     };
     extraConfig = {
       init.defaultBranch = "master";

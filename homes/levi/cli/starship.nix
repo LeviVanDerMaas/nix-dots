@@ -18,13 +18,14 @@
       renamed = "[»](bold red)";
       typechanged = "[T](bold red)";
       stashed = "[\\$](bold yellow)";
+      heuristic = true;
     };
 
     nix_shell = {
       format = "via [$symbol$name $state]($style) ";
       impure_msg = "";
       pure_msg = "(PURE)";
-      unknown_msg = "(PURE??)";
+      unknown_msg = "(PURITY UNCLEAR)";
     };
   };
 }

@@ -36,7 +36,7 @@
   hardware.bluetooth.powerOnBoot = true;
 
   # Printing
-  services.printing.enable = true; # Enables printing
+  services.printing.enable = true;
 
 
 

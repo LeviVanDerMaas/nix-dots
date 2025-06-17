@@ -21,7 +21,7 @@
   networking.networkmanager.enable = true;
 
   # Printing
-  services.printing.enable = true; # Enables printing
+  services.printing.enable = true;
 
 
 
