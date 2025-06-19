@@ -1,6 +1,7 @@
 {
   imports = [
     ./neovim
-    ./yazi
+
+    ./yazi.nix
   ];
 }

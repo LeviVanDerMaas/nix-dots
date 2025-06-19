@@ -18,7 +18,6 @@
       renamed = "[»](bold red)";
       typechanged = "[T](bold red)";
       stashed = "[\\$](bold yellow)";
-      heuristic = true;
     };
 
     nix_shell = {
