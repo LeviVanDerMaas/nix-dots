@@ -2,14 +2,13 @@
 
 let 
   cfg = config.modules.hyprland.integrations.discord;
-  hyprlandEnabled = config.modules.hyprland.enable;
   discordExe = "${pkgs.discord}/bin/discord";
 in
 {
   options.modules.hyprland.integrations.discord = {
     enable = lib.mkOption {
       type = lib.types.bool;
-      default = true;
+      default = config.modules.hyprland.enable;
       description = ''
         Integrates Discord by setting up a special workspace for it.
       '';
@@ -23,7 +22,7 @@ in
     };
   };
 
-  config = lib.mkIf (hyprlandEnabled && cfg.enable) {
+  config = lib.mkIf cfg.enable {
     wayland.windowManager.hyprland.settings = {
       workspace = [
         "special:discord, on-created-empty: ${discordExe}"

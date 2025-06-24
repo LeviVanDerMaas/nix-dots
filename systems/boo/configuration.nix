@@ -67,10 +67,7 @@
           }
         ];
 
-        integrations = {
-          discord.autoStart = true;
-          gaming.enable = true;
-        };
+        integrations.discord.autoStart = true;
       };
     };
   };
