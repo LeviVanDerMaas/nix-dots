@@ -37,10 +37,10 @@
       # manager soon to be deprecated for mgr.
       manager.prepend_keymap = [ # prepend, so prioritizes but does not override defaults
         # Process
-        { on = "q"; run = "quit --no-c~d-file"; desc = "Quit ~ithout outputting cwd-file"; }
+        { on = "q"; run = "quit --no-cwd-file"; desc = "Quit without outputting cwd-file"; }
         { on = "Q"; run = "quit"; desc = "Quit the process"; }
         { on = "<C-c>"; run = "close --no-cwd-file"; desc = "Close the current tab, or quit if it's last"; }
-        { on = "e"; run = "shell --orphan dolphin ."; desc = "Open directory in Dolphin"; }
+        { on = "e"; run = "shell --orphan -- dolphin ."; desc = "Open directory in Dolphin"; }
 
         # Navigation
         { on = "K"; run = "seek -10"; desc = "Seek up 10 units in the preview"; }
