@@ -45,8 +45,8 @@
         # Navigation
         { on = "K"; run = "seek -10"; desc = "Seek up 10 units in the preview"; }
         { on = "J"; run = "seek 10"; desc = "Seek down 10 units in the preview"; }
-        { on = "z"; run = "plugin zoxide"; desc = "Jump to a directory via zoxide"; }
-        { on = "Z"; run = "plugin fzf"; desc = "Jump to a file/directory via fzf"; }
+        { on = "z"; run = "plugin fzf"; desc = "Jump to a file/directory via fzf"; }
+        { on = "Z"; run = "plugin zoxide"; desc = "Jump to a directory via zoxide"; }
 
 
         # Selection

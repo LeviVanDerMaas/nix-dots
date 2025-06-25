@@ -8,36 +8,47 @@
   };
 
   programs.bash.initExtra = ''
-    shell-env() {
-      if [[ ! -e ./.envrc ]]; then
-        echo "use nix" > .envrc
-        direnv allow
+    shellify() {
+      if [[ -e ./shell.nix ]] || [[ -e ./default.nix ]]; then
+        echo 'ABORTING: ./shell.nix or ./default.nix already exists!'
+        return 1
       fi
-      if [[ ! -e shell.nix ]] && [[ ! -e default.nix ]]; then
-        cat > shell.nix <<'EOF'
-    with import <nixpkgs> {};
-    mkShell {
-      packages = [
-        
+      ''${EDITOR:-nvim} - +'f shell.nix' +'set ft=nix' <<EOF
+    { pkgs ? import <nixpkgs> {} }:
+
+    pkgs.mkShell {
+      packages = with pkgs; [
+
       ];
     }
     EOF
-        ''${EDITOR:-nvim} shell.nix
+      if [[ ! -e ./shell.nix ]]; then
+        echo 'ABORTING: no ./shell.nix written!'
+        return 1
+      fi
+      if [[ ! -e ./.envrc ]]; then
+        echo "use nix" > .envrc
+        direnv allow
+      else
+        echo './.envrc already exists, not modifying. You may need to add `use nix` to it.'
       fi
     }
 
-    flake-env() {
+    flakeify() {
+      if [[ -e flake.nix ]]; then
+        echo 'ABORTING: ./flake already exists!'
+      fi
+      if [[ $# -gt 0 ]]; then
+        nix flake new -t $@ .
+      else 
+        nix flake new -t ${(rootRel /.)}#basic-shell .
+      fi
+      ''${EDITOR:-nvim} flake.nix
       if [[ ! -e ./.envrc ]]; then
         echo "use flake" > .envrc
         direnv allow
-      fi
-      if [[ ! -e flake.nix ]]; then
-        if [[ $# -gt 0 ]]; then
-          nix flake new -t $@ .
-        else 
-          nix flake new -t ${(rootRel /.)}#basic-shell .
-        fi
-        ''${EDITOR:-nvim} flake.nix
+      else
+        echo './.envrc already exists, not modifying. You may need to add `use flake` to it.'
       fi
     }
   '';
