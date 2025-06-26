@@ -76,9 +76,19 @@ in
         };
       };
 
+      binds = {
+        hide_special_on_workspace_change = true;
+      };
+
       misc = {
         disable_hyprland_logo = true;
         disable_splash_rendering = true;
+      };
+
+      # TODO: REMOVE THIS ONCE GAMESCOPE GETS FIXED
+      # https://github.com/ValveSoftware/gamescope/issues/1825
+      debug = {
+        full_cm_proto = true; #  Changing this requires restart
       };
 
       windowrule = [

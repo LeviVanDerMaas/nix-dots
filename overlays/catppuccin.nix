@@ -9,8 +9,8 @@ in {
   "catppuccin-bat-${flavor}" = final.fetchgit {
     name = "catppuccin-bat-${flavor}";
     url = "https://github.com/catppuccin/bat.git";
-    rev = "699f60fc8ec434574ca7451b444b880430319941";
-    hash = "sha256-HonuDBZfXz5pXFsi88YzrWfIO6UwB7HoRLAwRKHGFCQ=";
+    rev = "6810349b28055dce54076712fc05fc68da4b8ec0";
+    hash = "sha256-OFTHrrBeFw/dGlGTHp2hKIz7pUbf9g2yMLkQTvDWk5o=";
     sparseCheckout = [ "themes" ];
   };
 
@@ -18,8 +18,8 @@ in {
     name = "catppuccin-yazi-${flavor}-${accent}";
     src = final.fetchgit {
       url = "https://github.com/catppuccin/yazi.git";
-      rev = "5d3a1eecc304524e995fe5b936b8e25f014953e8";
-      hash = "sha256-kBJ5pGaicrZy6rqHXTh2pvN7MvcbWYNhbUANLwZTul0=";
+      rev = "1a8c939e47131f2c4bd07a2daea7773c29e2a774";
+      hash = "sha256-DogpoUbqR7YL8hBTCxRR385AGKmVJ41pBmq1QCB7N1s=";
       sparseCheckout = [ "themes/${flavor}" ];
     };
     buildPhase = '' # This makes it so that the catppucchin theme also applies to the bat preview.

@@ -7,10 +7,10 @@
     shellWrapperName = "y";
 
     settings = {
-      # Soon to be deprecated for mgr
-      manager = {
+      mgr = {
         ratio = [1 2 5];
         scrolloff = 8;
+        tits = 3;
       };
 
       # Yazi uses `find` to get MIMEtypes.
@@ -34,8 +34,7 @@
     };
 
     keymap = {
-      # manager soon to be deprecated for mgr.
-      manager.prepend_keymap = [ # prepend, so prioritizes but does not override defaults
+      mgr.prepend_keymap = [ # prepend, so prioritizes but does not override defaults
         # Process
         { on = "q"; run = "quit --no-cwd-file"; desc = "Quit without outputting cwd-file"; }
         { on = "Q"; run = "quit"; desc = "Quit the process"; }

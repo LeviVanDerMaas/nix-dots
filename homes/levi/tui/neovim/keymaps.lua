@@ -26,7 +26,7 @@ vim.keymap.set('n', '<leader>vo', require('telescope.builtin').vim_options, { de
 -- Copilot
 vim.keymap.set('n', '<leader>cpe', copilot_enable, { desc = '[C]o[P]ilot [E]nable' })
 vim.keymap.set('n', '<leader>cpd', require('copilot.command').disable, { desc = '[C]o[P]ilot [D]isable' })
-vim.keymap.set('n', '<leader>cps', require('copilot.command').status, { desc = '[C]o[P]ilot [S]tatus' })
+vim.keymap.set('n', '<leader>cps', require('copilot.status.init').status, { desc = '[C]o[P]ilot [S]tatus' })
 
 -- Text Objects
 -- "i" will exclude blank characters at begining or end of buffer, "a" selects all in buffer
