@@ -34,18 +34,35 @@
       fi
     }
 
-    flakeify() {
+    flakify() {
       if [[ -e flake.nix ]]; then
-        echo 'ABORTING: ./flake already exists!'
+        echo 'ABORTING: ./flake.nix already exists!'
+        return 1
       fi
-      if [[ $# -gt 0 ]]; then
-        nix flake new -t $@ .
-      else 
-        nix flake new -t ${(rootRel /.)}#basic-shell .
+      ''${EDITOR:-nvim} - +'f flake.nix' +'set ft=nix' <<EOF
+    {
+      description = "Basic flake with Nix shell";
+      inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
+
+      outputs = { nixpkgs, ... }: let
+        arch = "x86_64-linux";
+        pkgs = nixpkgs.legacyPackages.''${arch};
+        lib = nixpkgs.lib;
+      in {
+        devShells.''${arch}.default = pkgs.mkShell {
+          packages = with pkgs; [ 
+            
+          ];
+        };
+      };
+    }
+    EOF
+      if [[ ! -e ./flake.nix ]]; then
+        echo 'ABORTING: no ./flake.nix written!'
+        return 1
       fi
-      ''${EDITOR:-nvim} flake.nix
       if [[ ! -e ./.envrc ]]; then
-        echo "use flake" > .envrc
+        echo "use nix" > .envrc
         direnv allow
       else
         echo './.envrc already exists, not modifying. You may need to add `use flake` to it.'

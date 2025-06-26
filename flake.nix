@@ -30,8 +30,6 @@
       modules = [ (import ./systems/${system}/configuration.nix) ];
     });
   in {
-    templates = import ./templates;
-
     nixosConfigurations = systemConfigsFor [ 
       "boo" 
       "lucy"
