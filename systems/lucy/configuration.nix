@@ -42,7 +42,7 @@
 
 
 
-  # Configuration derived from common config.
+  # System-level config modules
   modules = {
     hyprland.enable = true;
     plasma.enable = true;
@@ -53,7 +53,7 @@
 
 
 
-  # User specific config.
+  # User-specific config.
   modules.users.levi.enable = true;
   modules.users.levi.extraHMConfig = let
     usingPlasma = config.modules.plasma.enable;

@@ -8,7 +8,7 @@
   ];
 
   # System Name
-  networking.hostName = "boo";
+  networking.hostName = "scar";
 
   # Bootloader
   boot.loader.systemd-boot.enable = true;
@@ -23,6 +23,12 @@
   # Printing
   services.printing.enable = true;
 
+  # Nvidia GPU
+  hardware.graphics.enable = true;
+  services.xserver.videoDrivers = [ "nvidia" ];
+  hardware.nvidia.open = true;
+
+
 
 
 
@@ -33,16 +39,8 @@
       enable = true;
       numMonitors = 2;
     };
-    openrgb = {
-      enable = true;
-      serverStartDelay = 3;
-      initRunArgs = ''-d "NZXT RGB & Fan Controller" -c 5D0167'';
-      initRunDelay = 10;
-      initRunTries = 20;
-    };
-    sddm.setupCommands = "${pkgs.xorg.xrandr}/bin/xrandr --output DP-3 --left-of DP-1";
+    sddm.setupCommands = "${pkgs.xorg.xrandr}/bin/xrandr --output HDMI-A-1 --left-of DP-2";
     hyprland.enable = true;
-    zsa.enable = true;
     gaming.enable = true;
   };
 
@@ -50,7 +48,7 @@
 
 
 
-  # User-specific config
+  # User-specific config tweaks
   modules.users.levi.enable = true;
   modules.users.levi.extraHMConfig = {
     modules = {
@@ -58,11 +56,11 @@
         enable = true;
         monitors = [
           { 
-            name = "DP-1"; resolution = "1920x1080"; position = "0x0"; scale = "1";
+            name = "DP-2"; resolution = "3840x2160"; position = "0x0"; scale = "1";
             bindWorkspaces = [ 1 2 3 4 5 ];
           }
           { 
-            name = "DP-3"; resolution = "1920x1080"; position = "-1920x0"; scale = "1";
+            name = "HDMI-A-1"; resolution = "2560x1080"; position = "-2560x1080"; scale = "1";
             bindWorkspaces = [ 6 7 8 9 10 ];
           }
         ];
@@ -82,5 +80,5 @@
   # this value at the release version of the first install of this system.
   # Before changing this value read the documentation for this option
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
-  system.stateVersion = "24.05"; # Did you read the comment?
+  system.stateVersion = "25.05"; # Did you read the comment?
 }
