@@ -49,4 +49,13 @@ in
       cursor-size = cursorSize;
     };
   };
+
+  # KDE overwrites this file whenever it gets started, removing it from HM
+  # management. This then causes rebuilds to fail since HM wants to control
+  # this file, so we let HM force the symlink. Aditionally we must specify the
+  # exact same path for this as HM's gtk module otherwise HM's home.file handling
+  # thinks there is a conflict (e.g. `/home/levi/.gtkrc-2.0` vs `.gtkrc-2.0`).
+  # Aditionally, building without mkForce works, but it will cause errors in some
+  # other nix tools, like `nixos-option`, when evaluating this option.
+  home.file.${config.gtk.gtk2.configLocation}.force = lib.mkForce true;
 }
