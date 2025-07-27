@@ -10,13 +10,8 @@
   # System name
   networking.hostName = "lucy";
 
-  # Bootloader
-  # MAKE SURE YOU HAVE READ THE HARDWARE CONFIG BEFORE CHANGING THE BOOTLOADER TO SOMETHING
-  # OTHER THAN SYSTEMD-BOOT OR CHANGING THE MOUNT POINTS!
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
-  boot.loader.efi.efiSysMountPoint = "/efi";
-  boot.loader.systemd-boot.xbootldrMountPoint = "/boot";
+  # Enable bluetooth
+  hardware.bluetooth.enable = true;
 
   # No hibernation, too risky with Windows dual booting.
   systemd.sleep.extraConfig = ''
@@ -25,46 +20,26 @@
     AllowSuspendThenHibernate=no
   '';
 
-  # Disk
-  zramSwap.enable = true;
-
-  # Networking
-  networking.networkmanager.enable = true;
-
-  # Enable bluetooth
-  hardware.bluetooth.enable = true;
-  hardware.bluetooth.powerOnBoot = true;
-
-  # Printing
-  services.printing.enable = true;
-
-
-
-
-
-  # System-level config modules
+  # Custom config modules
   modules = {
+    # System-wide
     hyprland.enable = true;
     plasma.enable = true;
     backlight.enable = true;
-  };
 
-
-
-
-
-  # User-specific config.
-  modules.users.levi.enable = true;
-  modules.users.levi.extraHMConfig = let
-    usingPlasma = config.modules.plasma.enable;
-  in {
-    modules = {
-      kde.enable = !usingPlasma;
-      qt.enable = !usingPlasma;
-      hyprland.enable = true;
-      hyprland.extraEnv = lib.optionals usingPlasma [
-        "QT_QPA_PLATFORMTHEME,kde" # QT theming now also managed by kde on Hyprland
-      ];
+    # User-specific
+    users.levi.enable = true;
+    users.levi.extraHMConfig = let
+      usingPlasma = config.modules.plasma.enable;
+    in {
+      modules = {
+        kde.enable = !usingPlasma;
+        qt.enable = !usingPlasma;
+        hyprland.enable = true;
+        hyprland.extraEnv = lib.optionals usingPlasma [
+          "QT_QPA_PLATFORMTHEME,kde" # Makes QT theming also managed by kde on Hyprland
+        ];
+      };
     };
   };
 
@@ -79,5 +54,4 @@
   # Before changing this value read the documentation for this option
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
   system.stateVersion = "24.05"; # Did you read the comment?
-
 }

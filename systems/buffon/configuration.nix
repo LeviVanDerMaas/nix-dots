@@ -8,33 +8,16 @@
   ];
 
   # System Name
-  networking.hostName = "scar";
+  networking.hostName = "buffon";
 
-  # Bootloader
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
-
-  # Disk
-  zramSwap.enable = true;
-
-  # Networking
-  networking.networkmanager.enable = true;
-
-  # Printing
-  services.printing.enable = true;
-
-  # Nvidia GPU
+  # Nvidia RTX 2080
   hardware.graphics.enable = true;
   services.xserver.videoDrivers = [ "nvidia" ];
   hardware.nvidia.open = true;
 
-
-
-
-
-
-  # System-level config modules
+  # Custom config modules
   modules = {
+    # System-wide
     ddcutil = {
       enable = true;
       numMonitors = 2;
@@ -42,30 +25,26 @@
     sddm.setupCommands = "${pkgs.xorg.xrandr}/bin/xrandr --output HDMI-A-1 --left-of DP-2";
     hyprland.enable = true;
     gaming.enable = true;
-  };
 
+    # User-specific
+    users.levi.enable = true;
+    users.levi.extraHMConfig = {
+      modules = {
+        hyprland = {
+          enable = true;
+          monitors = [
+            { 
+              name = "DP-2"; resolution = "3840x2160"; position = "0x0"; scale = "1.5";
+              bindWorkspaces = [ 1 2 3 4 5 ];
+            }
+            { 
+              name = "HDMI-A-1"; resolution = "2560x1080"; position = "-2560x1080"; scale = "1";
+              bindWorkspaces = [ 6 7 8 9 10 ];
+            }
+          ];
 
-
-
-
-  # User-specific config tweaks
-  modules.users.levi.enable = true;
-  modules.users.levi.extraHMConfig = {
-    modules = {
-      hyprland = {
-        enable = true;
-        monitors = [
-          { 
-            name = "DP-2"; resolution = "3840x2160"; position = "0x0"; scale = "1";
-            bindWorkspaces = [ 1 2 3 4 5 ];
-          }
-          { 
-            name = "HDMI-A-1"; resolution = "2560x1080"; position = "-2560x1080"; scale = "1";
-            bindWorkspaces = [ 6 7 8 9 10 ];
-          }
-        ];
-
-        integrations.discord.autoStart = true;
+          integrations.discord.autoStart = true;
+        };
       };
     };
   };

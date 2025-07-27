@@ -33,7 +33,7 @@
     nixosConfigurations = systemConfigsFor [ 
       "boo" 
       "lucy"
-      "scar"
+      "buffon"
     ];
   };
 }

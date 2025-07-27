@@ -10,25 +10,9 @@
   # System Name
   networking.hostName = "boo";
 
-  # Bootloader
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
-
-  # Disk
-  zramSwap.enable = true;
-
-  # Networking
-  networking.networkmanager.enable = true;
-
-  # Printing
-  services.printing.enable = true;
-
-
-
-
-
-  # System-level config modules
+  # Custom config modules
   modules = {
+    # System-wide
     ddcutil = {
       enable = true;
       numMonitors = 2;
@@ -44,30 +28,26 @@
     hyprland.enable = true;
     zsa.enable = true;
     gaming.enable = true;
-  };
 
+    # User-specific
+    users.levi.enable = true;
+    users.levi.extraHMConfig = {
+      modules = {
+        hyprland = {
+          enable = true;
+          monitors = [
+            { 
+              name = "DP-1"; resolution = "1920x1080"; position = "0x0"; scale = "1";
+              bindWorkspaces = [ 1 2 3 4 5 ];
+            }
+            { 
+              name = "DP-3"; resolution = "1920x1080"; position = "-1920x0"; scale = "1";
+              bindWorkspaces = [ 6 7 8 9 10 ];
+            }
+          ];
 
-
-
-
-  # User-specific config
-  modules.users.levi.enable = true;
-  modules.users.levi.extraHMConfig = {
-    modules = {
-      hyprland = {
-        enable = true;
-        monitors = [
-          { 
-            name = "DP-1"; resolution = "1920x1080"; position = "0x0"; scale = "1";
-            bindWorkspaces = [ 1 2 3 4 5 ];
-          }
-          { 
-            name = "DP-3"; resolution = "1920x1080"; position = "-1920x0"; scale = "1";
-            bindWorkspaces = [ 6 7 8 9 10 ];
-          }
-        ];
-
-        integrations.discord.autoStart = true;
+          integrations.discord.autoStart = true;
+        };
       };
     };
   };
