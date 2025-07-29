@@ -5,7 +5,7 @@
     enable = true;
 
     shellAliases = let
-      rebuild = "sudo nixos-rebuild --flake ~/.dots";
+      rebuild = "sudo nixos-rebuild --flake .";
     in {
       dots-switch = "${rebuild} switch";
       dots-boot = "${rebuild} boot";
@@ -14,9 +14,11 @@
       dots-drya = "${rebuild} dry-activate";
 
       diff = "${pkgs.difftastic}/bin/difft";
+
       ls = "ls --color=tty";
       l = "ls -Ah";
       ll = "ls -Ahl";
+
       zzz = "systemctl suspend";
     };
   };
