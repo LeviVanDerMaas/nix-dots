@@ -78,6 +78,7 @@ in
 
       binds = {
         hide_special_on_workspace_change = true;
+        movefocus_cycles_fullscreen = true;
       };
 
       misc = {

@@ -26,6 +26,7 @@
     };
     sddm.setupCommands = "${pkgs.xorg.xrandr}/bin/xrandr --output DP-3 --left-of DP-1";
     hyprland.enable = true;
+    piper.enable = true;
     zsa.enable = true;
     gaming.enable = true;
 
