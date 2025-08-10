@@ -44,7 +44,7 @@ in
 
     wayland.windowManager.hyprland.enable = true;
     wayland.windowManager.hyprland.settings = {
-      env = cfg.extraEnv;
+      env = [] ++ cfg.extraEnv;
 
       input = {
         kb_layout = "us";
@@ -78,7 +78,6 @@ in
 
       binds = {
         hide_special_on_workspace_change = true;
-        movefocus_cycles_fullscreen = true;
       };
 
       misc = {
