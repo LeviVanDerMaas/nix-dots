@@ -1,5 +1,6 @@
 {
   imports = [
+    ./ags
     ./hyprland
     ./kde
     ./menus

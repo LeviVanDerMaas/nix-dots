@@ -15,9 +15,20 @@
       url = "github:CalcProgrammer1/OpenRGB?rev=b5638eee126234ebfe8eb7fe240d7b732f5d5dc3";
       flake = false;
     };
+
+    astal = {
+      url = "github:aylur/astal";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    ags = {
+      url = "github:aylur/ags";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.astal.follows = "astal";
+    };
   };
 
-  outputs = { self, nixpkgs, ... }@flake-inputs: let
+  outputs = { self, nixpkgs, ags, astal, ... }@flake-inputs: let
     arch = "x86_64-linux";
     pkgs = nixpkgs.legacyPackages.${arch};
     lib = nixpkgs.lib;
@@ -35,5 +46,22 @@
       "lucy"
       "buffon"
     ];
+    devShells.${arch}.ags = pkgs.mkShell {
+      buildInputs = [
+        (ags.packages.${arch}.default.override {
+          extraPackages = with astal.packages.${arch}; [
+            apps
+            battery
+            bluetooth
+            hyprland
+            mpris
+            network
+            notifd
+            tray
+            wireplumber
+          ];
+        })
+      ];
+    };
   };
 }
