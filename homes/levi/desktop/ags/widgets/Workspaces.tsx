@@ -1,5 +1,6 @@
 import AstalHyprland from "gi://AstalHyprland?version=0.1";
-import { createBinding, For, With } from "ags";
+import { createBinding, For } from "ags";
+import { WorkspaceIdBounds as WSB } from "utils/hyprland";
 
 const HYPRLAND = AstalHyprland.get_default();
 
@@ -14,27 +15,32 @@ type WorkspacesProps = {
 };
 
 function WorkspaceButton(wsn: number | string) {
-    // TODO: Fix a bug where .focus() will not actually work for named or special workspaces because
-    // under the hood it just uses hyprlands `workspace` dispatcher, which will interpret negative ids
-    // as a relative numbered workspace instead of a named or special one.
     const ws = typeof wsn === "number" ? 
         HYPRLAND.get_workspace(wsn) : 
         HYPRLAND.get_workspace_by_name(wsn);
 
-    if (!ws) {
-        return <button
-            class="WorkspaceButton non-existent"
-            onClicked={() => {print(wsn); HYPRLAND.dispatch("workspace", String(wsn))}}
-        >
-            {String(wsn)}
-        </button>
+    // If wsn is non-positive convert to name because `workspace` dispatcher
+    // only accepts non-negative ids. Note that Workspace.focus() does not do this.
+    if (typeof wsn === "number" && wsn < 1) {
+        if (ws) {
+            wsn = ws.name;
+        } else {
+            console.warn(`[WorkspaceButton] given id ${wsn}, no such named workspace exists. Assuming id as name.`);
+            wsn = String(wsn);
+        }
     }
 
+    // Named workspaces must be prefixed with `name:` in the dispatcher and specials with `special:`
+    // However, special workspaces are *already* prefixed with `special:` in their actual name.
+    const dispatchParam = typeof wsn === "number" ?
+        String(wsn) :
+        (wsn.startsWith("special:") ? "" : "name:") + wsn;
+
     return <button
-        class="WorkspaceButton"
-        onClicked={() => ws.focus()}
-    >
-        {ws.name}
+        class ={`WorkspaceButton ${!ws ? "non-existent" : ""}`}
+        onClicked={() => HYPRLAND.dispatch("workspace", dispatchParam)}
+        >
+        {String(wsn)}
     </button>
 }
 
@@ -65,29 +71,26 @@ export default function Workspaces({
     const workspacesToRender = createBinding(HYPRLAND, "workspaces").as(wss => {
         const numberedWss: Array<number | string> = listNumbered ?
             (whichToRender(
-                wss.filter(ws => ws.id >= 1), 
+                wss.filter(ws => ws.id >= WSB.NUMBERED_WORKSPACE_MIN_ID), 
                 nonExistentNumbered?.filter(n => !HYPRLAND.get_workspace(n))
             ) as number[])
             .sort((a, b) => a - b) : [];
 
         const namedWss = listNamed ?
             whichToRender(
-                // Digging in Compositor source code shows namedworkspaces have id of -1337 or lower
-                wss.filter(ws => ws.id <= -1337), 
+                wss.filter(ws => ws.id <= WSB.NAMED_WORKSPACE_MAX_ID), 
                 nonExistentNamed?.filter(n => !HYPRLAND.get_workspace_by_name(n))
             ) : [];
 
         const specialWss = listSpecial ?
             whichToRender(
-                // Digging in Compositor source code shows special workspaces have idea in range [-99, -2]
-                wss.filter(ws => ws.id >= -99 && ws.id <= -2),
+                wss.filter(ws => ws.id >= WSB.SPECIAL_WORKSPACE_MIN_ID && ws.id <= WSB.SPECIAL_WORKSPACE_MAX_ID),
                 nonExistentSpecial?.filter(n => !HYPRLAND.get_workspace_by_name(n))
             ) : [];
 
         return numberedWss.concat(namedWss, specialWss)
     })
 
-    // return <box><With value={workspacesToRender}>{(value) => {print(value); return <box/>}}</With></box>
     return <box>
         <For each={workspacesToRender}>
             {ws => WorkspaceButton(ws)}
