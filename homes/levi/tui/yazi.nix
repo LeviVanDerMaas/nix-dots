@@ -24,6 +24,9 @@
       open.rules = [ # override defaults, that is they become unset
         { name = "*/"; use = [ "edit" "xdg-open" "gui-manager" ]; } # folders
         { mime = "text/*"; use = [ "edit" "xdg-open" ]; } # Plain text
+        # Javascript and JSON may be considered application instead of text MIMEs because reasons.
+        { mime = "*/javascript}"; use = [ "edit" "xdg-open" ]; }
+        { mime = "application/{json,ndjson}}"; use = [ "edit" "xdg-open" ]; }
         { mime = "{audio,video}/*"; use = [ "play" ]; } # Media
         { mime = "application/{zip,rar,7z*,tar,gzip,xz,zstd,bzip*,lzma,compress,archive,cpio,arj,xar,ms-cab*}"; use = [ "extract" "xdg-open" "gui-manager" ]; }
         
