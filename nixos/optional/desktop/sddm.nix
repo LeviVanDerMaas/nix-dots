@@ -2,7 +2,7 @@
 
 let
   cfg = config.modules.sddm;
-  red = "#CF0700";
+  purple = "#701bbb";
 
   # Note to future me: this theme actually has a lot of config support to allow you
   # to do things like play videos for the background as well, so if you ever want to
@@ -11,22 +11,23 @@ let
   themePkg = pkgs.sddm-astronaut.override {
     themeConfig = {
       # If this doesn't work decaptilazing `Background` may.
-      Background = "${rootRel /assets/wallpapers/woodrot.png}";
+      Background = "${rootRel /assets/wallpapers/tunnel.jpg}";
 
       FullBlur = "false";
-      PartialBlur = "false";
+      PartialBlur = "true";
+      FormPosition = "left";
       HideVirtualKeyboard = "true";
       HideLoginButton = "true";
 
-      HighlightBorderColor = red;
-      HighlightBackgroundColor = red;
-      DropdownSelectedBackgroundColor = red;
-      HoverUserIconColor = red;
-      HoverPasswordIconColor = red;
-      HoverSystemButtonsIconsColor = red;
-      HoverSessionButtonTextColor = red;
-      HoverVirtualKeyboardButtonTextColor = red;
-      WarningColor = red;
+      HighlightBorderColor = purple;
+      HighlightBackgroundColor = purple;
+      DropdownSelectedBackgroundColor = purple;
+      HoverUserIconColor = purple;
+      HoverPasswordIconColor = purple;
+      HoverSystemButtonsIconsColor = purple;
+      HoverSessionButtonTextColor = purple;
+      HoverVirtualKeyboardButtonTextColor = purple;
+      WarningColor = purple;
     };
   };
 in
