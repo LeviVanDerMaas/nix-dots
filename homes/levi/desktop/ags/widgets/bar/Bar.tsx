@@ -9,12 +9,12 @@ export default function Bar(gdkmonitor: Gdk.Monitor) {
     const { TOP, LEFT, RIGHT } = Astal.WindowAnchor;
 
     return <window
-        visible
+        application={app}
         class="Bar"
         gdkmonitor={gdkmonitor}
-        exclusivity={Astal.Exclusivity.EXCLUSIVE}
         anchor={TOP | LEFT | RIGHT}
-        application={app}
+        exclusivity={Astal.Exclusivity.EXCLUSIVE}
+        visible
     >
         <centerbox cssName="centerbox">
             <button

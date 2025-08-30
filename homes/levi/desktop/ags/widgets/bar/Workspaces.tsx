@@ -1,4 +1,4 @@
-import AstalHyprland from "gi://AstalHyprland?version=0.1";
+import AstalHyprland from "gi://AstalHyprland";
 import { createBinding, For } from "ags";
 import { WorkspaceIdBounds as WSB } from "utils/hyprland";
 
@@ -19,8 +19,8 @@ function WorkspaceButton(wsn: number | string) {
         HYPRLAND.get_workspace(wsn) : 
         HYPRLAND.get_workspace_by_name(wsn);
 
-    // If wsn is non-positive convert to name because `workspace` dispatcher
-    // only accepts non-negative ids. Note that Workspace.focus() does not do this.
+    // If wsn is non-positive convert to name because `workspace` dispatcher only accepts
+    // non-negative ids. Note that Workspace.focus() does not account for this.
     if (typeof wsn === "number" && wsn < 1) {
         if (ws) {
             wsn = ws.name;
@@ -56,7 +56,7 @@ export default function Workspaces({
     const nonExistentSpecial = nonExistent?.filter((n): n is string => typeof n === "string" && n.startsWith("special:"));
 
     // Given a list of workspaces, return the id's or names of those that must be rendered for this instance.
-    // Aditionally, add any workspaces that we specified based on id or name (regardless of their existance).
+    // Aditionally, add any workspaces that we specified based on id or name (regardless of their existence).
     const whichToRender = (wss: Array<AstalHyprland.Workspace>, add?: Array<number | string>) => {
         if (onMonitor) {
             wss = wss.filter(ws => 
