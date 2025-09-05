@@ -14,7 +14,10 @@
         return 1
       fi
       ''${EDITOR:-nvim} - +'f shell.nix' +'set ft=nix' <<EOF
-    { pkgs ? import <nixpkgs> {} }:
+    let
+      nixpkgs = <nixpkgs>;
+    in
+    { pkgs ? import nixpkgs {} }:
 
     pkgs.mkShell {
       packages = with pkgs; [

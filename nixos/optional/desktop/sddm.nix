@@ -11,7 +11,7 @@ let
   themePkg = pkgs.sddm-astronaut.override {
     themeConfig = {
       # If this doesn't work decaptilazing `Background` may.
-      Background = "${rootRel /assets/wallpapers/tunnel.jpg}";
+      Background = "${rootRel /assets/wallpapers/tunnel.png}";
 
       FullBlur = "false";
       PartialBlur = "true";

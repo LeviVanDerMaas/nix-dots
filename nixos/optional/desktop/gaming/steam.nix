@@ -1,3 +1,9 @@
+# TODO: look into adding an option to add a file ~/.steam/steam/steam_dev.cfg
+# with 'unShaderBackgroundProcessingThreads x' in it (no quotes), where x is a
+# number we specify. By default Steam's shader precaching uses only 1 core, this
+# having this file with this line makes it use x cores instead (regardless of whether
+# backgroundprocessing is turned on or off).
+
 { pkgs, lib, config, ... }:
 
 let
@@ -9,7 +15,7 @@ in
       Install Steam and configure and install things needed to run games and Proton.
     '';
     install-gperftools = lib.mkEnableOption ''
-      Install gperftools. Team Fortress 2 depends on this for some reason.
+      Make gperftools available to Steam. Team Fortress 2 depends on this for some reason.
     '';
   };
 
