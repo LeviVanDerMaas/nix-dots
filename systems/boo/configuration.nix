@@ -1,5 +1,11 @@
 { pkgs, rootRel, ... }:
 
+let
+  monitors = {
+    main = "DP-1";
+    left = "DP-3";
+  };
+in
 {
   # General
   imports = [
@@ -24,7 +30,10 @@
       initRunDelay = 10;
       initRunTries = 20;
     };
-    sddm.setupCommands = "${pkgs.xorg.xrandr}/bin/xrandr --output DP-3 --left-of DP-1";
+    sddm.setupCommands = with monitors; ''
+      xrandr --output ${main} --primary
+      xrandr --output ${left} --left-of ${main}
+    '';
     hyprland.enable = true;
     piper.enable = true;
     zsa.enable = true;
@@ -36,13 +45,13 @@
       modules = {
         hyprland = {
           enable = true;
-          monitors = [
+          monitors = with monitors; [
             { 
-              name = "DP-1"; resolution = "1920x1080"; position = "0x0"; scale = "1";
+              name = "${main}"; resolution = "1920x1080"; position = "0x0"; scale = "1";
               bindWorkspaces = [ 1 2 3 4 5 ];
             }
             { 
-              name = "DP-3"; resolution = "1920x1080"; position = "-1920x0"; scale = "1";
+              name = "${left}"; resolution = "1920x1080"; position = "-1920x0"; scale = "1";
               bindWorkspaces = [ 6 7 8 9 10 ];
             }
           ];

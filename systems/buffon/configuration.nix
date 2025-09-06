@@ -1,5 +1,11 @@
 { pkgs, rootRel, ... }:
 
+let
+  monitors = {
+    main = "DP-2";
+    left =  "HDMI-A-1";
+  };
+in
 {
   # General
   imports = [
@@ -22,7 +28,10 @@
       enable = true;
       numMonitors = 2;
     };
-    sddm.setupCommands = "${pkgs.xorg.xrandr}/bin/xrandr --output HDMI-A-1 --left-of DP-2";
+    sddm.setupCommands = with monitors; ''
+      xrandr --output ${main} --primary
+      xrandr --output ${left} --left-of ${main}
+    '';
     hyprland.enable = true;
     gaming.enable = true;
 
@@ -32,13 +41,14 @@
       modules = {
         hyprland = {
           enable = true;
-          monitors = [
-            { 
-              name = "DP-2"; resolution = "3840x2160"; position = "0x0"; scale = "1.5";
+          monitors = with monitors; [
+            {
+              # If anything looks weird or blurry in certain apps its probs cuz of fractional scaling done here.
+              name = "${main}"; resolution = "3840x2160"; position = "0x0"; scale = "1.5";
               bindWorkspaces = [ 1 2 3 4 5 ];
             }
             { 
-              name = "HDMI-A-1"; resolution = "2560x1080"; position = "-2560x1080"; scale = "1";
+              name = "${left}"; resolution = "2560x1080"; position = "-2560x900"; scale = "1";
               bindWorkspaces = [ 6 7 8 9 10 ];
             }
           ];

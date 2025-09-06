@@ -18,6 +18,7 @@ let
       FormPosition = "left";
       HideVirtualKeyboard = "true";
       HideLoginButton = "true";
+      PasswordFocus = "true";
 
       HighlightBorderColor = purple;
       HighlightBackgroundColor = purple;
@@ -43,7 +44,8 @@ in
       description = ''
         Will be passed to `services.xserver.displayManager.setupCommands`.
         These are commands executed just after the X server has started and
-        can for example be used to set the monitor layout.
+        can for example be used to set the monitor layout. xrandr has been
+        made available to sddm so that you can include xrandr setup commands.
       '';
     };
       
@@ -62,12 +64,12 @@ in
       theme = "sddm-astronaut-theme"; # This theme requires qt6.
       extraPackages = with pkgs; [
         themePkg
+        xorg.xrandr # Not actually available to sddm by default for things like setupcommands.
       ];
     };
 
     environment.systemPackages = with pkgs; [
       # If theme is not in both extraPackages and systemPackages it will fail to apply for some reason
-      # May have to do with using a qt6 based SDDM package.
       themePkg
     ];
   };

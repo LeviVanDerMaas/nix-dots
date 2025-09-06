@@ -44,7 +44,10 @@ in
 
     wayland.windowManager.hyprland.enable = true;
     wayland.windowManager.hyprland.settings = {
-      env = [] ++ cfg.extraEnv;
+      env = [
+        # Special NIXOS var makes most Electron and CEF apps use wayland by default.
+        "NIXOS_OZONE_WL,1" 
+      ] ++ cfg.extraEnv;
 
       input = {
         kb_layout = "us";

@@ -9,7 +9,7 @@ in
       Set up monior configuration: the reason we have this as its own submodule in our
       home-manager config is because monitor setup is quite system dependent, so this
       lets us configure different monitor setups for different systems while keeping the
-      rest of our config uniform between systems.
+      rest of our config uniform between systems. First monitor will also be the cursor default.
     '';
     default = [];
     type = lib.types.listOf (lib.types.submodule {
@@ -59,6 +59,8 @@ in
       # The first rule will be a fallback rule, so that hotplugging unknown monitors should still work.
       monitor = [ ", preferred, auto, 1" ] ++
         builtins.map (mon: "${mon.name}, ${mon.resolution}, ${mon.position}, ${mon.scale}") cfg.monitors;
+
+      cursor.${if cfg.monitors != [] then "default_monitor" else null} = (builtins.head cfg.monitors).name;
       
       # Binds workspaces to monitors as indicated in cfg.bindWorkspaces,
       # and set the first workspace for a monitor as the default workspace.

@@ -26,7 +26,7 @@ in
         plasma-browser-integration
         okular
         kate
-
+        gwenview
         # I don't want to have Dolphin Plugins anyway, but just in case for future me:
         # the derivation for this may fail to build if you overlay dolphin.
         # Also even when this was installed it didn't seem to work anyway.
