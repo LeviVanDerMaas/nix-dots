@@ -4,7 +4,12 @@ let
 in
 {
   options.modules.ddcutil = {
-    enable = lib.mkEnableOption "Enable ddcutil service.";
+    enable = lib.mkEnableOption ''
+      Enable ddcutil service. This will also enable i2c support.
+      By default a locally logged on user should be able to manipulate i2c
+      devices when this is enabled, but in case it does not work, the user
+      must be added to the group specified by `hardware.i2c.group` (default: "i2c").
+    '';
     numMonitors = lib.mkOption {
       type = lib.types.int;
       default = 1;
@@ -16,6 +21,8 @@ in
     environment.systemPackages = with pkgs; [
       ddcutil
     ];
+
+    hardware.i2c.enable = true;
 
     environment.shellAliases = {
       br = let 
