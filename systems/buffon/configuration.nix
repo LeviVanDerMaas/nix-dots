@@ -1,4 +1,4 @@
-{ pkgs, rootRel, ... }:
+{ pkgs, rootRel, lib, ... }:
 
 let
   monitors = {
@@ -28,9 +28,11 @@ in
       enable = true;
       numMonitors = 2;
     };
-    sddm.setupCommands = with monitors; ''
-      xrandr --output ${main} --primary
-      xrandr --output ${left} --left-of ${main}
+    sddm.setupCommands = with monitors; let
+      xrandr = lib.getExe pkgs.xorg.xrandr;
+    in ''
+      ${xrandr} --output ${main} --primary
+      ${xrandr} --output ${left} --left-of ${main}
     '';
     hyprland.enable = true;
     gaming.enable = true;

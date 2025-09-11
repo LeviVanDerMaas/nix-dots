@@ -1,4 +1,4 @@
-{ pkgs, rootRel, ... }:
+{ pkgs, rootRel, lib, ... }:
 
 let
   monitors = {
@@ -30,9 +30,11 @@ in
       initRunDelay = 10;
       initRunTries = 20;
     };
-    sddm.setupCommands = with monitors; ''
-      xrandr --output ${main} --primary
-      xrandr --output ${left} --left-of ${main}
+    sddm.setupCommands = with monitors; let
+      xrandr = lib.getExe pkgs.xorg.xrandr;
+    in ''
+      ${xrandr} --output ${main} --primary
+      ${xrandr} --output ${left} --left-of ${main}
     '';
     hyprland.enable = true;
     piper.enable = true;

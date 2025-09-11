@@ -62,15 +62,20 @@ in
 
       # Preview with `sddm-greeter-qt6 --test-mode --theme /run/current-system/sw/share/sddm/themes/sddm-astronaut-theme/`
       theme = "sddm-astronaut-theme"; # This theme requires qt6.
+      # NOTE: extraPackages, contrary to what its description claims (on 2025-10-10), does
+      # not actually add the packages to sddm's environment, only to its buildInputs.
       extraPackages = with pkgs; [
         themePkg
-        xorg.xrandr # Not actually available to sddm by default for things like setupcommands.
       ];
+
+      # We can't set the cursor theme through sddm.conf, because that requires the cursor theme
+      # itself to be part of an sddm theme. # Setting  XCURSOR works just fine though.
     };
 
     environment.systemPackages = with pkgs; [
       # If theme is not in both extraPackages and systemPackages it will fail to apply for some reason
       themePkg
+      kdePackages.breeze
     ];
   };
 }
