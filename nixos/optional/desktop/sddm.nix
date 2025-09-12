@@ -51,6 +51,7 @@ in
       
   };
 
+
   config = lib.mkIf cfg.enable {
     services.xserver.displayManager.setupCommands = cfg.setupCommands;
     
@@ -60,22 +61,23 @@ in
       # Force cuz some DE modules will also try to set this and conflict even if packages match.
       package = lib.mkForce pkgs.kdePackages.sddm; 
 
-      # Preview with `sddm-greeter-qt6 --test-mode --theme /run/current-system/sw/share/sddm/themes/sddm-astronaut-theme/`
-      theme = "sddm-astronaut-theme"; # This theme requires qt6.
       # NOTE: extraPackages, contrary to what its description claims (on 2025-10-10), does
       # not actually add the packages to sddm's environment, only to its buildInputs.
-      extraPackages = with pkgs; [
-        themePkg
-      ];
+      extraPackages = [];
 
-      # We can't set the cursor theme through sddm.conf, because that requires the cursor theme
-      # itself to be part of an sddm theme. # Setting  XCURSOR works just fine though.
+
+      # The sddm package will set sddm.conf to look fort themes in /run/current-system/sw/share/sddm/themes by default.
+      # This means that it should suffice to add themes to environment.systemPackages to make em available to sddm.
+      # Preview with `sddm-greeter-qt6 --test-mode --theme /run/current-system/sw/share/sddm/themes/<theme-name>/`
+      # NOTE: For cursors, easiest way to set one is to use xdg.icons.fallbackCursorThemes (again, should suffice to
+      # add cursors to environment.systemPackages and then use the name in fallbackCursorThemes), however, if you desire
+      # to set it independently you must wrap SDDM to start with env var XCURSOR_PATH containing a path to where the
+      # desired cursor theme is located, then set services.displaymanaer.sdd.settings.Themes.CursorTheme to the cursor theme name.
+      theme = "sddm-astronaut-theme"; # This theme requires qt6.
     };
 
     environment.systemPackages = with pkgs; [
-      # If theme is not in both extraPackages and systemPackages it will fail to apply for some reason
       themePkg
-      kdePackages.breeze
     ];
   };
 }
