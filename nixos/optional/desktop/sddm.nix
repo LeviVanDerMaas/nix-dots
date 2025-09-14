@@ -4,13 +4,9 @@ let
   cfg = config.modules.sddm;
   purple = "#701bbb";
 
-  # Note to future me: this theme actually has a lot of config support to allow you
-  # to do things like play videos for the background as well, so if you ever want to
-  # snazz things up you should first check if this already supports it instead of
-  # picking a different theme altogether.
-  themePkg = pkgs.sddm-astronaut.override {
+  astronautThemePkg = pkgs.sddm-astronaut.override {
     themeConfig = {
-      # If this doesn't work decaptilazing `Background` may.
+      # These config options are custom to this theme
       Background = "${rootRel /assets/wallpapers/tunnel.png}";
 
       FullBlur = "false";
@@ -48,7 +44,6 @@ in
         made available to sddm so that you can include xrandr setup commands.
       '';
     };
-      
   };
 
 
@@ -61,11 +56,6 @@ in
       # Force cuz some DE modules will also try to set this and conflict even if packages match.
       package = lib.mkForce pkgs.kdePackages.sddm; 
 
-      # NOTE: extraPackages, contrary to what its description claims (on 2025-10-10), does
-      # not actually add the packages to sddm's environment, only to its buildInputs.
-      extraPackages = [];
-
-
       # The sddm package will set sddm.conf to look fort themes in /run/current-system/sw/share/sddm/themes by default.
       # This means that it should suffice to add themes to environment.systemPackages to make em available to sddm.
       # Preview with `sddm-greeter-qt6 --test-mode --theme /run/current-system/sw/share/sddm/themes/<theme-name>/`
@@ -74,10 +64,18 @@ in
       # to set it independently you must wrap SDDM to start with env var XCURSOR_PATH containing a path to where the
       # desired cursor theme is located, then set services.displaymanaer.sdd.settings.Themes.CursorTheme to the cursor theme name.
       theme = "sddm-astronaut-theme"; # This theme requires qt6.
+
+      # NOTE: extraPackages, contrary to what its description claims (on 2025-10-10), does
+      # not actually add the packages to sddm's environment, only to its buildInputs.
+      extraPackages = [
+        # Astronaut has some propagtedBuildInputs that sddm needs in order for this theme
+        # to function correctly.
+        astronautThemePkg
+      ];
     };
 
     environment.systemPackages = with pkgs; [
-      themePkg
+      astronautThemePkg
     ];
   };
 }
