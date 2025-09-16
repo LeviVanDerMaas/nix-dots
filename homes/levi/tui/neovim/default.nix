@@ -1,12 +1,18 @@
 { pkgs, ... }:
 
 {
-  programs.neovim =
-  let
-    toLua = str: "lua << EOF\n${str}\nEOF\n";
-    toLuaFile = file: "lua << EOF\n${builtins.readFile file}\nEOF\n";
-  in
-  {
+  programs.neovim = let
+    # Wrap lua strings in :lua, turning it into vimscript expression.
+    luaChunk = str: "lua << EOF\n${str}\nEOF\n";
+    luaChunckFile = file:  "lua << EOF\n${builtins.readFile file}EOF\n";
+
+    # Wrap lua in 'do-end' block, limiting the scope to that piece of lua.
+    scopeLua = str: "do\n${str}\nend\n";
+    scopeLuaFile = file: "do\n${builtins.readFile file}end\n";
+    scopeLuaFiles = files: let
+      blocks = builtins.map (f: scopeLuaFile f) files;
+    in builtins.concatStringsSep "\n" blocks;
+  in {
     enable = true;
 
     defaultEditor = true;
@@ -20,6 +26,7 @@
       ripgrep # Optional dep for telescope, faster live grep
       fd # Optional dep for telescope, faster file finding
       wl-clipboard # Required for clipboard sync
+      zathura # For texlive
 
       # Language servers
       clang-tools
@@ -35,7 +42,7 @@
       {
         # Completion engine
         plugin = nvim-cmp;
-        config = toLuaFile ./plugins/nvim-cmp.lua;
+        config = luaChunckFile ./plugins/nvim-cmp.lua;
       }
       luasnip # Snippet engine
       cmp_luasnip # Makes luasnip work with nvim-cmp
@@ -48,22 +55,26 @@
 
       # Treesitter
       {
+        #TODO: May want to consider specifically excluding the latex grammar.
+        # You should be able to access an attrset of all grammars with the
+        # packages grammarPlugins attribute (which is how withAllGrammars
+        # installs all grammars), and remove the latex attribute from it.
         plugin = nvim-treesitter.withAllGrammars;
-        config = toLuaFile ./plugins/treesitter.lua;
+        config = luaChunckFile ./plugins/treesitter.lua;
       }
 
       # LSP
       {
         # Configs for built-in LSPs for many languages
         plugin = nvim-lspconfig;
-        config = toLuaFile ./plugins/lsp.lua;
+        config = luaChunckFile ./plugins/lsp.lua;
       }
       cmp-nvim-lsp # nvim-cmp source for built-in LSP client
       lspkind-nvim # Adds icons to built-in lsp (requires patched font)
       {
         # LSP progress notifications (for lsps using $/progress handler)
         plugin = fidget-nvim;
-        config = toLua "require('fidget').setup({})";
+        config = luaChunk "require('fidget').setup({})";
       }
       neodev-nvim # Should replace this with lazydev.nvim at some point
 
@@ -75,7 +86,7 @@
       {
         # Add signs for git to the sign column, and more
         plugin = gitsigns-nvim;
-        config = toLuaFile ./plugins/gitsigns.lua;
+        config = luaChunckFile ./plugins/gitsigns.lua;
       }
 
       # UI
@@ -86,18 +97,24 @@
       {
         # Statusline
         plugin = lualine-nvim;
-        config = toLuaFile ./plugins/lualine.lua;
+        config = luaChunckFile ./plugins/lualine.lua;
       }
       {
         # Shows key-maps in pop-up (with delay)
         plugin = which-key-nvim;
-        config = toLua "require('which-key').setup()";
+        config = luaChunk "require('which-key').setup()";
+      }
+
+      # Latex
+      {
+        plugin = vimtex;
+        config = luaChunckFile ./plugins/vimtex.lua;
       }
 
       # Telescope
       {
         plugin = telescope-nvim;
-        config = toLuaFile ./plugins/telescope.lua;
+        config = luaChunckFile ./plugins/telescope.lua;
       }
       telescope-ui-select-nvim # Replace vim.ui.select with telescope
 
@@ -108,32 +125,30 @@
       {
         # Operator-based inserting and deleting of (, ", <tag>, etc.
         plugin = nvim-surround;
-        config = toLua "require('nvim-surround').setup()";
+        config = luaChunk "require('nvim-surround').setup()";
       }
       {
         # Adds indentation guides
         plugin = indent-blankline-nvim;
-        config = toLua "require('ibl').setup()";
+        config = luaChunk "require('ibl').setup()";
       }
       {
         # Better commenting than built-in
         plugin = comment-nvim;
-        config = toLua "require('Comment').setup()";
+        config = luaChunk "require('Comment').setup()";
       }
 
       # Misc
       plenary-nvim # Dependency for some plugins, such as telescope
-
     ];
 
-    # options should come first because some other things may depend on it,
-    # e.g. what key is the leader key. Similarly util should come right after.
-    extraLuaConfig = ''
-      ${builtins.readFile ./options.lua}
-      ${builtins.readFile ./util.lua}
-
-      ${builtins.readFile ./keymaps.lua}
-      ${builtins.readFile ./commands.lua}
-    '';
+    # MAKE SURE to SCOPE external code (like files) so that local variables etc.
+    # will not enter the global namespace in init.lua.
+    extraLuaConfig = scopeLuaFiles [
+      ./options.lua  # Should come first
+      ./util.lua # Should come second
+      ./keymaps.lua
+      ./commands.lua
+    ];
   };
 }

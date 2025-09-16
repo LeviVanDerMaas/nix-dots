@@ -3,8 +3,10 @@
 {
   imports = [
     ./dolphin.nix
-    ./kitty.nix
     ./firefox.nix
+    ./kitty.nix
+    ./texlive.nix
+    ./zathura.nix
   ];
 
   # Non-module packages
