@@ -5,7 +5,7 @@
     ./kde
     ./menus
     ./programs
-    ./theme
+    ./theming
     ./waybar
   ];
 }

@@ -12,8 +12,8 @@
   # Non-module packages
   home.packages = with pkgs; [
     discord
-    fastfetch
     obsidian
+    signal-desktop
     vlc
   ];
 }
