@@ -40,5 +40,8 @@ in
         ];
       };
     };
+
+    # This lets steam use controllers.
+    hardware.steam-hardware.enable = true;
   };
 }
