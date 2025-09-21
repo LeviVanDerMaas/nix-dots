@@ -37,7 +37,6 @@ in
       extraSpecialArgs = { inherit flake-inputs rootRel; };
 
       users.levi = { ... }: {
-        # Doing it like this lets the extra hm config get merged properly.
         imports = [ (rootRel /homes/levi) ];
         config = cfg.extraHMConfig;
       };
