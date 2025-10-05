@@ -3,6 +3,7 @@ import { Astal, Gtk, Gdk } from "ags/gtk4"
 import { execAsync } from "ags/process"
 import { createPoll } from "ags/time"
 import Workspaces from "./Workspaces";
+import Clock from "./Clock";
 
 export default function Bar(gdkmonitor: Gdk.Monitor) {
     const time = createPoll("", 1000, "date");
@@ -26,7 +27,12 @@ export default function Bar(gdkmonitor: Gdk.Monitor) {
                 <label label="Welcome to AGS!" />
             </button>
             <Workspaces $type="center"/>
-            <box $type="end" />
+            <Clock 
+                $type="end" 
+                format={'%R\n<span size="smaller">%d-%m-%Y</span>'}
+                extraClocks={[{format: "%T"}]}
+                withCalendar
+            />
         </centerbox>
     </window>
 }
