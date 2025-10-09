@@ -8,6 +8,7 @@ in
     ./animations.nix
     ./binds.nix
     ./exec.nix
+    ./hyprland-portals.nix
     ./hyprpaper.nix
     ./monitors.nix
 

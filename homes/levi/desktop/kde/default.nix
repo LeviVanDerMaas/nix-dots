@@ -12,7 +12,7 @@ in
         A module to manually configure KDE-related settings. We would want to
         be able to disable this module as a whole in cases where we also
         install Plasma on the device, because Plasma can freak out pretty hard 
-        if it does not have proper access to KDE-related config files.
+        if it does not have proper control of KDE-related config files.
       '';
     };
 
