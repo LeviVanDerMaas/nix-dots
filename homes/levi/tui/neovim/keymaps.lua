@@ -1,13 +1,13 @@
--- NOTE TO FUTURE SELF: keybinds will expand named keys, which means that if
--- you are mapping commands that also use these then they might not play nice
--- together, e.g. if you `:map xy :normal! ggv/\S<CR>`, then <CR> will "finish"
--- the normal command, and since the search command must be finished by its own
--- <CR> it will be left unfinished and thus aborted. Instead, in these cases,
--- consider using :exec.
+-- NOTE: keymaps expand named keys like <CR>, use exec in cases where you need named keys.
 
--- General
-vim.keymap.set('', '<leader>h', ':set hlsearch!<CR>', { desc = 'Toggle search [h]ighlights' })
-vim.keymap.set('', '<leader>H', ':noh<CR>', { desc = 'No search [h]ighlights' })
+vim.keymap.set('', '<leader>h', function ()
+  if vim.v.hlsearch == 0 then
+    vim.o.hlsearch = true
+  else
+    vim.v.hlsearch = 0 -- Disable highlights but not 'hlsearch' option
+  end
+end, { silent = true; desc = 'Toggle search highlights' })
+vim.keymap.set('', '<leader>H', ':set hlsearch!<CR>:set hlsearch?<CR>', { desc = "Toggle 'hlsearch' option" })
 
 -- Telescope
 vim.keymap.set('n', '<leader>?', require('telescope.builtin').oldfiles, { desc = '[?] Find recently opened files' })
