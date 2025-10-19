@@ -144,11 +144,6 @@
 
     # MAKE SURE to SCOPE external code (like files) so that local variables etc.
     # will not enter the global namespace in init.lua.
-    extraLuaConfig = scopeLuaFiles [
-      ./options.lua  # Should come first
-      ./util.lua # Should come second
-      ./keymaps.lua
-      ./commands.lua
-    ];
+    extraLuaConfig = builtins.readFile ./init.lua;
   };
 }
