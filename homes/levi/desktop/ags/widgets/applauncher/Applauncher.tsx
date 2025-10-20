@@ -30,9 +30,6 @@ export default function Applauncher({
         }
     }
 
-    // NOTE: if we wanna do custom parsing of the .desktop's exec field:
-    // use `replace(/\%[fFuUdDnNickvm]/g, '').trim()` to strip out all field codes
-    // then use Glib.shell_parse_argv() to get individual args in array form.
     function launch(app?: AstalApps.Application) {
         win.hide()
         if (app) {
