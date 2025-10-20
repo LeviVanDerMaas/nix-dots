@@ -4,6 +4,7 @@ import { execAsync } from "ags/process"
 import { createPoll } from "ags/time"
 import Workspaces from "./Workspaces";
 import Clock from "./Clock";
+import Network from "./Network";
 
 export default function Bar(gdkmonitor: Gdk.Monitor) {
     const time = createPoll("", 1000, "date");
@@ -26,7 +27,7 @@ export default function Bar(gdkmonitor: Gdk.Monitor) {
             >
                 <label label="Welcome to AGS!" />
             </button>
-            <Workspaces $type="center"/>
+            <Network $type="center"/>
             <Clock 
                 $type="end" 
                 format={'%R\n<span size="smaller">%d-%m-%Y</span>'}
