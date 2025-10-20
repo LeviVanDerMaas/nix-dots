@@ -1,9 +1,4 @@
-local g = vim.g
 local o = vim.opt
-
--- Vim globals
-g.mapleader = ' ' -- WARNING: Set BEFORE loading plugins!
-g.maplocalleader = ' ' -- WARNING: Set BEFORE loading plugins!
 
 -- Data
 o.swapfile = false -- If true, `updatetime` shouldn't be too low.

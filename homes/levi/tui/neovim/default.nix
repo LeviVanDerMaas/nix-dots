@@ -1,19 +1,15 @@
 { pkgs, ... }:
 
 {
-  programs.neovim = let
-    # Wrap lua strings in :lua, turning it into vimscript expression.
-    luaChunk = str: "lua << EOF\n${str}\nEOF\n";
-    luaChunckFile = file:  "lua << EOF\n${builtins.readFile file}EOF\n";
+  xdg.configFile."nvim/lua".source = ./lua;
 
-    # Wrap lua in 'do-end' block, limiting the scope to that piece of lua.
-    scopeLua = str: "do\n${str}\nend\n";
-    scopeLuaFile = file: "do\n${builtins.readFile file}end\n";
-    scopeLuaFiles = files: let
-      blocks = builtins.map (f: scopeLuaFile f) files;
-    in builtins.concatStringsSep "\n" blocks;
+  programs.neovim = let
+    vsLua = str: "lua << EOF\n${str}\nEOF\n";
+    vsRequireSetup = mod: vsLua "require('${mod}').setup()";
+    vsPluginSetup = str: vsLua "require 'plugin_setups.${str}'";
   in {
     enable = true;
+    extraLuaConfig = builtins.readFile ./init.lua;
 
     defaultEditor = true;
 
@@ -42,7 +38,7 @@
       {
         # Completion engine
         plugin = nvim-cmp;
-        config = luaChunckFile ./plugins/nvim-cmp.lua;
+        config = vsPluginSetup "nvim-cmp";
       }
       luasnip # Snippet engine
       cmp_luasnip # Makes luasnip work with nvim-cmp
@@ -60,21 +56,21 @@
         # packages grammarPlugins attribute (which is how withAllGrammars
         # installs all grammars), and remove the latex attribute from it.
         plugin = nvim-treesitter.withAllGrammars;
-        config = luaChunckFile ./plugins/treesitter.lua;
+        config = vsPluginSetup "treesitter";
       }
 
       # LSP
       {
         # Configs for built-in LSPs for many languages
         plugin = nvim-lspconfig;
-        config = luaChunckFile ./plugins/lsp.lua;
+        config = vsPluginSetup "lsp";
       }
       cmp-nvim-lsp # nvim-cmp source for built-in LSP client
       lspkind-nvim # Adds icons to built-in lsp (requires patched font)
       {
         # LSP progress notifications (for lsps using $/progress handler)
         plugin = fidget-nvim;
-        config = luaChunk "require('fidget').setup({})";
+        config = vsRequireSetup "fidget";
       }
       neodev-nvim # Should replace this with lazydev.nvim at some point
 
@@ -86,69 +82,60 @@
       {
         # Add signs for git to the sign column, and more
         plugin = gitsigns-nvim;
-        config = luaChunckFile ./plugins/gitsigns.lua;
+        config = vsPluginSetup "gitsigns"; 
       }
 
       # UI
       {
         plugin = catppuccin-nvim;
-        config = "colorscheme catppuccin-mocha";
+        config = vsLua "vim.cmd.colorscheme 'catppuccin-mocha'";
       }
       {
         # Statusline
         plugin = lualine-nvim;
-        config = luaChunckFile ./plugins/lualine.lua;
+        config = vsPluginSetup "lualine"; 
       }
       {
         # Shows key-maps in pop-up (with delay)
         plugin = which-key-nvim;
-        config = luaChunk "require('which-key').setup()";
+        config = vsRequireSetup "which-key";
       }
 
       # Latex
       {
         plugin = vimtex;
-        config = luaChunckFile ./plugins/vimtex.lua;
+        config = vsPluginSetup "vimtex"; 
       }
 
       # Telescope
       {
         plugin = telescope-nvim;
-        config = luaChunckFile ./plugins/telescope.lua;
+        config = vsPluginSetup "telescope"; 
       }
       telescope-ui-select-nvim # Replace vim.ui.select with telescope
 
       # Code-editing
       vim-sleuth # Automatic heuristic setting of shiftwidth and expandtab
-      rainbow-delimiters-nvim # Rainbow brackets, braces, etc.
+      rainbow-delimiters-nvim # Rainbow brackets, braces, etc. #NOTE: CAN INTEGRATE WITH INDENT BLANK LINES IF WE CONFIG THAT, check GH readme
 
       {
         # Operator-based inserting and deleting of (, ", <tag>, etc.
         plugin = nvim-surround;
-        config = luaChunk "require('nvim-surround').setup()";
+        config = vsRequireSetup "nvim-surround";
       }
       {
         # Adds indentation guides
         plugin = indent-blankline-nvim;
-        config = luaChunk "require('ibl').setup()";
+        config = vsRequireSetup "ibl";
       }
       {
         # Better commenting than built-in
         plugin = comment-nvim;
-        config = luaChunk "require('Comment').setup()";
+        config = vsRequireSetup "Comment";
       }
 
       # Misc
       plenary-nvim # Dependency for some plugins, such as telescope
-    ];
-
-    # MAKE SURE to SCOPE external code (like files) so that local variables etc.
-    # will not enter the global namespace in init.lua.
-    extraLuaConfig = scopeLuaFiles [
-      ./options.lua  # Should come first
-      ./util.lua # Should come second
-      ./keymaps.lua
-      ./commands.lua
     ];
   };
 }

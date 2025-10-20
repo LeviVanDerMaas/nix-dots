@@ -1,5 +1,4 @@
--- NOTE: keymaps expand named keys like <CR>, use exec in cases where you need named keys.
-
+-- Search highlights
 vim.keymap.set('', '<leader>h', function ()
   if vim.v.hlsearch == 0 then
     vim.o.hlsearch = true
@@ -31,10 +30,10 @@ vim.keymap.set('n', '<leader>cps', require('copilot.status.init').status, { desc
 -- Text Objects
 -- "i" will exclude blank characters at begining or end of buffer, "a" selects all in buffer
 vim.keymap.set({'v', 'o'}, 'ia', function ()
-    vim.cmd[[silent! exec "normal! \e"]] -- Little hack to force normal mode
-    vim.cmd [[silent! normal! gg0"]]
-    vim.call('search', '\\S', 'c') -- To the next non-blank char, including the one the cursor is on
-    vim.cmd [[silent! normal! vG$"]]
-    vim.call('search', '\\S', 'bc') -- To the previous non-blank char, including the one the cursor is on
+  vim.cmd[[silent! exec "normal! \e"]] -- Little hack to force normal mode
+  vim.cmd [[silent! normal! gg0"]]
+  vim.call('search', '\\S', 'c') -- To the next non-blank char, including the one the cursor is on
+  vim.cmd [[silent! normal! vG$"]]
+  vim.call('search', '\\S', 'bc') -- To the previous non-blank char, including the one the cursor is on
 end, { silent = true, desc = 'Select [I]nner [A]ll' })
 vim.keymap.set({'v', 'o'}, 'aa', [[:<C-u>normal! gg0vG$<CR>]], { silent = true, desc = 'Select [A]ll [A]ll' })
