@@ -52,9 +52,32 @@
       # Treesitter
       {
         #TODO: May want to consider specifically excluding the latex grammar.
-        # You should be able to access an attrset of all grammars with the
-        # packages grammarPlugins attribute (which is how withAllGrammars
-        # installs all grammars), and remove the latex attribute from it.
+        # Nixpkgs manual suggests installing treesitter grammars via either
+        # `.withAllGrammars` or `.withPlugins (p: [..])`. Through a somewhat
+        # convoluted process in nixpkgs, all selected parsers are then made
+        # available as plugins in a `pack` dir in the store under the `start`
+        # dir, where each plugin has a single `parser` dir in the root which
+        # contains the corresponding parser. This approach works but has some disadvantages.
+        # - Primarly it is liable to cause the treesitter plugin to be unable
+        #   to locate any of the installed parsers when loaded with an external
+        #   plugin manager (especially if it disables normal plugin loading, like
+        #   lazy.nvim)
+        # - Furthermore, since `pack`-based autoloading (plugin's under the
+        #   package's `start` dir) effectively inserts each loaded plugin into
+        #   the runtimepath via wildcards, this bloats your runtime path with a
+        #   bunch of plugins for individual parsers: it also causes Treesitter
+        #   to potentially search the parser directories of *all* plugins
+        #   whenver it tries to load a parse (this probably doesn't noticably
+        #   affect performance all that much, nontheless it's more neat to not
+        #   do this).
+        # So instead, what we do is include just the treesitter plugin, without
+        # `.withAllGrammars` or .`withPlugins`, so that parsers are not added
+        # as plugins. Instead we can symlink the parsers directly to a single
+        # `parser` dir that is included in our rtp (like `~/.config`). When we
+        # call `.withAllGrammars` or `.withPlugins`, properly working
+        # derivations for all specified parsers are made available in
+        # `.dependencies` (this is a passthru attribute, so no duplicate neovim
+        # instance is realised) e.g. `.withAllGrammars.dependencies`.
         plugin = nvim-treesitter.withAllGrammars;
         config = vsPluginSetup "treesitter";
       }
