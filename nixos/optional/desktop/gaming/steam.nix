@@ -39,7 +39,22 @@ in
           lib.optionals cfg.install-gperftools [ gperftools ] ++ [
         ];
       };
+
+      # Doesn't seem to work properly but still has some useful features, like
+      # finding steam appids of any games you have already ran with -l.
+      protontricks.enable = true;
     };
+
+    # We can work around protontricks not working for non-steam games by using
+    # winetricks instead. Find the pfx of the game you want to run it on,
+    # then run `WINEPREFIX=/path/to/pfx` winetricks` and it should work.
+    # Downside is we must install another version of Wine but oh well.
+    # Should you ever mess something up with the pfx, you can just nuke the
+    # dir holding the pfx and Steam will recreate it upon next launch.
+    environment.systemPackages = with pkgs; [
+      wineWowPackages.stable
+      winetricks
+    ];
 
     # This lets steam use controllers.
     hardware.steam-hardware.enable = true;
