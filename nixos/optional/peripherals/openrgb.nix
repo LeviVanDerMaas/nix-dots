@@ -58,11 +58,19 @@ in
       # I have.
       package = (pkgs.openrgb.overrideAttrs (oldAttrs: {
         src = flake-inputs.openrgb;
+        patches = [
+          # Sometime after nixpkgS 25.05, a patch was added here. Not sure what it's for but
+          # it adds an extra import to the file qt/OpenRGBFonts.cpp, but in the version
+          # of openrgb we pull that's already included so now it conflicts, but it should
+          # be fine to just remove this patch from nixpkgs. I'm not even sure what the patch
+          # is for considering the version of openrgb in nixpkgs is still 0.9, which does not
+          # include this import in the original source code?
+        ];
         postPatch = ''
           patchShebangs scripts/build-udev-rules.sh
           substituteInPlace scripts/build-udev-rules.sh \
-            --replace /bin/chmod "${pkgs.coreutils}/bin/chmod" \
-            --replace /usr/bin/env "${pkgs.coreutils}/bin/env"
+            --replace-warn /bin/chmod "${pkgs.coreutils}/bin/chmod" \
+            --replace-warn /usr/bin/env "${pkgs.coreutils}/bin/env"
         '';
       }));
     };

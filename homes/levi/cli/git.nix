@@ -4,29 +4,29 @@ in
 {
   programs.git = {
     enable = true;
-    userName = "Levi van der Maas";
-    difftastic.enable = true;
-    aliases = {
-      l = "log --graph --abbrev-commit --decorate --format=format:'${commit-fstr}'";
-      graph = "log --graph --abbrev-commit --decorate --all --format=format:'${commit-fstr}'";
-
-      about = "show --stat --format=format:'${commit-fstr}%n%b'";
-      shortabout = "show --shortstat --format=format:'${commit-fstr}%n%b'";
-
-      a = "add";
-      c = "commit";
-      d = "diff";
-      ds = "diff --staged";
-      s = "status";
-
-      amend = "commit --amend";
-      softmerge = "merge --no-ff --no-commit";
-      unstage = "restore --staged";
-    };
-    extraConfig = {
+    settings = {
       init.defaultBranch = "master";
+      user.name = "Levi van der Maas";
       user.useConfigOnly = true;
       advice.detachedHead = false;
+
+      alias = {
+        l = "log --graph --abbrev-commit --decorate --format=format:'${commit-fstr}'";
+        graph = "log --graph --abbrev-commit --decorate --all --format=format:'${commit-fstr}'";
+
+        about = "show --stat --format=format:'${commit-fstr}%n%b'";
+        shortabout = "show --shortstat --format=format:'${commit-fstr}%n%b'";
+
+        a = "add";
+        c = "commit";
+        d = "diff";
+        ds = "diff --staged";
+        s = "status";
+
+        amend = "commit --amend";
+        softmerge = "merge --no-ff --no-commit";
+        unstage = "restore --staged";
+      };
     };
   };
 }

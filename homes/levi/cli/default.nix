@@ -2,6 +2,7 @@
   imports = [
     ./bash.nix
     ./bat.nix
+    ./difftastic.nix
     ./direnv.nix
     ./fastfetch.nix
     ./fd.nix
