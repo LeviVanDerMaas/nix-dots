@@ -83,12 +83,17 @@
         # Add signs for git to the sign column, and more
         plugin = gitsigns-nvim;
         config = vsPluginSetup "gitsigns"; 
-      }
+      }  
 
       # UI
       {
         plugin = catppuccin-nvim;
-        config = vsLua "vim.cmd.colorscheme 'catppuccin-mocha'";
+        config = vsLua ''require('catppuccin').setup {
+          flavour = 'mocha',
+          float = { transparent = true }
+        }
+        vim.cmd.colorscheme 'catppuccin'
+        '';
       }
       {
         # Statusline
@@ -112,6 +117,7 @@
         plugin = telescope-nvim;
         config = vsPluginSetup "telescope"; 
       }
+      telescope-fzf-native-nvim # Better sorting performance for telescope
       telescope-ui-select-nvim # Replace vim.ui.select with telescope
 
       # Code-editing

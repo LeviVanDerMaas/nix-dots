@@ -89,7 +89,7 @@ require('neodev').setup({
 })
 
 
-require('lspconfig').lua_ls.setup {
+vim.lsp.config('lua_ls', {
   on_attach = on_attach,
   capabilities = capabilities,
   root_dir = function()
@@ -102,30 +102,30 @@ require('lspconfig').lua_ls.setup {
       telemetry = { enable = false },
     },
   }
-}
+})
 
-require('lspconfig').nixd.setup {
+vim.lsp.config('nixd', {
   on_attach = on_attach,
   capabilities = capabilities,
-}
+})
 
 
-require('lspconfig').clangd.setup {
+vim.lsp.config('clangd', {
   on_attach = on_attach,
   capabilities = capabilities,
-}
+})
 
-require('lspconfig').metals.setup {
+vim.lsp.config('metals', {
   on_attach = on_attach,
   capabilities = capabilities,
-}
+})
 
-require('lspconfig').ts_ls.setup {
+vim.lsp.config('ts_ls', {
   on_attach = on_attach,
   capabilities = capabilities,
-}
+})
 
-require('lspconfig').pyright.setup {
+vim.lsp.config('pyright', {
   on_attach = on_attach,
   capabilities = capabilities,
-}
+})
