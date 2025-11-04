@@ -6,8 +6,9 @@
     ];
     ignores = [
       ".git/"
-      "/nix/store"
-      ".nix-profile"
+      "/nix/store/"
+      ".nix-profile/"
+      "**/.local/share/Trash"
     ];
   };
 }
