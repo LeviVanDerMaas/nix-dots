@@ -107,10 +107,10 @@
       }
 
       # Latex
-      {
-        plugin = vimtex;
-        config = vsPluginSetup "vimtex"; 
-      }
+      # {
+      #   plugin = vimtex;
+      #   config = vsPluginSetup "vimtex"; 
+      # }
 
       # Telescope
       {
