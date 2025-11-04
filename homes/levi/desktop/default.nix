@@ -2,10 +2,11 @@
   imports = [
     ./ags
     ./hyprland
-    ./kde
     ./menus
     ./programs
     ./theming
     ./waybar
+
+    ./kdeConfig.nix
   ];
 }

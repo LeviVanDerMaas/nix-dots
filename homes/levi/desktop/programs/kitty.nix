@@ -18,7 +18,7 @@
     };
   };
 
-  modules.kde.kdeglobals = {
+  modules.kdeConfig.kdeglobals = {
     General = {
       TerminalApplication = "kitty";
     };
