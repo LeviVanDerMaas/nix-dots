@@ -41,7 +41,7 @@
       modules = [ (import ./systems/${system}/configuration.nix) ];
     });
   in {
-    nixosConfigurations = systemConfigsFor [ 
+    nixosConfigurations = systemConfigsFor [
       "boo" 
       "lucy"
       "buffon"
