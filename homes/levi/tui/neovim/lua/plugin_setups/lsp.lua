@@ -108,24 +108,28 @@ vim.lsp.config('nixd', {
   on_attach = on_attach,
   capabilities = capabilities,
 })
-
+vim.lsp.enable('nixd')
 
 vim.lsp.config('clangd', {
   on_attach = on_attach,
   capabilities = capabilities,
 })
+vim.lsp.enable('clangd')
 
 vim.lsp.config('metals', {
   on_attach = on_attach,
   capabilities = capabilities,
 })
+vim.lsp.enable('metals')
 
 vim.lsp.config('ts_ls', {
   on_attach = on_attach,
   capabilities = capabilities,
 })
+vim.lsp.enable('ts_ls')
 
 vim.lsp.config('pyright', {
   on_attach = on_attach,
   capabilities = capabilities,
 })
+vim.lsp.enable('pyright')
