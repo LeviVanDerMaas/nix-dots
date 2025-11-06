@@ -33,7 +33,7 @@
       usingPlasma = config.modules.plasma.enable;
     in {
       modules = {
-        kde.enable = !usingPlasma;
+        kdeConfig.enable = !usingPlasma;
         qt.enable = !usingPlasma;
         hyprland.enable = true;
         hyprland.extraEnv = lib.optionals usingPlasma [
