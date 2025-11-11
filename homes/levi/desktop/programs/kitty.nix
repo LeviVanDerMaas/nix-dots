@@ -12,9 +12,12 @@
     };
 
     keybindings = {
-      "ctrl+shift+space" = "launch --cwd=current --type=tab"; # New tab in same dir
-      "ctrl+shift+d" = "launch --cwd=current"; # New window in same dir
-      "ctrl+shift+n" = "new_os_window_with_cwd"; #New OS window in same dir
+      "ctrl+shift+d" = "new_window_with_cwd";
+      "ctrl+alt+d" = "detach_window ask";
+      "ctrl+shift+space" = "new_tab_with_cwd";
+      "ctrl+shift+n" = "new_os_window_with_cwd";
+      "ctrl+alt+n" = "detach_tab ask";
+
     };
   };
 
