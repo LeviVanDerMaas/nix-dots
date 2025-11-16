@@ -2,13 +2,19 @@
 
 read_only=
 includes=
+load=
+expression=
+
+set -- $(getopt --name nix-path --options 'adrI:l::' --longoptions 'all-outputs,derivations,read-only,include:,load::')
+
 # Take all derivation expressions and wrap them in brackets, so that can put them into a list.
 # Note that this relies on bash's builtin printf repeating the format as necessary, 
 # which isn't the case for all printf versions.
 expressions=$(printf '(%s) ' "$@")
+
 nix eval --impure --raw --quiet --quiet --quiet --quiet --quiet \
-    ${read_only:+--read-only} ${includes:+-I $includes} --expr \
-    "with import <nixpkgs> {}; let \
+    ${read_only:+--read-only} $includes --expr \
+    "with ${load:-"import <nixpkgs> {}"}; let \
         drvs = [ $expressions ]; \
         drvPaths = builtins.map (d: d.drvPath) drvs; \
         mainOutPaths = builtins.map (d: d.outPath) drvs; \
