@@ -1,5 +1,7 @@
 {
   imports = [
+    ./nix-sp
+
     ./bash.nix
     ./bat.nix
     ./difftastic.nix
