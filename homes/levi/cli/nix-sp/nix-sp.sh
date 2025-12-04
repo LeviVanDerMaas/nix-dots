@@ -15,7 +15,7 @@ Later flags override earlier ones where applicable.
 -a, --all-outputs  List paths of all derivation outputs, rather than just main.
 -d, --derivations  List paths of derivatons themselves, rather than their outputs.
 -b, --build        Build each listed path, ensuring it exists. Overrides -r.
--r, --read-only    Do not instantiate or built derivations. Overrides -b.
+-r, --read-only    Do not instantiate (nor build) derivations. Overrides -b.
 -I, --include      Add entry to search path. Can be supplied multiple times.
 -l, --load         Nix expression added to scope. Default: \`import <nixpkgs> {}\`
 -h, --help         Display this help message, do not do anything else.
