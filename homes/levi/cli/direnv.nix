@@ -13,7 +13,7 @@
         echo 'ABORTING: ./shell.nix or ./default.nix already exists!'
         return 1
       fi
-      ''${EDITOR:-nvim} - +'f shell.nix' +'set ft=nix' <<EOF
+      ''${EDITOR:-nvim} - +'f shell.nix' +'set ft=nix' <<'EOF'
     let
       nixpkgs = <nixpkgs>;
     in
@@ -42,7 +42,7 @@
         echo 'ABORTING: ./flake.nix already exists!'
         return 1
       fi
-      ''${EDITOR:-nvim} - +'f flake.nix' +'set ft=nix' <<EOF
+      ''${EDITOR:-nvim} - +'f flake.nix' +'set ft=nix' <<'EOF'
     {
       description = "Basic flake with Nix shell";
       inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
