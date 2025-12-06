@@ -13,22 +13,31 @@
         cat <<'EOF'
       Quickly initialize a nix-direnv setup for a nix shell or flake.
       By default creates a nix shell with a simple template and opens it in your editor,
-      then creates an .envrc that uses it, if neither exists yet.
-        
+      then, if it does not yet exist, creates an .envrc that uses the shell or flake.
+
       Flags:
+      The -s, -d, and -f flags override any previous ones from this group.
+      -s, --shell           Create a direnv using a nix shell (shell.nix).
+      -d, --default         Create a direnv using a nix shell (default.nix).
       -f, --flake           Create a direnv using a nix flake.
       -e, --use_existing    Uses the existing nix shell or flake, if one exists. No effect if -o.
       -o, --overwrite       Overwrite nix shell or flake, if one exists.
       -h, --help            Display this help message, do not do anything else.
       EOF
       }
-      parsed_args=$(getopt --name nixify --options 'feoh' --longoptions 'flake,use_existing,overwrite,help' -- "$@")
+      parsed_args=$(getopt --name nixify --options 'sdfeoh' --longoptions 'shell,default,flake,use_existing,overwrite,help' -- "$@")
       eval "set -- $parsed_args"
       
       while true; do
         case "$1" in
+          -s | --shell)
+            kind="shell.nix"
+            shift;;
+          -d | --default)
+            kind="default.nix"
+            shift;;
           -f | --flake)
-            flake=1
+            kind="flake.nix"
             shift;;
           -e | --use_existing)
             use_existing=1
@@ -52,30 +61,36 @@
         esac
       done
 
-      if [[ -v flake ]]; then
-        if [[ -e "flake.nix" ]]; then
-          already_exists="flake.nix"
-        fi
-      elif [[ -e shell.nix ]]; then
-        already_exists="shell.nix"
-      elif [[ -e default.nix ]]; then
-        already_exists="default.nix"
-      fi
-      
-      if [[ -v already_exists ]]; then
-         if [[ ! (-v use_existing || -v overwrite) ]]; then
-          echo "ABORTING: $already_exists already exists! Use '-e' to use it instead, '-o' to overwrite." >&2
-          exit 1
-        fi
-        file="$already_exists"
-      elif [[ -v flake ]]; then
-        file="flake.nix";
-      else
-        file="shell.nix";
+      if [[ ! -v kind ]]; then
+        echo "ERROR: You must specify one of -s, -d, or -f. Use -h for usage help."
+        exit 1
       fi
 
-      if [[ ! -v already_exists || -v overwrite ]]; then
-        if [[ -v flake ]]; then
+      # if [[ -v flake ]]; then
+      #   if [[ -e "flake.nix" ]]; then
+      #     already_exists="flake.nix"
+      #   fi
+      # elif [[ -e shell.nix ]]; then
+      #   already_exists="shell.nix"
+      # elif [[ -e default.nix ]]; then
+      #   already_exists="default.nix"
+      # fi
+
+      
+      # if [[ -e "$kind" ]]; then
+      #    if [[ ! (-v use_existing || -v overwrite) ]]; then
+      #     echo "ABORTING: $kind already exists! Use '-e' to use it instead, '-o' to overwrite." >&2
+      #     exit 1
+      #   fi
+      # fi
+
+      if [[ -e "$kind" && ! (-v use_existing || -v overwrite) ]]; then
+        echo "ABORTING: $kind already exists! Use '-e' to use it instead, '-o' to overwrite." >&2
+        exit 1
+      fi
+
+      if [[ ! -e "$kind" || -v overwrite ]]; then
+        if [[ "$kind" == "flake.nix" ]]; then
           file_content='{
         description = "Basic flake with Nix shell";
         inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
@@ -104,14 +119,14 @@
         ];
       }'
         fi
-        cat > "$file" <<< $file_content
+        cat > "$kind" <<< $file_content
       fi
 
       # Here is where we actually edit the flake/shell.
-      ''${EDITOR:-vim} $file
+      ''${EDITOR:-vim} $kind
 
       if [[ ! -e ./.envrc ]]; then
-        if [[ -v flake ]]; then
+        if [[ "$kind" == "flake.nix"  ]]; then
           echo "use flake" > .envrc
         else
           echo "use nix" > .envrc
