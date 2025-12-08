@@ -49,13 +49,11 @@ in
               name = "${main}"; resolution = "3840x2160"; position = "0x0"; scale = "1.5";
               bindWorkspaces = [ 1 2 3 4 5 ];
             }
-            { 
+            {
               name = "${left}"; resolution = "2560x1080"; position = "-2560x900"; scale = "1";
               bindWorkspaces = [ 6 7 8 9 10 ];
             }
           ];
-
-          integrations.discord.autoStart = true;
         };
       };
     };

@@ -1,5 +1,8 @@
-{ pkgs, lib, ... }:
+{ pkgs, lib, config, ... }:
 
+let
+  cfg = config.modules.cursorDefault;
+in
 {
   options.modules.cursorDefault = {
     enable = lib.mkOption {
@@ -12,7 +15,7 @@
     };
   };
 
-  config = {
+  config = lib.mkIf cfg.enable {
     environment.systemPackages = with pkgs; [
       # May wanna consider making a custom package that pulls 
       # just breeze cursors instead of all of breeze, should we end up
