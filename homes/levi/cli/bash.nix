@@ -13,6 +13,8 @@
       dots-dryb = "${rebuild} dry-build";
       dots-drya = "${rebuild} dry-activate";
 
+      nixpkgs-repl = "nix repl --expr 'import <nixpkgs> {}'";
+
       ls = "ls --color=auto --hyperlink=auto";
       l = "ls -Ah";
       ll = "ls -Ahl";
