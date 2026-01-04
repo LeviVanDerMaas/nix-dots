@@ -64,6 +64,27 @@
         "type": "github"
       }
     },
+    "levisNeovimConfig": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1767556363,
+        "narHash": "sha256-zKKDJklKsLmYdRUCu8bSmxfr3X56hQGpFHLP3MDh7XU=",
+        "owner": "LeviVanDerMaas",
+        "repo": "nvim",
+        "rev": "f4f52aa3ab5f6fd25ac25199a471d284a8826845",
+        "type": "github"
+      },
+      "original": {
+        "owner": "LeviVanDerMaas",
+        "ref": "master",
+        "repo": "nvim",
+        "type": "github"
+      }
+    },
     "nixpkgs": {
       "locked": {
         "lastModified": 1765779637,
@@ -102,6 +123,7 @@
         "ags": "ags",
         "astal": "astal",
         "home-manager": "home-manager",
+        "levisNeovimConfig": "levisNeovimConfig",
         "nixpkgs": "nixpkgs",
         "openrgb": "openrgb"
       }

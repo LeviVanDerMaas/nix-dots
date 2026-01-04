@@ -11,6 +11,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    levisNeovimConfig = {
+      url = "github:LeviVanDerMaas/nvim/master";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     openrgb = { # Experimental release with support for my fans, will be merged in v0.10
       url = "github:CalcProgrammer1/OpenRGB?rev=b5638eee126234ebfe8eb7fe240d7b732f5d5dc3";
       flake = false;
