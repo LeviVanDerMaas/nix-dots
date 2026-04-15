@@ -38,12 +38,13 @@ in
     wayland.windowManager.hyprland.settings = {
       env = [
         # Special NIXOS var makes most Electron and CEF apps use wayland by default.
-        "NIXOS_OZONE_WL,1" 
+        "NIXOS_OZONE_WL,1"
       ] ++ cfg.extraEnv;
 
       input = {
         kb_layout = "us";
-        kb_options = "caps:escape, compose:sclk";
+        kb_variant = "altgr-weur"; # https://altgr-weur.eu/
+        kb_options = "caps:escape_shifted_capslock";
         repeat_rate = 60;
         repeat_delay = 600;
       };
