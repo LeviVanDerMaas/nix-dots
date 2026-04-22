@@ -78,6 +78,7 @@ in
       };
 
       misc = {
+        focus_on_activate = true; # This can also be set per window
         disable_hyprland_logo = true;
         disable_splash_rendering = true;
       };
