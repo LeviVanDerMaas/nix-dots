@@ -531,7 +531,7 @@ in
           monitors = [ ];
           normalUrgencyDuration = 8;
           overlayLayer = false;
-          respectExpireTimeout = false;
+          respectExpireTimeout = true;
           saveToHistory = {
             critical = true;
             low = true;
