@@ -85,7 +85,7 @@ in
         audio = {
           cavaFrameRate = 60;
           mprisBlacklist = [ ];
-          preferredPlayer = "";
+          preferredPlayer = "firefox";
           visualizerType = "linear";
           volumeFeedback = false;
           volumeOverdrive = false;

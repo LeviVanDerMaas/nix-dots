@@ -9,7 +9,10 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    hardware.keyboard.zsa.enable = true; # udevs for flashing ZSA Moonlander keyboard
+    hardware.keyboard = {
+      zsa.enable = true; # udevs for flashing ZSA Moonlander keyboard
+      qmk.enable = true; # udev rules for non-root access to qmk firmware
+    };
     environment.systemPackages = with pkgs; [
       keymapp
     ];
