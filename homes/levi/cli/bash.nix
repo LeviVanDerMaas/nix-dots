@@ -3,6 +3,15 @@
 {
   programs.bash = {
     enable = true;
+    historyControl = [ "ignoredups" ];
+    shellOptions = [
+      "checkjobs"
+      "histappend"
+
+      "dotglob"
+      "extglob"
+      "globstar"
+    ];
 
     shellAliases =
       let
