@@ -71,12 +71,12 @@ in
       wantedBy = [ "openrgb.service" ];
       after = [ "openrgb.service" ];
       preStart = "${pkgs.coreutils}/bin/sleep ${toStr cfg.initRunDelay}";
-      startLimitBurst = cfg.initRunTries;
+      unitConfig.startLimitIntervalSec = "infinity";
       serviceConfig = {
         Type = "oneshot";
         ExecStart = "${pkgs.openrgb}/bin/openrgb ${cfg.initRunArgs}";
         Restart = "on-failure";
-        StartLimitIntervalSec = "infinity";
+        startLimitBurst = cfg.initRunTries;
         # RestartSec = cfg.initRunTryInterval; # same as preStart def above, but has no initial delay.
       };
     };
