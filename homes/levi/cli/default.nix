@@ -10,6 +10,7 @@
     ./fd.nix
     ./fzf.nix
     ./git.nix
+    ./less.nix
     ./ripgrep.nix
     ./starship.nix
     ./zoxide.nix
