@@ -5,6 +5,9 @@
     enable = true;
     nix-direnv.enable = true;
     enableBashIntegration = true;
+    config = {
+      hide_env_diff = true;
+    };
   };
 
   home.packages = [
