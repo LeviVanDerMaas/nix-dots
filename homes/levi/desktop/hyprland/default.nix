@@ -75,6 +75,7 @@ in
 
       binds = {
         hide_special_on_workspace_change = true;
+        scroll_event_delay = 0;
       };
 
       misc = {

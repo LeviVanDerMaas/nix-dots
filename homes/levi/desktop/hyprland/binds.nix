@@ -34,8 +34,8 @@ lib.mkIf cfg.enable {
     "$mainMod" = "SUPER";
     "$allMods" = "$mainMod ALT SHIFT CTRL";
 
-    "$silentMod" = "SHIFT"; # This mod shouldn't move focus on applicable dispatchers
-    "$focusMod" = "CTRL"; # This mod should move focus on applicable dispatchers
+    "$focusMod" = "SHIFT"; # This mod should move focus on applicable dispatchers
+    "$silentMod" = "CTRL"; # This mod shouldn't move focus on applicable dispatchers
     "$monKey" = "GRAVE"; # This key is for non-directinal monitor management.
 
     bind = lib.flatten [
@@ -43,6 +43,8 @@ lib.mkIf cfg.enable {
       (genDigitBinds_rAbs "$mainMod" "workspace")
       (genDigitBinds_rAbs "$mainMod $focusMod" "movetoworkspace")
       (genDigitBinds_rAbs "$mainMod $silentMod" "movetoworkspacesilent")
+      "$mainMod, mouse_down, workspace, r-1"
+      "$mainMod, mouse_up, workspace, r+1"
 
       # Monitor binds
       (genDirectionBinds "$mainMod ALT" "focusmonitor")
@@ -51,6 +53,8 @@ lib.mkIf cfg.enable {
       "$mainMod, $monKey, focusmonitor, +1"
       "$mainMod $silentMod, $monKey, movewindow, mon:+1 silent"
       "$mainMod $focusMod, $monKey, movewindow, mon:+1"
+      "$mainMod, mouse_left, focusmonitor, l"
+      "$mainMod, mouse_right, focusmonitor, r"
 
       # Window binds
       (genDirectionBinds "$mainMod" "movefocus")
