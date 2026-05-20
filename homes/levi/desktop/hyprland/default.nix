@@ -34,7 +34,10 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    wayland.windowManager.hyprland.enable = true;
+    wayland.windowManager.hyprland = {
+      enable = true;
+      configType = "hyprlang"; # TODO: switch to lua config as hyprlang is deprecated
+    };
     wayland.windowManager.hyprland.settings = {
       env = [
         # Special NIXOS var makes most Electron and CEF apps use wayland by default.
