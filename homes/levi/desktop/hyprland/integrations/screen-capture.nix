@@ -11,13 +11,10 @@ lib.mkIf cfg.enable {
     wl-clipboard #  Dep for both, nix wraps this in already, but this is not technically a required dep so eh.
   ];
 
-  wayland.windowManager.hyprland.settings = {
-    bind = [
-      ", PRINT, exec, ${grimPre} copy output"
-      "SHIFT, PRINT, exec, ${grimPre} copy area"
-      "CTRL, PRINT, exec, ${grimPre} copy screen"
-
-      "ALT, PRINT, exec, hyprpicker -anf hex"
-    ];
-  };
+  wayland.windowManager.hyprland.extraConfig = /* lua */ ''
+    hl.bind("PRINT", DIS.exec_cmd("${grimPre} copy output"))
+    hl.bind("SHIFT + PRINT", DIS.exec_cmd("${grimPre} copy area"))
+    hl.bind("CTRL + PRINT", DIS.exec_cmd("${grimPre} copy screen"))
+    hl.bind("ALT + PRINT", DIS.exec_cmd("hyprpicker -anf hex"))
+  '';
 }

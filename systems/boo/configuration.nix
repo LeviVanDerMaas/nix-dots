@@ -57,8 +57,7 @@ in
             { output = "${main}"; mode = "1920x1080"; position = "0x0"; scale = "1"; }
             { output = "${left}"; mode = "1920x1080"; position = "-1920x0"; scale = "1"; }
           ];
-          # TODO: Reenable this once ported to Lua
-          # integrations.gaming.enable = true;
+          integrations.gaming.enable = true;
         };
       };
     };

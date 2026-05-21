@@ -48,8 +48,7 @@ in
             { output = "${main}"; mode = "3840x2160"; position = "0x0"; scale = "1.5"; }
             { output = "${left}"; mode = "2560x1080"; position = "-2560x900"; scale = "1"; }
           ];
-          # TODO: Reenable this once ported to Lua
-          # integrations.gaming.enable = true;
+          integrations.gaming.enable = true;
         };
       };
     };

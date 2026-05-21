@@ -14,8 +14,7 @@ in
     ./config.nix
     ./monitors.nix
     ./windowrules.nix
-    # TODO: Reenable this once ported to Lua
-    # ./integrations
+    ./integrations
 
     # Configuration of hyprland ecosystem tools
     ./hyprland-portals.nix

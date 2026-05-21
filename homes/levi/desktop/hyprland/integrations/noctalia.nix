@@ -12,36 +12,40 @@ in
       targetDesktops = "Hyprland";
     };
 
-    wayland.windowManager.hyprland.settings = {
-      bind = genNoctCalls [
-        [ "$mainMod" "SPACE" "launcher toggle" ]
-        [ "$mainMod SHIFT" "SPACE" "launcher command" ]
-        [ "$mainMod ALT" "SPACE" "launcher windows" ]
-        [ "$mainMod" "X" "launcher clipboard" ]
-      ];
+    wayland.windowManager.hyprland.extraConfig = /* lua */ ''
+      local function noctCall(keys, cmd, flags)
+        flags = flags or {}
+        hl.bind(keys, DIS.exec_cmd("noctalia-shell ipc call " .. cmd), flags)
+      end
+      noctCall("SUPER + SPACE", "launcher toggle")
+      noctCall("SUPER + SHIFT + SPACE", "launcher command")
+      noctCall("SUPER + ALT + SPACE", "launcher windows")
+      noctCall("SUPER + X", "launcher clipboard")
 
-      bindel = genNoctCalls ([
-        [ "" "XF86AudioRaiseVolume" "volume increase || wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+" ]
-        [ "" "XF86AudioLowerVolume" "volume decrease || wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-" ]
-        [ "" "XF86AudioMute" "volume muteOutput || wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle" ]
-        [ "" "XF86AudioMicMute" "volume muteInput || wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle" ]
+      local function noctCallEl(keys, cmd)
+        noctCall(keys, cmd, { repeating = true, locked = true })
+      end
+      noctCallEl("XF86AudioRaiseVolume", "volume increase || wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+")
+      noctCallEl("XF86AudioLowerVolume", "volume decrease || wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-")
+      noctCallEl("XF86AudioMute", "volume muteOutput || wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle")
+      noctCallEl("XF86AudioMicMute", "volume muteInput || wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle")
+      noctCallEl("XF86AudioPlay", "media playPause")
+      noctCallEl("XF86AudioStop", "media pause")
+      noctCallEl("XF86AudioNext", "media next")
+      noctCallEl("XF86AudioPrev", "media previous")
+      noctCallEl("XF86AudioForward", "media seekRelative 5")
+      noctCallEl("XF86AudioRewind", "media seekRelative -5")
 
-        [ "" "XF86AudioPlay" "media playPause"]
-        [ "" "XF86AudioStop" "media pause"]
-        [ "" "XF86AudioNext" "media next" ]
-        [ "" "XF86AudioPrev" "media previous" ]
-        [ "" "XF86AudioForward" "media seekRelative 5" ]
-        [ "" "XF86AudioRewind" "media seekRelative -5" ]
-      ] ++ (
+      ${
         let
           bctl = osConfig.modules.brightnessctl or {};
           osBinds = (bctl.enabled or false) && (bctl.brightnessKeys or false);
         in
-        lib.optionals (!osBinds) [
-          [ "" "XF86MonBrightnessUp" "brightness increase" ]
-          [ "" "XF86MonBrightnessDown" "brightness decrease" ]
-        ]
-      ));
-    };
+        lib.optionalString (!osBinds) /* lua */ ''
+          noctCallEl("XF86MonBrightnessUp", "brightness increase")
+          noctCallEl("XF86MonBrightnessDown", "brightness decrease")
+        ''
+      }
+    '';
   };
 }
