@@ -5,7 +5,9 @@ let
 in
 {
   config = lib.mkIf cfg.enable {
-    wayland.windowManager.hyprland.extraConfig = /* lua */ ''
+    # Make sure binds are set early in final config file so that they still
+    # work even if a later part of the config fails
+    wayland.windowManager.hyprland.extraConfig = lib.mkBefore /* lua */ ''
       -- Generate workspace-related binds for each digit key (0 to 9).
       -- For each digit, set dispatcher's 'workspace' field to value corresponding the key, with 0 -> 10.
       -- prefixDigit: string to prefix to workspace selector

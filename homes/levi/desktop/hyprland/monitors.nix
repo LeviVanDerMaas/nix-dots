@@ -72,27 +72,28 @@ in
 
 
         # Bind groups of ten workspaces to each monitor in order
-        wsToMonBind = mon: ws:
-          /* lua */ "hl.workspace_rule { workspace = ${ws}, monitor = \"${mon}\" }";
-        IthWsRangeToMonBinds = i: mon:
+        monNames = map (m: m.output) cfg.monitors;
+        wsRangesToMonBinds = lib.optionalString (cfg.monitors != []) (
           let
-            r = 10 * i + 1;
-            r' = r + 9;
-            wsRange = map toString (lib.range r r');
+            luaMonNameArray = ''{ "${builtins.concatStringsSep ''", "'' monNames}" }'';
           in
-          map (wsToMonBind mon) wsRange;
-        wsBinds =
-          let
-            mons = map (m: toString m.output) cfg.monitors;
-            bindsPerMon = lib.imap0 IthWsRangeToMonBinds mons;
-            bindsAllMons = builtins.concatLists bindsPerMon;
-          in
-          builtins.concatStringsSep "\n" bindsAllMons;
+          /* lua */ ''
+            local function bindIthWsRangeToMon(i, mon)
+              local wsRangeBase = 10 * i + 1
+              for ws = wsRangeBase, wsRangeBase + 9 do
+                hl.workspace_rule { workspace = tostring(ws), monitor = mon }
+              end
+            end
+            for i, mon in ipairs(${luaMonNameArray}) do
+              bindIthWsRangeToMon(i - 1, mon)
+            end
+          ''
+        );
       in
       /* lua */ ''
         ${monConfigs}
         ${defaultMon}
-        ${wsBinds}
+        ${wsRangesToMonBinds}
       '';
   };
 }
