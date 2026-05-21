@@ -45,10 +45,11 @@ in
           enable = true;
           monitors = with monitors; [
             # If anything looks weird or blurry in certain apps its probs cuz of fractional scaling done here.
-            { name = "${main}"; resolution = "3840x2160"; position = "0x0"; scale = "1.5"; }
-            { name = "${left}"; resolution = "2560x1080"; position = "-2560x900"; scale = "1"; }
+            { output = "${main}"; mode = "3840x2160"; position = "0x0"; scale = "1.5"; }
+            { output = "${left}"; mode = "2560x1080"; position = "-2560x900"; scale = "1"; }
           ];
-          integrations.gaming.enable = true;
+          # TODO: Reenable this once ported to Lua
+          # integrations.gaming.enable = true;
         };
       };
     };

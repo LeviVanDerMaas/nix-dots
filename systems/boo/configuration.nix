@@ -54,10 +54,11 @@ in
         hyprland = {
           enable = true;
           monitors = with monitors; [
-            { name = "${main}"; resolution = "1920x1080"; position = "0x0"; scale = "1"; }
-            { name = "${left}"; resolution = "1920x1080"; position = "-1920x0"; scale = "1"; }
+            { output = "${main}"; mode = "1920x1080"; position = "0x0"; scale = "1"; }
+            { output = "${left}"; mode = "1920x1080"; position = "-1920x0"; scale = "1"; }
           ];
-          integrations.gaming.enable = true;
+          # TODO: Reenable this once ported to Lua
+          # integrations.gaming.enable = true;
         };
       };
     };

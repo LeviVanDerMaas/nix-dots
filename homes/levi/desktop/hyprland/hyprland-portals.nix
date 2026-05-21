@@ -24,5 +24,8 @@ lib.mkIf cfg.enable {
 
   # This helps persuade most gtk apps to actually respect portal config.
   # Seems like it's mainly gtk3 apps that otherwise have troulbe with portals.
-  wayland.windowManager.hyprland.settings.env = [ "GTK_USE_PORTAL,1" ];
+  # wayland.windowManager.hyprland.settings.env = [ "GTK_USE_PORTAL,1" ];
+  wayland.windowManager.hyprland.extraConfig = /* lua */ ''
+    hl.env("GTK_USE_PORTAL", "1")
+  '';
 }

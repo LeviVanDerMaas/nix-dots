@@ -1,6 +1,6 @@
-{ pkgs, config, lib, ... }:
+{ config, lib, ... }:
 
-let 
+let
   cfg = config.modules.hyprland.integrations.discord;
 in
 {
@@ -21,23 +21,23 @@ in
     };
   };
 
-  config = lib.mkIf cfg.enable {
-    wayland.windowManager.hyprland.settings = {
-      workspace = [
-        "special:discord, on-created-empty:discord"
-      ];
-
-      windowrule = [
-        # "workspace special:discord silent, class:(discord)"
-        "match:class discord, workspace special:discord"
-      ];
-
-      exec-once = lib.optionals cfg.autoStart [ "discord" ];
-
-      bind = [
-        "$mainMod, V, togglespecialworkspace, discord"
-        "$mainMod, V, movetoworkspace, special:discord,class:discord"
-      ];
-    };
-  };
+  # config = lib.mkIf cfg.enable {
+  #   wayland.windowManager.hyprland.extraConfig =
+  #     let
+  #       discordAutoStart = lib.optionalString cfg.autoStart /* lua */ ''
+  #         hl.on("hyprland.start", function ()
+  #           hl.exec_cmd("discord")
+  #         end)
+  #       '';
+  #     in
+  #     /* lua */ ''
+  #       hl.workspace_rule { workspace = "special:discord", on_created_empty = "discord" }
+  #       hl.window_rule { match = { class = "discord" }, workspace = "special:discord silent"}
+  #
+  #       hl.bind("SUPER + V", WS.toggle_special("discord"))
+  #       hl.bind("SUPER + V", WIN.move({ window = "class:discord", workspace = "special:discord"}))
+  #
+  #       ${discordAutoStart}
+  #     '';
+  # };
 }

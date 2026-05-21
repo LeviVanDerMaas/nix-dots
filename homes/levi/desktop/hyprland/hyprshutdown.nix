@@ -5,9 +5,9 @@ let
 in
 lib.mkIf cfg.enable {
   home.packages = with pkgs; [ hyprshutdown ];
-  wayland.windowManager.hyprland.settings.bind = [
-    "$allMods, E, exec, hyprshutdown -t 'Exiting Hyprland...'"
-    "$allMods, P, exec, hyprshutdown -t 'Shutting down...' --post-cmd 'poweroff'"
-    "$allMods, R, exec, hyprshutdown -t 'Rebooting...' --post-cmd 'reboot'"
-  ];
+  wayland.windowManager.hyprland.extraConfig = /* lua */ ''
+    hl.bind("SUPER + ALT + CTRL + SHIFT", DIS.exec_cmd("hyprshutdown -t 'Exiting Hyprland...'"))
+    hl.bind("SUPER + ALT + CTRL + SHIFT", DIS.exec_cmd("hyprshutdown -t 'Shutting down...' --post-cmd 'poweroff'"))
+    hl.bind("SUPER + ALT + CTRL + SHIFT", DIS.exec_cmd("hyprshutdown -t 'Rebooting...' --post-cmd 'reboot'"))
+  '';
 }

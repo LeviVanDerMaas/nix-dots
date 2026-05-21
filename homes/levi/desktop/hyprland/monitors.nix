@@ -1,6 +1,6 @@
 { config, lib, ... }:
 
-let 
+let
   cfg = config.modules.hyprland;
 in
 {
@@ -13,32 +13,32 @@ in
     default = [];
     type = lib.types.listOf (lib.types.submodule {
       options = {
-        name = lib.mkOption {
+        output = lib.mkOption {
           type = lib.types.str;
           default = "";
           description = ''
-            The name parameter of Hyprland's "monitor" keyword.
+            The `output` parameter passed to `hl.monitor`.
           '';
         };
-        resolution = lib.mkOption {
+        mode = lib.mkOption {
           type = lib.types.str;
           default = "";
           description = ''
-            The resolution parameter of Hyprland's "monitor" keyword.
+            The `mode` parameter passed to`hl.monitor`.
           '';
         };
         position = lib.mkOption {
           type = lib.types.str;
           default = "";
           description = ''
-            The position parameter of Hyprland's "monitor" keyword.
+            The `position` parameter passed to`hl.monitor`.
           '';
         };
         scale = lib.mkOption {
           type = lib.types.str;
           default = "";
           description = ''
-            The scale parameter of Hyprland's "monitor" keyword.
+            The `scale` parameter passed to`hl.monitor`.
           '';
         };
       };
@@ -46,25 +46,53 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    wayland.windowManager.hyprland.settings = {
-      # The first rule will be a fallback rule, so that hotplugging unknown monitors should still work.
-      monitor = [ ", preferred, auto, 1" ] ++
-        map (mon: "${mon.name}, ${mon.resolution}, ${mon.position}, ${mon.scale}") cfg.monitors;
+    wayland.windowManager.hyprland.extraConfig =
+      let
+        # Monitor configurations
+        monToLua = m: /* lua */ ''
+          hl.monitor {
+            output   = "${m.output}",
+            mode     = "${m.mode}",
+            position = "${m.position}",
+            scale    = "${m.scale}"
+          }
+        '';
+        hotpluggedMon = { output = ""; mode = "preferred"; position = "auto"; scale = "1"; };
+        monConfigs = builtins.concatStringsSep ""
+          (map monToLua (cfg.monitors ++ [ hotpluggedMon ]));
 
-      # Make the first monitor the default monitor.
-      cursor.default_monitor = lib.optional (cfg.monitors != []) (builtins.head cfg.monitors).name;
 
-      workspace =
-        let
-          bindWsRangeToMonI = i: mon:
-            let
-              a = 10 * i + 1;
-              b = a + 9;
-            in
-            map (w: "${toString w}, monitor:${mon.name}") (lib.range a b);
-          bindsPerMon = lib.imap0 bindWsRangeToMonI cfg.monitors;
-        in
-        builtins.concatLists bindsPerMon;
-    };
+        # Set default monitor to first given monitor
+        defaultMon =
+          let
+            firstMon = (builtins.head cfg.monitors).output;
+          in
+          lib.optionalString (cfg.monitors != [])
+            /* lua */ "hl.config { cursor = { default_monitor = \"${firstMon}\" } }";
+
+
+        # Bind groups of ten workspaces to each monitor in order
+        wsToMonBind = mon: ws:
+          /* lua */ "hl.workspace_rule { workspace = ${ws}, monitor = \"${mon}\" }";
+        IthWsRangeToMonBinds = i: mon:
+          let
+            r = 10 * i + 1;
+            r' = r + 9;
+            wsRange = map toString (lib.range r r');
+          in
+          map (wsToMonBind mon) wsRange;
+        wsBinds =
+          let
+            mons = map (m: toString m.output) cfg.monitors;
+            bindsPerMon = lib.imap0 IthWsRangeToMonBinds mons;
+            bindsAllMons = builtins.concatLists bindsPerMon;
+          in
+          builtins.concatStringsSep "\n" bindsAllMons;
+      in
+      /* lua */ ''
+        ${monConfigs}
+        ${defaultMon}
+        ${wsBinds}
+      '';
   };
 }
