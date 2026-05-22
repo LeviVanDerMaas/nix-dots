@@ -22,6 +22,13 @@ in
 
   config = lib.mkIf cfg.enable {
     wayland.windowManager.hyprland.extraConfig = /* lua */ ''
+      -- Temporary workaround for apparent Pipewire regression causing Steam to segfault on launch
+      -- https://github.com/ValveSoftware/steam-for-linux/issues/13178#issuecomment-4412963794
+      -- TODO: Check if this is fixed and then remove it
+      hl.on("hyprland.start", function ()
+        hl.exec_cmd("systemctl --user restart pipewire pipewire-pulse wireplumber")
+      end)
+
       local initialLauncherClasses = { "steam", ".*prismlauncher.*" }
       local initialGameClasses = { "steam_app_.*", "gamescope", ".*Minecraft.*" }
       local launcherWorkspace = "${toString cfg.launcherWorkspace}"
