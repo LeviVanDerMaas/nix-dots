@@ -7,16 +7,10 @@ in
   imports = [ flake-inputs.noctalia-shell.homeModules.default ];
 
   options.modules.noctalia-shell = {
-    enable = lib.mkEnableOption ''Enables noctalia shell, don't forget to add your target desktop!'';
-    targetDesktops = lib.mkOption {
-      type = lib.types.either lib.types.str (lib.types.listOf lib.types.str);
-      default = [];
-      description = ''Start noctalia-shell only when XDG_CURRENT_DESKTOP matches one of these values'';
-    };
+    enable = lib.mkEnableOption ''Install and configure Noctalia-shell.'';
   };
 
   config = lib.mkIf cfg.enable {
-    modules.services.conditonSystemdServiceOnDE = { noctalia-shell = cfg.targetDesktops; };
     home.packages = with pkgs; [
       pavucontrol # More advanced audio control
       networkmanagerapplet # has nm-connection-editor
@@ -30,7 +24,6 @@ in
 
     programs.noctalia-shell = {
       enable = true;
-      systemd.enable = true;
 
       # Modified version of the built-in catppuccin with:
       # blue, mauve and lavender as main colors.

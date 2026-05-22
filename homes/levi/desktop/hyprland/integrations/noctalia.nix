@@ -9,10 +9,13 @@ in
   config = lib.mkIf cfg.enable {
     modules.noctalia-shell = {
       enable = true;
-      targetDesktops = "Hyprland";
     };
 
     wayland.windowManager.hyprland.extraConfig = /* lua */ ''
+      hl.on("hyprland.start", function () 
+        hl.exec_cmd("noctalia-shell")
+      end)
+      
       local function noctCall(keys, cmd, flags)
         flags = flags or {}
         hl.bind(keys, DIS.exec_cmd("noctalia-shell ipc call " .. cmd), flags)
