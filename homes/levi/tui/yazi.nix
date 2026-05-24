@@ -36,7 +36,7 @@ in
         xdg-open = [{ run = "xdg-open \"$@\""; orphan = true; desc = "Open (XDG)"; }];
       };
       open.rules = [ # override defaults, that is they become unset
-        { name = "*/"; use = [ "edit" "xdg-open" "gui-manager" ]; } # folders
+        { url = "*/"; use = [ "edit" "xdg-open" "gui-manager" ]; } # folders
         { mime = "text/*"; use = [ "edit" "xdg-open" ]; } # Plain text
         # Javascript and JSON may be considered application instead of text MIMEs because reasons.
         { mime = "*/javascript"; use = [ "edit" "xdg-open" ]; }
