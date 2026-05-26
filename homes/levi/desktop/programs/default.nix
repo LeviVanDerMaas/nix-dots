@@ -6,6 +6,7 @@
     ./firefox.nix
     ./kitty.nix
     ./texlive.nix
+    ./vscode.nix
     ./zathura.nix
   ];
 
