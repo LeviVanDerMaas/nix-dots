@@ -38,15 +38,13 @@
     # bashrcExtra runs uncoditionally. Eventhough .bashrc is usually
     # not automtically sourced by non-interactive shells, there are some weird
     # edge cases where it does like remote shells.
-    initExtra =
-      # bash
-      ''
-        nixpkgs=${pkgs.path}
+    initExtra = /* bash */ ''
+      nixpkgs=${pkgs.path}
 
-        whichr() { realpath $(which $@); }
-        whichd() { dirname $(which $@); }
-        whichrd() { dirname $(realpath $(which $@)); }
-        launch() { setsid $@ < /dev/null &> /dev/null; }
+      whichr() { realpath $(which $@); }
+      whichd() { dirname $(which $@); }
+      whichrd() { dirname $(realpath $(which $@)); }
+      launch() { setsid $@ < /dev/null &> /dev/null; }
       '';
   };
 }
