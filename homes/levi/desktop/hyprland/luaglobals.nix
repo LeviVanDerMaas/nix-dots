@@ -9,6 +9,11 @@ lib.mkIf cfg.enable {
     WIN = hl.dsp.window
     WS = hl.dsp.workspace
 
+    -- Useful for runtime debugging
+    function debug_notify(msg, duration)
+      hl.notification.create { text = msg, timeout = duration or 5000, icon = 1 }
+    end
+
     function tbl_contains(tbl, e)
       for _, v in pairs(tbl) do
         if e == v then return true end
