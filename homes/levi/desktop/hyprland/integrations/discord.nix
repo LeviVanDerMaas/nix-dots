@@ -32,7 +32,11 @@ in
       in
       /* lua */ ''
         hl.workspace_rule { workspace = "special:discord", on_created_empty = "discord" }
-        hl.window_rule { match = { class = "discord" }, workspace = "special:discord silent"}
+        hl.window_rule {
+            match = { class = "discord" },
+            workspace = "special:discord silent",
+            tag = "suppressInitialActivate"
+        }
 
         hl.bind("SUPER + V", WS.toggle_special("discord"))
         hl.bind("SUPER + V", WIN.move({ window = "class:discord", workspace = "special:discord"}))

@@ -41,11 +41,13 @@ in
           workspace = launcherWorkspace
         }
       end
-      -- Make games open on designated workspace silently
+
+      -- Make games open on designated workspace silently, cuz games take time to launch
       for _, gc in ipairs(initialGameClasses) do
         hl.window_rule {
           match = { initial_class = gc },
-          workspace = gamingWorkspace .. " silent"
+          workspace = gamingWorkspace .. " silent",
+          tag = "suppressInitialActivate"
         }
       end
     '';

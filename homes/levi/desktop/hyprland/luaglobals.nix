@@ -9,6 +9,12 @@ lib.mkIf cfg.enable {
     WIN = hl.dsp.window
     WS = hl.dsp.workspace
 
+    function tbl_contains(tbl, e)
+      for _, v in pairs(tbl) do
+        if e == v then return true end
+      end
+      return false
+    end
 
     -- Does not deal with or consider metatables or recursive tables.
     function tbl_deepclone(tbl)
