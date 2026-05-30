@@ -38,7 +38,7 @@ in
 
           local globalFOA = tostring(hl.get_config("misc.focus_on_activate"))
           hl.dispatch(setWinFOA(globalFOA))
-        end, { timeout = 1000, type = "oneshot" })
+        end, { timeout = 3000, type = "oneshot" })
       end)
     '';
   };
