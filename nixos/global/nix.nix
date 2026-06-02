@@ -8,6 +8,8 @@
     # Read note below to understand what keep-{derivations,outputs} actually do
     keep-derivations = true;
     keep-outputs = true;
+
+    auto-optimise-store = true;
   };
 
   nixpkgs = {
