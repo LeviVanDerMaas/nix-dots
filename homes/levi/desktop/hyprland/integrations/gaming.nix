@@ -29,7 +29,7 @@ in
         hl.exec_cmd("systemctl --user restart pipewire pipewire-pulse wireplumber")
       end)
 
-      local initialLauncherClasses = { "steam", ".*prismlauncher.*" }
+      local initialLauncherClasses = { "steam", ".*prismlauncher.*", "r2modman" }
       local initialGameClasses = { "steam_app_.*", "gamescope", ".*Minecraft.*" }
       local launcherWorkspace = "${toString cfg.launcherWorkspace}"
       local gamingWorkspace = "${toString cfg.gamingWorkspace}"
