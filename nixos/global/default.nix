@@ -3,6 +3,7 @@
 {
   imports = [
     ./audio.nix
+    ./bash.nix
     ./editor.nix
     ./fonts.nix
     ./locale.nix
