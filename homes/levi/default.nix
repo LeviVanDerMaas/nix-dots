@@ -1,4 +1,4 @@
-{pkgs, config, lib, ...}:
+{ ... }:
 
 {
   imports = [
@@ -7,7 +7,7 @@
     ./desktop
   ];
 
-  config = { 
+  config = {
     programs.home-manager.enable = true;
 
     home = {

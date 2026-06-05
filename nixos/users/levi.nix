@@ -15,15 +15,14 @@ in
       type = lib.types.attrs;
       default = {};
       description = ''
-        Extra config added to levi's Home Manager config. Mainly useful
-        to allow systems to pass in sytem-specific tweaks to levi's Home Manager
-        config. Note this shouldn't be a module, just an attrset for the `config`
-        attribute of a Home Manager module.
+        Extra defintions to pass to `config` for levi's Home Manager
+        configuration. Mainly useful to set system-specific tweaks to the
+        HM-config from the system config.
       '';
     };
   };
 
-  config = {
+  config = lib.mkIf cfg.enable {
     users.users.levi = {
       isNormalUser = true;
       description = "Levi";
