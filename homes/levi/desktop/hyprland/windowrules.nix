@@ -6,11 +6,21 @@ in
 {
   config = lib.mkIf cfg.enable {
     wayland.windowManager.hyprland.extraConfig = /* lua */ ''
-      hl.window_rule { -- Pavucontrol
+
+      -- Make the border of maximized windows glow differently to signify they are maximized
+      hl.window_rule {
+        match = { fullscreen_state_internal = 1 },
+        border_color = "#3320b7"
+      }
+
+      -- APP SPECIFIC RULES
+      -- pavucontrol
+      hl.window_rule {
         match = { initial_class = "org.pulseaudio.pavucontrol"},
         float = true, center = true
       }
-      hl.window_rule { -- nm-connection-editor, a.k.a nm-applet's GUI
+      -- nm-connection-editor, a.k.a nm-applet's GUI
+      hl.window_rule {
         match = { initial_class = "nm-connection-editor"},
         float = true, center = true
       }
@@ -22,7 +32,7 @@ in
         local SIA_tag = "suppressInitialActivate*"
         local tags = w.tags
         if not (tags == SIA_tag or tbl_contains(tags, SIA_tag)) then
-          return 
+          return
         end
 
         local setWinFOA = function (v) -- v should be a string
