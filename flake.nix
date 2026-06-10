@@ -55,7 +55,7 @@
           "buffon"
         ];
 
-      # Note that these are generic imports as I like to use HM as a
+      # Note that these are generic stand-alone imports as I like to use HM as a
       # NixOS module and use system specific tweaks. This is useful to access
       # when I wanna run just home-manager though, like for nixd.
       homeConfigurations =

@@ -1,4 +1,4 @@
-{ flake-outputs, specialArgs, ... }:
+{ flake-outputs, ... }:
 
 {
   nix.settings = {
@@ -17,11 +17,6 @@
     overlays = builtins.attrValues flake-outputs.overlays;
   };
   environment.variables = { NIXPKGS_ALLOW_UNFREE = 1; };
-
-  home-manager = {
-    useGlobalPkgs = true;
-    extraSpecialArgs = specialArgs;
-  };
 }
 
 # Note on garbage collection of derivations and build-time-only outputs:
