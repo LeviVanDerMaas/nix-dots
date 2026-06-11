@@ -6,7 +6,7 @@
     ./theming
 
     ./kdeConfig.nix
-    ./menus.nix
     ./noctalia-shell.nix
+    ./xdg.nix
   ];
 }
