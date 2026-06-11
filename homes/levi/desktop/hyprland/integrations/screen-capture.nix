@@ -2,7 +2,6 @@
 
 let
   cfg = config.modules.hyprland;
-  grimPre = "grimblast --notify --freeze";
 in
 lib.mkIf cfg.enable {
   home.packages = with pkgs; [
@@ -12,9 +11,10 @@ lib.mkIf cfg.enable {
   ];
 
   wayland.windowManager.hyprland.extraConfig = /* lua */ ''
-    hl.bind("PRINT", DIS.exec_cmd("${grimPre} copy output"))
-    hl.bind("SHIFT + PRINT", DIS.exec_cmd("${grimPre} copy area"))
-    hl.bind("CTRL + PRINT", DIS.exec_cmd("${grimPre} copy screen"))
+    hl.bind("PRINT", DIS.exec_cmd("grimblast copy output"))
+    hl.bind("SUPER + PRINT", DIS.exec_cmd("grimblast --notify copysave output"))
+    hl.bind("SHIFT + PRINT", DIS.exec_cmd("grimblast --freeze copy area"))
+    hl.bind("CTRL + PRINT", DIS.exec_cmd("grimblast copy screen"))
     hl.bind("ALT + PRINT", DIS.exec_cmd("hyprpicker -anf hex"))
   '';
 }
