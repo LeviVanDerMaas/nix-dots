@@ -10,8 +10,6 @@ let
   };
 in
 {
-  # xdg.configFile."yazi/theme.toml".source = catppuccin-yazi;
-
   programs.yazi = {
     enable = true;
     enableBashIntegration = true;
@@ -25,6 +23,7 @@ in
       mgr = {
         ratio = [1 2 5];
         scrolloff = 8;
+        sort_by = "natural";
       };
 
       # Yazi uses `find` to get MIMEtypes.
@@ -61,8 +60,13 @@ in
         # Navigation
         { on = "K"; run = "seek -10"; desc = "Seek up 10 units in the preview"; }
         { on = "J"; run = "seek 10"; desc = "Seek down 10 units in the preview"; }
-        { on = "z"; run = "plugin fzf"; desc = "Jump to a file/directory via fzf"; }
-        { on = "Z"; run = "plugin zoxide"; desc = "Jump to a directory via zoxide"; }
+
+        # File searching and jumping
+        { on = ["f" "f"]; run = "filter --smart"; desc = "Filter files"; }
+        { on = ["f" "d"]; run = "search --via=fd"; desc = "Search files by name via fd"; }
+        { on = ["f" "r"]; run = "search --via=rg"; desc = "Search files by content via ripgrep"; }
+        { on = ["f" "z"]; run = "plugin fzf"; desc = "Jump to a file/directory via fzf"; }
+        { on = "z"; run = "plugin zoxide"; desc = "Jump to a directory via zoxide"; }
 
 
         # Selection
