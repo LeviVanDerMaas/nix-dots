@@ -28,11 +28,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1779279892,
-        "narHash": "sha256-2F/7ujlAPR49q2qJvJJWXm2ZQgRCNZdmPtev69lTObc=",
+        "lastModified": 1781476993,
+        "narHash": "sha256-3LdnteSAdPlbMggQINE4K6Lz2NNS88eHtj+snWZfygY=",
         "owner": "LeviVanDerMaas",
         "repo": "neovim-config",
-        "rev": "7895189ca0c8b8a6751ec7b966dc17566288eee5",
+        "rev": "01483ff62773ed23e28c2e10792bcb085cd8514d",
         "type": "github"
       },
       "original": {
