@@ -20,7 +20,7 @@ in
   config = lib.mkIf cfg.enable {
     environment.systemPackages = with pkgs; [
       ddcutil
-      (writeShellScriptBin "br" ''
+      (writeShellScriptBin "ddcbr" ''
         if [ $# -eq 1 ]; then
           for i in {1..${toString cfg.numMonitors}}; do
             ddcutil -d $i setvcp x10 $1;
