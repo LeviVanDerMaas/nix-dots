@@ -1,4 +1,4 @@
-{ fns, ... }:
+{ pkgs, fns, ... }:
 {
 
   programs.bash.shellAliases = {
@@ -7,6 +7,21 @@
   };
 
   programs.broot = {
+    # Override package until next release to pull in some bug fixes for :select and :show
+    # https://github.com/Canop/broot/pull/1178
+    package = fns.checkPkgVersion pkgs.broot "1.57.0" pkgs.broot.overrideAttrs rec {
+      src = pkgs.fetchFromGitHub {
+        owner = "Canop";
+        repo = "broot";
+        rev = "8bcfc57c39bd558805d77dede44e79b0f3924830";
+        hash = "sha256-c+2ZWjiHs58zWnPOxCO5sfM0TAZSoMxAJWi8NMZfz1w=";
+      };
+      cargoDeps = pkgs.rustPlatform.fetchCargoVendor {
+        inherit src;
+        hash = "sha256-HTYC4yGohraK6Jc5fwtmezZ4idyLhPAzvatL2PXKAXk=";
+      };
+    };
+
     enable = true;
     enableBashIntegration = true;
 

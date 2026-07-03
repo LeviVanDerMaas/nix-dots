@@ -1,9 +1,5 @@
 # Custom commands.
 
-# BUGGED: CURRENTLY :select and :show are bugged and do not work when invoked through a cmd
-# Also it might be that :show does not work becaus
-# https://github.com/Canop/broot/issues/1176
-
 # NOTES:
 # - Verb invocation pattern syntax:
 #   Invocation patterns are parsed as (Rust) regex, and you can use capture groups to destructure
@@ -42,22 +38,31 @@ set_defaults [
     invocation = "cd"; key = "ctrl-q";
     external = "cd {directory}"; from_shell = true; leave_broot = true;
   }
+  {
+    invocation = "goto {path}"; shortcut = "gt";
+    cmd = ":focus {path:path-from-directory};:show {path:path-from-directory}";
+  }
+  {
+    invocation = "goto_at {dir} {subpath}"; shortcut = "gta";
+    cmd = ":focus {dir:path-from-directory};:show {subpath}";
+  }
 
   # FILE MANIPULATION
   # Touch file/dir
   {
     invocation = "touch {path}";
     external = "touch {path}";
+    switch_terminal = false;
   }
   # Create file and any parent directories, and move focus to it
   {
-    invocation = "create (?<path>({dir}/)?[^/]+)"; shortcut = "cr";
-    cmd = ":mkdir {dir}/.;:touch {path};:focus {path}";
+    invocation = "create (?<dir>.*/)?(?<name>[^/]+)"; shortcut = "cr";
+    cmd = ":mkdir {dir}/.;:focus {dir};:touch {name};:show {name}";
   }
   # Create file at {dir}/{subpath}, set {dir} as displayed root and select {subpath}
   {
-    invocation = "create_at {dir} (?<subpath>({subdir}/)?[^/]+)"; shortcut = "ca";
-    cmd = ":focus {dir};:create {subpath}";
+    invocation = "create_at {dir} (?<subpath>(?<subdir>.*/)?(?<name>[^/]+))"; shortcut = "cra";
+    cmd = ":focus {dir};:mkdir {subdir};:touch {subpath};:show {subpath}";
   }
   # Copy and move (cut) shortcuts, with special behaviours for staging area
   {
