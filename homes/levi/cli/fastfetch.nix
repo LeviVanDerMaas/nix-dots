@@ -1,3 +1,38 @@
 {
-  programs.fastfetch.enable = true;
+  programs.fastfetch = {
+    enable = true;
+    settings = {
+      modules = [
+        "Title"
+        "Separator"
+        "OS"
+        "Board"
+        "Kernel"
+        "Uptime"
+        "Packages"
+        "Shell"
+        "Display"
+        "DE"
+        "WM"
+        "WMTheme"
+        "Theme"
+        "Icons"
+        "Font"
+        "Cursor"
+        "Terminal"
+        "TerminalFont"
+        "CPU"
+        "GPU"
+        "Memory"
+        "Swap"
+        "Disk"
+        "LocalIp"
+        "Battery"
+        "PowerAdapter"
+        "Locale"
+        "Break"
+        "Colors"
+      ];
+    };
+  };
 }
