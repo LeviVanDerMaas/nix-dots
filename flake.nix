@@ -7,14 +7,13 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    noctalia-shell = {
-      url = "github:noctalia-dev/noctalia-shell/v4.7.7";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
     levisNeovimConfig = {
       url = "github:LeviVanDerMaas/neovim-config";
       inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    noctalia = {
+      url = "github:noctalia-dev/noctalia/cachix";
     };
   };
 

@@ -1,52 +1,58 @@
-{ config, lib, fns, osConfig ? {}, ... }:
+{ config, lib, osConfig ? {}, ... }:
 
 let
   cfg = config.modules.hyprland;
-  noctCall = mods: key: cmd: "${mods}, ${key}, exec, noctalia-shell ipc call ${cmd}";
-  genNoctCalls = map (fns.apply noctCall);
 in
 {
   config = lib.mkIf cfg.enable {
-    modules.noctalia-shell = {
+    modules.noctalia = {
       enable = true;
     };
 
     wayland.windowManager.hyprland.extraConfig = /* lua */ ''
-      hl.on("hyprland.start", function () 
-        hl.exec_cmd("noctalia-shell")
+      hl.on("hyprland.start", function ()
+        hl.exec_cmd("noctalia")
       end)
-      
-      local function noctCall(keys, cmd, flags)
-        flags = flags or {}
-        hl.bind(keys, DIS.exec_cmd("noctalia-shell ipc call " .. cmd), flags)
-      end
-      noctCall("SUPER + SPACE", "launcher toggle")
-      noctCall("SUPER + SHIFT + SPACE", "launcher command")
-      noctCall("SUPER + ALT + SPACE", "launcher windows")
-      noctCall("SUPER + X", "launcher clipboard")
 
-      local function noctCallEl(keys, cmd)
-        noctCall(keys, cmd, { repeating = true, locked = true })
+      local function noctBind(keys, cmd, flags)
+        hl.bind(keys, DIS.exec_cmd("noctalia msg " .. cmd), flags or {})
       end
-      noctCallEl("XF86AudioRaiseVolume", "volume increase || wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+")
-      noctCallEl("XF86AudioLowerVolume", "volume decrease || wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-")
-      noctCallEl("XF86AudioMute", "volume muteOutput || wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle")
-      noctCallEl("XF86AudioMicMute", "volume muteInput || wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle")
-      noctCallEl("XF86AudioPlay", "media playPause")
-      noctCallEl("XF86AudioStop", "media pause")
-      noctCallEl("XF86AudioNext", "media next")
-      noctCallEl("XF86AudioPrev", "media previous")
-      noctCallEl("XF86AudioForward", "media seekRelative 5")
-      noctCallEl("XF86AudioRewind", "media seekRelative -5")
+      local function noctBind_fLocked(keys, cmd)
+        noctBind(keys, cmd, { locked = true })
+      end
 
-      ${
+      -- UI toggles
+      noctBind("SUPER + SPACE", "panel-toggle launcher")
+      noctBind("SUPER + ALT + SPACE", "panel-toggle launcher /win")
+      noctBind("ALT + TAB", "window-switcher")
+      noctBind("SUPER + X", "panel-toggle clipboard")
+      -- This does not currently exist in v5 but I assume it will eventually
+      noctBind("SUPER + SHIFT + SPACE", "panel-toggle launcher /cmd")
+
+      -- Media controls
+      noctBind_fLocked("XF86AudioPlay", "media toggle")
+      noctBind_fLocked("XF86AudioStop", "media stop")
+      noctBind_fLocked("XF86AudioNext", "media next")
+      noctBind_fLocked("XF86AudioPrev", "media previous")
+      noctBind_fLocked("SHIFT + XF86AudioNext", "media next-player")
+      noctBind_fLocked("SHIFT + XF86AudioPrev", "media previous-player")
+      -- These 2 below do not currently exist in v5 but I assume something like them will eventually
+      noctBind_fLocked("XF86AudioForward", "media seekRelative 5")
+      noctBind_fLocked("XF86AudioRewind", "media seekRelative -5")
+
+      -- System controls
+      noctBind_fLocked("XF86AudioRaiseVolume", "volume-up")
+      noctBind_fLocked("XF86AudioLowerVolume", "volume-down")
+      noctBind_fLocked("XF86AudioMute", "volume-mute")
+      noctBind_fLocked("XF86AudioMicMute", "mic-mute")
+      ${ # If we didn't set brightness binds at the OS level (i.e. for builtin screens), then let Noctalia handle it
         let
           bctl = osConfig.modules.brightnessctl or {};
           osBinds = (bctl.enabled or false) && (bctl.brightnessKeys or false);
         in
         lib.optionalString (!osBinds) /* lua */ ''
-          noctCallEl("XF86MonBrightnessUp", "brightness increase")
-          noctCallEl("XF86MonBrightnessDown", "brightness decrease")
+          noctBind_fLocked("XF86MonBrightnessUp", "brightness-up")
+          noctBind_fLocked("XF86MonBrightnessDown", "brightness-down")
         ''
       }
     '';
