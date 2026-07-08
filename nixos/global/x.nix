@@ -1,10 +1,10 @@
 {
-  services.xserver = { 
+  services.xserver = {
     enable = true;
 
     xkb = {
       layout = "us";
-      options = "caps:escape";
+      options = "caps:escape_shifted_capslock";
       variant = "";
     };
   };

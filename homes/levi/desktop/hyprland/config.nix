@@ -9,7 +9,7 @@ lib.mkIf cfg.enable {
       input = {
         kb_layout = "us",
         kb_variant = "altgr-weur", -- https://altgr-weur.eu/
-          kb_options = "caps:escape_shifted_capslock",
+        kb_options = "caps:escape_shifted_capslock",
         repeat_rate = 60,
         repeat_delay = 600,
       },
