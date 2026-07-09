@@ -1,4 +1,4 @@
-{ flake-inputs, pkgs, lib, fns, config, osConfig ? {}, ... }:
+{ flake-inputs, pkgs, lib, config, osConfig ? {}, ... }:
 
 let
   cfg = config.modules.noctalia;
@@ -18,14 +18,13 @@ in
 
   config = lib.mkIf cfg.enable {
     # Little hack to make the notification history not persist between restarts
-    # xdg.cacheFile."noctalia/notifications.json" = {
-    #   force = true;
-    #   text = lib.toJSON { notifications = []; };
-    # };
+    xdg.stateFile."noctalia/notification_history.json" = {
+      force = true;
+      text = lib.toJSON { notifications = []; };
+    };
 
     programs.noctalia = {
       enable = true;
-
       customPalettes.CatppuccinMochaBlue.dark = {
         mError = "#f38ba8";
         mHover = "#b4befe";
@@ -126,18 +125,48 @@ in
         };
 
         shell = {
+          setup_wizard_enabled = false;
+          settings_show_advanced = true;
+          clipboard_history_max_entries = 30;
+
+          shadow = {
+            alpha = 1;
+            direction = "down";
+          };
+
+          panel = {
+            open_near_click_control_center = true;
+          };
           launcher = {
             categories = false;
           };
-          panel = {
-            clipboard_placement = "attached";
-            open_near_click_clipboard = true;
-            open_near_click_control_center = true;
-          };
-          settings_show_advanced = true;
-          shadow = {
-            direction = "center";
-          };
+
+          session.actions = let hyprshutdown = config.modules.hyprshutdown; in [
+            {
+              action = "suspend";
+              countdown_seconds = 1.0;
+              shortcut = "1";
+            }
+            {
+              action = "logout";
+              command = hyprshutdown.logoutCommand;
+              countdown_seconds = 3.0;
+              shortcut = "2";
+            }
+            {
+              action = "reboot";
+              command = hyprshutdown.rebootCommand;
+              countdown_seconds = 3.0;
+              shortcut = "3";
+            }
+            {
+              action = "shutdown";
+              command = hyprshutdown.shutdownCommand;
+              countdown_seconds = 3.0;
+              shortcut = "4";
+              variant = "destructive";
+            }
+          ];
         };
 
         widget = {
@@ -150,6 +179,8 @@ in
             max_length = 145;
             min_length = 145;
             title_scroll = "on_hover";
+            capsule = true;
+            capsule_padding = 8;
           };
           battery = {
             display_mode = "graphic";
@@ -186,12 +217,21 @@ in
             max_length = 400;
             min_length = 145;
             title_scroll = "on_hover";
+            capsule = true;
+            capsule_padding = 8;
           };
           network = {
             show_label = false;
           };
           notifications = {
             hide_when_no_unread = true;
+          };
+          tray = {
+            drawer = true;
+            hidden = [ "Discord" ];
+            # Once the option to hide passive items comes back in v5, adding this rule
+            # together with hiding passive should make udiskie so that it only shows when an usb is inserted.
+            # pinned = [ "udiskie" ];
           };
           volume = {
             font_family = systemDefaultMonospaceFont;

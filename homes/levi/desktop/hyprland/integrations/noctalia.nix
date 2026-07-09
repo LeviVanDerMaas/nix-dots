@@ -17,9 +17,6 @@ in
       local function noctBind(keys, cmd, flags)
         hl.bind(keys, DIS.exec_cmd("noctalia msg " .. cmd), flags or {})
       end
-      local function noctBind_fLocked(keys, cmd)
-        noctBind(keys, cmd, { locked = true })
-      end
 
       -- UI toggles
       noctBind("SUPER + SPACE", "panel-toggle launcher")
@@ -30,29 +27,29 @@ in
       noctBind("SUPER + SHIFT + SPACE", "panel-toggle launcher /cmd")
 
       -- Media controls
-      noctBind_fLocked("XF86AudioPlay", "media toggle")
-      noctBind_fLocked("XF86AudioStop", "media stop")
-      noctBind_fLocked("XF86AudioNext", "media next")
-      noctBind_fLocked("XF86AudioPrev", "media previous")
-      noctBind_fLocked("SHIFT + XF86AudioNext", "media next-player")
-      noctBind_fLocked("SHIFT + XF86AudioPrev", "media previous-player")
+      noctBind("XF86AudioPlay", "media toggle", { locked = true })
+      noctBind("XF86AudioStop", "media stop", { locked = true })
+      noctBind("XF86AudioNext", "media next", { locked = true })
+      noctBind("XF86AudioPrev", "media previous", { locked = true })
+      noctBind("SHIFT + XF86AudioNext", "media next-player", { locked = true })
+      noctBind("SHIFT + XF86AudioPrev", "media previous-player", { locked = true })
       -- These 2 below do not currently exist in v5 but I assume something like them will eventually
-      noctBind_fLocked("XF86AudioForward", "media seekRelative 5")
-      noctBind_fLocked("XF86AudioRewind", "media seekRelative -5")
+      noctBind("XF86AudioForward", "media seekRelative 5", { locked = true })
+      noctBind("XF86AudioRewind", "media seekRelative -5", { locked = true })
 
       -- System controls
-      noctBind_fLocked("XF86AudioRaiseVolume", "volume-up")
-      noctBind_fLocked("XF86AudioLowerVolume", "volume-down")
-      noctBind_fLocked("XF86AudioMute", "volume-mute")
-      noctBind_fLocked("XF86AudioMicMute", "mic-mute")
+      noctBind("XF86AudioRaiseVolume", "volume-up", { locked = true, repeating = true })
+      noctBind("XF86AudioLowerVolume", "volume-down", { locked = true, repeating = true })
+      noctBind("XF86AudioMute", "volume-mute", { locked = true })
+      noctBind("XF86AudioMicMute", "mic-mute", { locked = true })
       ${ # If we didn't set brightness binds at the OS level (i.e. for builtin screens), then let Noctalia handle it
         let
           bctl = osConfig.modules.brightnessctl or {};
           osBinds = (bctl.enabled or false) && (bctl.brightnessKeys or false);
         in
         lib.optionalString (!osBinds) /* lua */ ''
-          noctBind_fLocked("XF86MonBrightnessUp", "brightness-up")
-          noctBind_fLocked("XF86MonBrightnessDown", "brightness-down")
+          noctBind("XF86MonBrightnessUp", "brightness-up", { locked = true, repeating = true })
+          noctBind("XF86MonBrightnessDown", "brightness-down", { locked = true, repeating = true })
         ''
       }
     '';
