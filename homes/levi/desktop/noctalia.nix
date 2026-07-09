@@ -21,12 +21,6 @@ in
 
 
   config = lib.mkIf cfg.enable {
-    # Little hack to make the notification history not persist between restarts
-    xdg.stateFile."noctalia/notification_history.json" = {
-      force = true;
-      text = lib.toJSON { notifications = []; };
-    };
-
     programs.noctalia = {
       enable = true;
       customPalettes.CatppuccinMochaBlue.dark = {
@@ -132,6 +126,8 @@ in
           setup_wizard_enabled = false;
           settings_show_advanced = true;
           clipboard_history_max_entries = 30;
+
+          animation = 1.5;
 
           shadow = {
             alpha = 1;
@@ -239,6 +235,7 @@ in
           };
           volume = {
             font_family = systemDefaultMonospaceFont;
+            mute_color = "on_surface_variant";
           };
           workspaces = {
             active_pill_size = 2.0;
@@ -265,6 +262,7 @@ in
         osd = {
           kinds = {
             media = false;
+            privacy = false;
           };
         };
 
