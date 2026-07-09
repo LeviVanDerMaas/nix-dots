@@ -16,6 +16,10 @@ in
     enable = lib.mkEnableOption ''Install and configure Noctalia, a Wayland compositor shell.'';
   };
 
+
+
+
+
   config = lib.mkIf cfg.enable {
     # Little hack to make the notification history not persist between restarts
     xdg.stateFile."noctalia/notification_history.json" = {

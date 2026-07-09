@@ -14,10 +14,18 @@ in
         hl.exec_cmd("noctalia")
       end)
 
+      hl.layer_rule {
+        name = "noctalia",
+        match = { namespace = "^noctalia-(bar-.+|notification|dock|panel|attached-panel|osd)$" },
+        no_anim = true,
+        blur = true,
+        blur_popups = true,
+        ignore_alpha = 0.5
+      }
+
       local function noctBind(keys, cmd, flags)
         hl.bind(keys, DIS.exec_cmd("noctalia msg " .. cmd), flags or {})
       end
-
       -- UI toggles
       noctBind("SUPER + SPACE", "panel-toggle launcher")
       noctBind("SUPER + ALT + SPACE", "panel-toggle launcher /win")
@@ -25,7 +33,6 @@ in
       noctBind("SUPER + X", "panel-toggle clipboard")
       -- This does not currently exist in v5 but I assume it will eventually
       noctBind("SUPER + SHIFT + SPACE", "panel-toggle launcher /cmd")
-
       -- Media controls
       noctBind("XF86AudioPlay", "media toggle", { locked = true })
       noctBind("XF86AudioStop", "media stop", { locked = true })
@@ -36,7 +43,6 @@ in
       -- These 2 below do not currently exist in v5 but I assume something like them will eventually
       noctBind("XF86AudioForward", "media seekRelative 5", { locked = true })
       noctBind("XF86AudioRewind", "media seekRelative -5", { locked = true })
-
       -- System controls
       noctBind("XF86AudioRaiseVolume", "volume-up", { locked = true, repeating = true })
       noctBind("XF86AudioLowerVolume", "volume-down", { locked = true, repeating = true })
