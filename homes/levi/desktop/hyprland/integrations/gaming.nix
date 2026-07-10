@@ -24,28 +24,37 @@ in
     wayland.windowManager.hyprland.extraConfig = /* lua */ ''
       -- Temporary workaround for apparent Pipewire regression causing Steam to segfault on launch
       -- https://github.com/ValveSoftware/steam-for-linux/issues/13174
-      -- TODO: Check if this is fixed and then remove it
+      -- TODO: Check if this is fixed and then remove it (last checked 2026-07-10)
       hl.on("hyprland.start", function ()
         hl.exec_cmd("systemctl --user restart pipewire pipewire-pulse wireplumber")
       end)
 
-      local initialLauncherClasses = { "steam", ".*prismlauncher.*", "r2modman" }
-      local initialGameClasses = { "steam_app_.*", "gamescope", ".*Minecraft.*" }
       local launcherWorkspace = "${toString cfg.launcherWorkspace}"
       local gamingWorkspace = "${toString cfg.gamingWorkspace}"
+      local launchers = {
+        -- Steam UI has many components implemented as seperate windows. So match
+        -- only main steam window so rest will open on main windows *current* workspace
+        { initial_class = "steam", initial_title = "Steam" },
+        { initial_class = ".*prismlauncher.*" },
+        { initial_class = "r2modman" }
+      }
+      local games = {
+        { initial_class = "steam_app_.*" },
+        { initial_class = "gamescope" },
+        { initial_class = ".*Minecraft.*" }
+      }
 
       -- Make launchers open on designated workspace
-      for _, lc in ipairs(initialLauncherClasses) do
+      for _, launcher in ipairs(launchers) do
         hl.window_rule {
-          match = { initial_class = lc },
+          match = launcher,
           workspace = launcherWorkspace
         }
       end
-
       -- Make games open on designated workspace silently, cuz games take time to launch
-      for _, gc in ipairs(initialGameClasses) do
+      for _, game in ipairs(games) do
         hl.window_rule {
-          match = { initial_class = gc },
+          match = game,
           workspace = gamingWorkspace .. " silent",
           tag = "suppressInitialActivate"
         }
