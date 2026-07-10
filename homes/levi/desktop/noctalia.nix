@@ -127,7 +127,9 @@ in
           settings_show_advanced = true;
           clipboard_history_max_entries = 30;
 
-          animation = 1.5;
+          animation = {
+            speed = 1.5;
+          };
 
           shadow = {
             alpha = 1;
