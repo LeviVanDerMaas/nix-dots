@@ -79,7 +79,7 @@
   hex_non_ascii = "rgb(243, 139, 168) none";
 
   staging_area_title = "rgb(250, 179, 135) none";
-  mode_command_mark = "rgb(88, 91, 112) rgb(243, 139, 168) Bold";
+  mode_command_mark = "rgb(137, 180, 250) Bold";
 
   good_to_bad_0 = "rgb(204, 239, 201)";
   good_to_bad_1 = "rgb(185, 233, 181)";

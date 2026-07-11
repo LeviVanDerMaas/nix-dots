@@ -31,7 +31,11 @@
     # set here (including arrays) will override the default values.
     settings = {
       imports = []; # Ensure imports empty because of aformentioned reasons.
+
       default_flags = "-g";
+      modal = true;
+      initial_mode = "command";
+
       terminal_title = "br: {file}";
       lines_before_match_in_preview = 5;
       lines_after_match_in_preview = 5;
@@ -43,7 +47,6 @@
       # Sum - Whether it should show/compute file/dir size.
       special_paths = {
         ".git" = { list = "never"; };
-        ".cache" = { list = "never"; };
       };
 
       verbs = import ./verbs.nix;
