@@ -15,14 +15,23 @@ lib.mkIf cfg.enable {
       },
 
       general = {
+        layout = "scrolling",
+        no_focus_fallback = true,
+
         border_size = 2,
         gaps_in = 5,
         gaps_out = 10,
         ["col.active_border"] = "#701bbbee",
         ["col.inactive_border"] = "#35293dcc",
-
-        layout = "dwindle",
-        no_focus_fallback = true,
+      },
+      dwindle = {
+        preserve_split = true,
+        precise_mouse_move = true, -- Smart split but only when using the mouse
+      },
+      scrolling = {
+        fullscreen_on_one_column = true,
+        column_width = 0.5;
+        explicit_column_widths = "0.5, 1.0";
       },
 
       decoration = {
@@ -31,11 +40,6 @@ lib.mkIf cfg.enable {
           enabled = true,
           size = 3,
         },
-      },
-
-      dwindle = {
-        preserve_split = true,
-        precise_mouse_move = true, -- Smart split but only when using the mouse
       },
 
       binds = {

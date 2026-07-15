@@ -73,14 +73,24 @@ in
       -- Mouse binds
       hl.bind("SUPER + mouse:272", WIN.drag(), { mouse = true })
       hl.bind("SUPER + mouse:273", WIN.resize(), { mouse = true })
-      -- Split management
-      hl.bind("SUPER + PERIOD", DIS.layout("splitratio +0.1"))
-      hl.bind("SUPER + COMMA",  DIS.layout("splitratio -0.1"))
-      hl.bind("SUPER + R",  DIS.layout("swapsplit"))
-      hl.bind("SUPER + SHIFT + R",  DIS.layout("togglesplit")) -- Requires preserve_split to be true
+      -- Split management (Dwindle layout)
+      -- hl.bind("SUPER + PERIOD", DIS.layout("splitratio +0.1"))
+      -- hl.bind("SUPER + COMMA",  DIS.layout("splitratio -0.1"))
+      -- hl.bind("SUPER + R",  DIS.layout("swapsplit"))
+      -- hl.bind("SUPER + SHIFT + R",  DIS.layout("togglesplit")) -- Requires preserve_split to be true
+      -- Column management (Scrolling layout)
+      hl.bind("SUPER", DIS.layout(""))
+      hl.bind("SUPER + PERIOD", DIS.layout("colresize +0.1"))
+      hl.bind("SUPER + COMMA",  DIS.layout("colresize -0.1"))
+      hl.bind("SUPER + R",  DIS.layout("swapcol r"))
+      hl.bind("SUPER + SHIFT + R",  DIS.layout("swapcol l"))
+      hl.bind("SUPER + Q",  DIS.layout("consume_or_expel next"))
+      hl.bind("SUPER + SHIFT + Q",  DIS.layout("consume_or_expel prev"))
+
       -- Screenstate management
       hl.bind("SUPER + F", WIN.fullscreen({ mode = "fullscreen", action = "toggle" }))
-      hl.bind("SUPER + SHIFT + F", WIN.fullscreen({ mode = "maximized", action = "toggle" }))
+      -- hl.bind("SUPER + SHIFT + F", WIN.fullscreen({ mode = "maximized", action = "toggle" })) -- Acts as colresize 1.0 for scrolling
+      hl.bind("SUPER + SHIFT + F", DIS.layout("colresize +conf"))
       -- Floating management
       hl.bind("SUPER + Z", WIN.float({ action = "toggle" }))
       hl.bind("SUPER + SHIFT + Z", WIN.center())
