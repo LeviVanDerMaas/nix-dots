@@ -10,7 +10,7 @@ in
     '';
     launcherWorkspace = lib.mkOption {
       type = lib.types.either lib.types.int lib.types.str;
-      default = 5;
+      default = 4;
       description = "Which workspace to designate as the launcher workspace";
     };
     gamingWorkspace = lib.mkOption {
@@ -48,8 +48,7 @@ in
       for _, launcher in ipairs(launchers) do
         hl.window_rule {
           match = launcher,
-          workspace = launcherWorkspace,
-          scrolling_width = 1.0 -- Mainly interesting when launcher and gaming workspaces are the same
+          workspace = launcherWorkspace
         }
       end
       -- Make games open on designated workspace silently, cuz games take time to launch
