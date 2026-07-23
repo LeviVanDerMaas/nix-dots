@@ -61,8 +61,8 @@ in
       genDirectionBinds("SUPER + ALT", DIS.focus, { monitor = true })
       genDirectionBinds("SUPER + ALT + SHIFT", WIN.move, { monitor = true, follow = true })
       genDirectionBinds("SUPER + ALT + CTRL", WIN.move, { monitor = true, follow = false })
-      hl.bind("SUPER + ALT + ALT_L", DIS.focus { monitor = "+1" }, { release = "true" })
-      hl.bind("SUPER + TAB", DIS.focus { monitor = "+1" }) -- Alternative to above for standard keyboard
+      hl.bind("SUPER + TAB", DIS.focus { monitor = "+1" })
+      hl.bind("SUPER + SHIFT + TAB", DIS.focus { monitor = "-1" })
       hl.bind("SUPER + mouse_left", DIS.focus({ monitor = "l" }))
       hl.bind("SUPER + mouse_right", DIS.focus({ monitor = "r" }))
 
