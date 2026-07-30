@@ -56,6 +56,8 @@ in
         lib.optionalString (!osBinds) /* lua */ ''
           noctBind("XF86MonBrightnessUp", "brightness-up", { locked = true, repeating = true })
           noctBind("XF86MonBrightnessDown", "brightness-down", { locked = true, repeating = true })
+          noctBind("SHIFT + XF86MonBrightnessUp", "brightness-up \\*", { locked = true, repeating = true })
+          noctBind("SHIFT + XF86MonBrightnessDown", "brightness-down \\*", { locked = true, repeating = true })
         ''
       }
     '';
