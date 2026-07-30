@@ -5,22 +5,28 @@ let
 in
 {
   config = lib.mkIf cfg.enable {
-    # Make sure binds are set early in final config file so that they still
-    # work even if a later part of the config fails
-    wayland.windowManager.hyprland.extraConfig = lib.mkBefore /* lua */ ''
-      -- Generate workspace-related binds for each digit key (0 to 9).
-      -- For each digit, set dispatcher's 'workspace' field to value corresponding the key, with 0 -> 10.
-      -- prefixDigit: string to prefix to workspace selector
-      local function genWorkspaceDigitBinds(mods, dispatcher, prefixDigit, params, flags)
-        prefixDigit = prefixDigit or ""
-        params = params and tbl_deepclone(params) or {}
-        flags = flags or {}
+    wayland.windowManager.hyprland.extraConfig = lib.mkOrder 20 /* lua */ ''
+      -- Generate binds for each digit key (0 to 9).
+      -- For each digit key, set specified dispatcher parameters to value corresponding the key (0 maps to 10).
+      -- `config` is a table of the following optional values:
+      --    * digitParams: list of dispatcher parameters for which to set digits (default { "workspace" })
+      --    * extraParams: table of extra parameters to set for the dispatcher and their values
+      --    * flags: bind flags to set
+      --    * digitPrefix: string to prefix to the digit for each bind (e.g. for relative workspace ids)
+      local function genDigitBinds(mods, dispatcher, config)
+        config = config or {}
+        local digitParams = config.digitParams or { "workspace" }
+        local extraParams = config.extraParams or {}
+        local flags = config.flags or {}
+        local digitPrefix = config.digitPrefix or ""
+
+        local dspParams = tbl_deepclone(extraParams)
         for d = 1, 9 do
-          params.workspace = prefixDigit .. d
-          hl.bind(mods .. " + " .. d, dispatcher(params), flags)
+          for _, p in ipairs(digitParams) do dspParams[p] = digitPrefix .. d end
+          hl.bind(mods .. " + " .. d, dispatcher(dspParams), flags)
         end
-        params.workspace = prefixDigit .. 10
-        hl.bind(mods .. " + " .. 0, dispatcher(params), flags)
+        for _, p in ipairs(digitParams) do dspParams[p] = digitPrefix .. 10 end
+        hl.bind(mods .. " + " .. 0, dispatcher(dspParams), flags)
       end
 
       local directions = {
@@ -29,38 +35,64 @@ in
          J = "d"; S = "d"; DOWN  = "d";
          L = "r"; D = "r"; RIGHT = "r";
       }
-      -- Generate directional binds. For each key, set the dispatcher's
-      -- 'direction' field to the value mapped to that key. If 'params.monitor'
-      -- evaluates to true, set that instead.
-      local function genDirectionBinds(mods, dispatcher, params, flags)
-        params = params and tbl_deepclone(params) or {}
-        flags = flags or {}
-        for k, v in pairs(directions) do
-          if params.monitor then
-            params.monitor = v
-          else
-            params.direction = v
-          end
-          hl.bind(mods .. " + " .. k, dispatcher(params), flags)
+      -- Generate binds for various directional keys (HJKL, WASD, arrow keys).
+      -- For each key, set the dispatcher's specified parameters to value corresponding to the key.
+      -- `config` is a table of the following optional values:
+      --   * directionParams: list of dispatcher parameters for which to set the direction ( default { "direction" })
+      --   * extraParams: table of extra parameters to set for the dispatcher and their values
+      --   * flags: bind flags to set
+      local function genDirectionBinds(mods, dispatcher, config)
+        config = config or {}
+        local directionParams = config.directionParams or { "direction" }
+        local extraParams = config.extraParams or {}
+        local flags = config.flags or {}
+
+        local dspParams = tbl_deepclone(extraParams)
+        for k, d in pairs(directions) do
+          for _, p in ipairs(directionParams) do dspParams[p] = d end
+          hl.bind(mods .. " + " .. k, dispatcher(dspParams), flags)
         end
       end
 
 
 
+
+
       -- Workspace binds
-      local function genWorkspaceDigitBinds_rAbs(mods, dispatcher, params, flags)
-        genWorkspaceDigitBinds(mods, dispatcher, "r~", params, flags)
+      genDigitBinds("SUPER", dispatcher_map1to10toUniqueIdForMon(DIS.focus))
+      genDigitBinds("SUPER + SHIFT", dispatcher_map1to10toUniqueIdForMon(WIN.move), { extraParams = { follow = true } })
+      genDigitBinds("SUPER + CTRL", dispatcher_map1to10toUniqueIdForMon(WIN.move), { extraParams = { follow = false } })
+      -- This is a simpler form of the below binds that should work starting from Hyprland 0.66.
+      -- Currently, hl.get_workspace() does not support workspace selectors besides id, but
+      -- the following PR adds that: https://github.com/hyprwm/Hyprland/pull/15555
+      -- genDigitBinds("SUPER + ALT",
+      --   dispatcher_map1to10toUniqueIdForMon(workspace_swap_id_and_move, "id"),
+      --   { digitParams = { "id" }, extraParams = { workspace = "+0", follow = true } }
+      -- )
+      local digit_swap_dispatcher = dispatcher_map1to10toUniqueIdForMon(
+        function(params)
+          params = tbl_deepclone(params)
+          params.workspace = hl.get_active_workspace()
+          hl.dispatch(workspace_swap_id_and_move(params))
+        end,
+        "id"
+      )
+      local direction_swap_dispatcher = function(params)
+        params = tbl_deepclone(params)
+        return function()
+          local dParams = tbl_deepclone(params)
+          dParams.workspace = hl.get_active_workspace()
+          hl.dispatch(workspace_swap_id_and_monitor(dParams))
+        end
       end
-      genWorkspaceDigitBinds_rAbs("SUPER", DIS.focus)
-      genWorkspaceDigitBinds_rAbs("SUPER + SHIFT", WIN.move, { follow = true })
-      genWorkspaceDigitBinds_rAbs("SUPER + CTRL", WIN.move, { follow = false })
+      genDigitBinds("SUPER + ALT", digit_swap_dispatcher, { digitParams = { "id" }, extraParams = { follow = true } })
+      genDigitBinds("SUPER + ALT + CTRL", digit_swap_dispatcher, { digitParams = { "id" }, extraParams = { follow = false } })
+      genDirectionBinds("SUPER + ALT", direction_swap_dispatcher, { directionParams = { "monitor" }, extraParams = { follow = true }} )
+      genDirectionBinds("SUPER + ALT + CTRL", direction_swap_dispatcher, { directionParams = { "monitor" }, extraParams = { follow = false }} )
       hl.bind("SUPER + mouse_down", DIS.focus({ workspace = "r-1" }))
       hl.bind("SUPER + mouse_up", DIS.focus({ workspace = "r+1" }))
 
       -- Monitor binds
-      genDirectionBinds("SUPER + ALT", DIS.focus, { monitor = true })
-      genDirectionBinds("SUPER + ALT + SHIFT", WIN.move, { monitor = true, follow = true })
-      genDirectionBinds("SUPER + ALT + CTRL", WIN.move, { monitor = true, follow = false })
       hl.bind("SUPER + TAB", DIS.focus { monitor = "+1" })
       hl.bind("SUPER + SHIFT + TAB", DIS.focus { monitor = "-1" })
       hl.bind("SUPER + mouse_left", DIS.focus({ monitor = "l" }))

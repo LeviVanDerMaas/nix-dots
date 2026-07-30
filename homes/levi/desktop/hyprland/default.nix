@@ -5,14 +5,13 @@ let
 in
 {
   imports = [
-    # Global values and functions for lua config
-    ./luaglobals.nix
-
     # Hyprland configuration
-    ./animations.nix
-    ./binds.nix
-    ./config.nix
+    ./luaglobals.nix
     ./monitors.nix
+    ./custom_dispatchers.nix
+    ./binds.nix
+    ./animations.nix
+    ./config.nix
     ./windowrules.nix
     ./integrations
 
