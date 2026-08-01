@@ -49,12 +49,7 @@ in
     # Set this early so that other config can depend on the (externally set) monitor config.
     wayland.windowManager.hyprland.extraConfig = lib.mkOrder 1 (
       let
-        # List of monitors to make available to the lua config.
-        monNames = map (m: m.output) cfg.monitors;
-        MONITORS = /* lua */ ''MONITORS = { "${builtins.concatStringsSep ''", "'' monNames}" }'';
-
-        # Monitor configurations
-        monToLua = m: /* lua */ ''
+        nixMonToLua = m: /* lua */ ''
           hl.monitor {
             output   = "${m.output}",
             mode     = "${m.mode}",
@@ -64,52 +59,43 @@ in
         '';
         hotpluggedMon = { output = ""; mode = "preferred"; position = "auto"; scale = "1"; };
         monConfigs = builtins.concatStringsSep ""
-          (map monToLua (cfg.monitors ++ [ hotpluggedMon ]));
-
-
-        # Set default monitor to first given monitor, if there is one
-        defaultMon = lib.optionalString (cfg.monitors != [])
-          /* lua */ "hl.config { cursor = { default_monitor = MONITORS[1] } }";
-
-
-        # Bind groups of ten numeric workspaces to each monitor in order.
-        # Add a helper function to convert a relative id to the unique (bound) id for a given monitor
-        wsRangesToMonBinds = lib.optionalString (cfg.monitors != []) /* lua */ ''
-          local function bindIthWsRangeToMon(i, mon)
-            local wsRangeBase = 10 * i + 1
-            for ws = wsRangeBase, wsRangeBase + 9 do
-              hl.workspace_rule { workspace = tostring(ws), monitor = mon }
-            end
-          end
-          for i, mon in ipairs(MONITORS) do
-            bindIthWsRangeToMon(i - 1, mon)
-          end
-
-          -- Given `n` in the range [1, 10] and, optionally, `monitor`, convert `n` to an absolute
-          -- id that is unique to that monitor.
-          -- NOTE: This function makes sure that the returned ids align to the ordering in MONITORS,
-          -- but otherwise relies soley on the id of the monitor to return a unique workspace id.
-          function map1to10toUniqueIdForMon(n, mon)
-            if tonumber(n) < 1 or tonumber(n) > 10 then error("workspace_relative10OnMonToId: n must be in range [1, 10]") end
-
-            mon = hl.get_monitor(mon) or hl.get_active_monitor()
-            if not mon then return nil end -- Failsafe
-            local mon_name = mon.name
-
-            -- If monitor not in list, its id can be used to find a free range as fallback.
-            local configged_mon_count = #MONITORS
-            local mon_prio = array_indexOf(MONITORS, mon_name) or (configged_mon_count + mon.id)
-            if configged_mon_count > 0 then mon_prio = mon_prio - 1 end
-            return mon_prio * 10 + n
-          end
-        '';
+          (map nixMonToLua (cfg.monitors ++ [ hotpluggedMon ]));
+        monNames = map (m: m.output) cfg.monitors;
       in
-      # Make sure to do monitors very early
       /* lua */ ''
-        ${MONITORS}
         ${monConfigs}
-        ${defaultMon}
-        ${wsRangesToMonBinds}
+        MONITORS = { ${lib.optionalString (cfg.monitors != []) ''"${builtins.concatStringsSep ''", "'' monNames}" ''}}
+
+        hl.config { cursor = { default_monitor = MONITORS[1] } }
+
+        -- For the i'th monitor, bind workspaces [1, 10] * i to it
+        local function bindIthWsRangeToMon(i, mon)
+          local wsRangeBase = 10 * i + 1
+          for ws = wsRangeBase, wsRangeBase + 9 do
+            hl.workspace_rule { workspace = tostring(ws), monitor = mon }
+          end
+        end
+        for i, mon in ipairs(MONITORS) do
+          bindIthWsRangeToMon(i - 1, mon)
+        end
+
+        -- Given `n` in the range [1, 10] and, optionally, `monitor`, convert `n` to an absolute
+        -- id that is unique to that monitor.
+        -- NOTE: This function makes sure that the returned ids align to the ordering in MONITORS,
+        -- but otherwise relies soley on the id of the monitor to return a unique workspace id.
+        function map1to10toUniqueIdForMon(n, mon)
+          if tonumber(n) < 1 or tonumber(n) > 10 then error("workspace_relative10OnMonToId: n must be in range [1, 10]") end
+
+          mon = hl.get_monitor(mon) or hl.get_active_monitor()
+          if not mon then return nil end -- Failsafe
+          local mon_name = mon.name
+
+          -- If monitor not in list, its id can be used to find a free range as fallback.
+          local configged_mon_count = #MONITORS
+          local mon_prio = array_indexOf(MONITORS, mon_name) or (configged_mon_count + mon.id)
+          if configged_mon_count > 0 then mon_prio = mon_prio - 1 end
+          return mon_prio * 10 + n
+        end
       ''
     );
   };
