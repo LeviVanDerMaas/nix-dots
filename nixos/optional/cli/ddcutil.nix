@@ -12,7 +12,7 @@ in
     '';
     numMonitors = lib.mkOption {
       type = lib.types.int;
-      default = 1;
+      default = lib.length (lib.attrValues config.modules.monitors.config);
       description = "Number of monitors to control with ddcutil.";
     };
   };

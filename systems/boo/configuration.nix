@@ -1,11 +1,5 @@
 { pkgs, lib, fns, ... }:
 
-let
-  monitors = {
-    main = "DP-1";
-    left = "DP-3";
-  };
-in
 {
   # General
   imports = [
@@ -25,9 +19,16 @@ in
   # Custom config modules
   modules = {
     # System-wide
-    ddcutil = {
-      enable = true;
-      numMonitors = 2;
+    monitors.config = {
+      DP-1 = {
+        primary = true;
+        position = { x = 0; y = 0; };
+        resolution = { width = 1920; height = 1080; };
+      };
+      DP-3 = {
+        position = { x = -1920; y = 0; };
+        resolution = { width = 1920; height = 1080; };
+      };
     };
     openrgb = {
       enable = true;
@@ -36,15 +37,10 @@ in
       initRunDelay = 10;
       initRunTries = 20;
     };
-    sddm.setupCommands = with monitors; let
-      xrandr = lib.getExe pkgs.xrandr;
-    in ''
-      ${xrandr} --output ${main} --primary
-      ${xrandr} --output ${left} --left-of ${main}
-    '';
-    hyprland.enable = true;
+    ddcutil.enable = true;
     piper.enable = true;
     zsa.enable = true;
+    hyprland.enable = true;
     gaming.enable = true;
 
     # User-specific
@@ -53,10 +49,6 @@ in
       modules = {
         hyprland = {
           enable = true;
-          monitors = with monitors; [
-            { output = "${main}"; mode = "1920x1080"; position = "0x0"; scale = "1"; }
-            { output = "${left}"; mode = "1920x1080"; position = "-1920x0"; scale = "1"; }
-          ];
           integrations.gaming.enable = true;
         };
       };
@@ -70,7 +62,7 @@ in
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
   # on your system were taken. It‘s perfectly fine and recommended to leave
-  # this value at the release version of the first install of this system.
+  # this value at the release version of the first install of this system.boo
   # Before changing this value read the documentation for this option
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
   system.stateVersion = "24.05"; # Did you read the comment?

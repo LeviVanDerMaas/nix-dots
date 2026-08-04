@@ -1,11 +1,5 @@
 { pkgs, lib, fns, ... }:
 
-let
-  monitors = {
-    main = "DP-2";
-    left =  "HDMI-A-1";
-  };
-in
 {
   # General
   imports = [
@@ -24,16 +18,19 @@ in
   # Custom config modules
   modules = {
     # System-wide
-    ddcutil = {
-      enable = true;
-      numMonitors = 2;
+    monitors.config = {
+      DP-2 = {
+        primary = true;
+        position = { x = 0; y = 0; };
+        resolution = { width = 3840; height = 2160; };
+        scale = 1.5;
+      };
+      HDMI-A-1 = {
+        position = { x = -2560; y = 900; };
+        resolution = { width = 2560; height = 1080; };
+      };
     };
-    sddm.setupCommands = with monitors; let
-      xrandr = lib.getExe pkgs.xrandr;
-    in ''
-      ${xrandr} --output ${main} --primary
-      ${xrandr} --output ${left} --left-of ${main}
-    '';
+    ddcutil.enable = true;
     hyprland.enable = true;
     gaming.enable = true;
 
@@ -43,11 +40,6 @@ in
       modules = {
         hyprland = {
           enable = true;
-          monitors = with monitors; [
-            # If anything looks weird or blurry in certain apps its probs cuz of fractional scaling done here.
-            { output = "${main}"; mode = "3840x2160"; position = "0x0"; scale = "1.5"; }
-            { output = "${left}"; mode = "2560x1080"; position = "-2560x900"; scale = "1"; }
-          ];
           integrations.gaming.enable = true;
         };
       };

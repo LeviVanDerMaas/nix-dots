@@ -1,4 +1,4 @@
-{ config, lib, ... }:
+{ config, lib, osConfig ? {}, ... }:
 
 let
   cfg = config.modules.hyprland;
@@ -9,47 +9,61 @@ in
       Set up monior configuration. Furthermore, the first monitor will have
       workspaces 1 to 10 bound to it, the second monitor 11 to 20, and so on.
       First monitor will also be the cursor default.
+
+      If Home Manager is ran as a NixOS module, then any monitor configuration
+      set at system level will also be used as (individually) overridable defaults
+      for this option.
     '';
-    default = [];
-    type = lib.types.listOf (lib.types.submodule {
+    default = {};
+    type = lib.types.attrsOf (lib.types.submodule ({ name, ... }: {
       options = {
         output = lib.mkOption {
           type = lib.types.str;
-          default = "";
+          default = name;
           description = ''
-            The `output` parameter passed to `hl.monitor`.
+            Defaults to the attribute name.
           '';
         };
         mode = lib.mkOption {
           type = lib.types.str;
           default = "";
-          description = ''
-            The `mode` parameter passed to`hl.monitor`.
-          '';
         };
         position = lib.mkOption {
           type = lib.types.str;
           default = "";
-          description = ''
-            The `position` parameter passed to`hl.monitor`.
-          '';
         };
         scale = lib.mkOption {
           type = lib.types.str;
           default = "";
-          description = ''
-            The `scale` parameter passed to`hl.monitor`.
-          '';
         };
       };
-    });
+    }));
   };
 
   config = lib.mkIf cfg.enable {
-    # Set this early so that other config can depend on the (externally set) monitor config.
+    # Set system level monitor configuration as individually overridable defaults
+    modules.hyprland.monitors =
+      let
+        sysMons = osConfig.modules.monitors.config or {};
+        sysMonToDefaultHyprMon = n: m:
+          let
+            nullableFieldMap = prop: to: if m.${prop} != null then to else null;
+          in
+          lib.mkDefault {
+            output = m.port;
+            ${nullableFieldMap "position" "position"} = "${toString m.position.x}x${toString m.position.y}";
+            ${nullableFieldMap "scale" "scale"} = "${toString m.scale}";
+            ${nullableFieldMap "resolution" "mode"} =
+              "${toString m.resolution.width}x${toString m.resolution.height}" +
+              "${lib.optionalString (m.refreshRate != null) "@${toString m.refreshRate}"}";
+          };
+      in
+      lib.mapAttrs sysMonToDefaultHyprMon sysMons;
+
+    # Lua monitor conifg: set early so that other config can depend on the (externally set) monitor config.
     wayland.windowManager.hyprland.extraConfig = lib.mkOrder 1 (
       let
-        nixMonToLua = m: /* lua */ ''
+        nixMonToLua = n: m: /* lua */ ''
           hl.monitor {
             output   = "${m.output}",
             mode     = "${m.mode}",
@@ -57,14 +71,13 @@ in
             scale    = "${m.scale}"
           }
         '';
-        hotpluggedMon = { output = ""; mode = "preferred"; position = "auto"; scale = "1"; };
-        monConfigs = builtins.concatStringsSep ""
-          (map nixMonToLua (cfg.monitors ++ [ hotpluggedMon ]));
-        monNames = map (m: m.output) cfg.monitors;
+        hotpluggedMonDefault = { "" = { output = ""; mode = "preferred"; position = "auto"; scale = "1"; }; };
+        monConfigs = (lib.concatMapAttrsStringSep "" nixMonToLua (hotpluggedMonDefault // cfg.monitors));
+        monOutputNames = lib.mapAttrsToList (n: m: m.output) cfg.monitors;
       in
       /* lua */ ''
         ${monConfigs}
-        MONITORS = { ${lib.optionalString (cfg.monitors != []) ''"${builtins.concatStringsSep ''", "'' monNames}" ''}}
+        MONITORS = { ${lib.optionalString (cfg.monitors != {}) ''"${builtins.concatStringsSep ''", "'' monOutputNames}" ''}}
 
         hl.config { cursor = { default_monitor = MONITORS[1] } }
 
