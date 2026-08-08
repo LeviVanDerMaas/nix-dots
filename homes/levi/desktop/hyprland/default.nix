@@ -6,6 +6,7 @@ in
 {
   imports = [
     # Hyprland configuration
+    ./hotconf.nix
     ./luaglobals.nix
     ./monitors.nix
     ./custom_dispatchers.nix
