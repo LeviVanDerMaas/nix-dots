@@ -43,37 +43,62 @@ in
         { initial_class = "", initial_title = "Steam"} -- Steam updater window
       }
       local gameWindows = {
-        { initial_class = "steam_app_.*" },
+        { initial_class = "steam_app_.*" }, -- Catches most, but not ALL steam games
         { initial_class = "gamescope" },
         { initial_class = ".*Minecraft.*" }
       }
 
-      -- Make launchers main windows open on designated workspace and call attention
       for _, launcher in ipairs(launcherWindows) do
+        hl.window_rule { match = launcher, tag = "gameLauncher" }
+
+        -- Make launchers main windows open on designated workspace and call attention
         hl.window_rule {
           match = launcher,
           workspace = launcherWorkspace
         }
       end
-      -- Make "automatic" launcher windows open on designated workspace silently;
-      -- Many launchers have these for things like sign-in/update/shutdown progress,
-      -- or launchers embedded in other launchers (ugh).
-      -- NOTE: Some launchers may still call focus to their main window, like Steam on shutdown
       for _, automaticLauncher in ipairs(automaticLauncherWindows) do
+        -- Make "automatic" launcher windows open on designated workspace silently;
+        -- Many launchers have these for things like sign-in/update/shutdown progress,
+        -- or launchers embedded in other launchers (ugh).
+        -- NOTE: Some launchers may still call focus to their main window, like Steam on shutdown
         hl.window_rule {
           match = automaticLauncher,
           workspace = launcherWorkspace .. " silent",
           tag = "suppressInitialActivate"
         }
       end
-      -- Make games open on designated workspace silently, cuz games take time to launch
       for _, game in ipairs(gameWindows) do
+        hl.window_rule { match = game, tag = "game" }
+
+        -- Make games open on designated workspace silently, cuz games take time to launch
         hl.window_rule {
           match = game,
           workspace = gamingWorkspace .. " silent",
           tag = "suppressInitialActivate"
         }
       end
+
+      -- If a game opens while the currently focussed window is a launcher,
+      -- then call the focus to that game window despite the silent opening
+      -- NOTE: For some weird reason this won't work with `window.open`, in that case
+      -- it will just refocus the already window (confirmed it's not because of other config).
+      hl.on("window.open_early", function(w)
+        local active_window = hl.get_active_window()
+        if not active_window then
+          return
+        end
+        local opened_tags = w.tags
+        local active_tags = active_window.tags
+        local game_opened_while_launcher_active = (opened_tags and active_tags)
+          and (active_tags == "gameLauncher*" or array_indexOf(active_tags, "gameLauncher*"))
+          and (opened_tags == "game*" or array_indexOf(opened_tags, "game*"))
+        if game_opened_while_launcher_active then
+          hl.dispatch(DIS.focus { window = w })
+        end
+      end)
+
+
 
 
 
