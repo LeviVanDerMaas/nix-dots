@@ -122,6 +122,10 @@ in
           sidebar_section = "none";
         };
 
+        notification = {
+          history_retention_hours = 24;
+        };
+        
         shell = {
           setup_wizard_enabled = false;
           settings_show_advanced = true;
@@ -241,10 +245,10 @@ in
           };
           workspaces = {
             active_pill_size = 2.0;
-            display = "name";
             focused_output_only = true;
             font_family = systemDefaultMonospaceFont;
             font_weight = 700;
+            label_source = "name";
             labels_only_when_occupied = true;
             max_label_chars = 10;
           };
