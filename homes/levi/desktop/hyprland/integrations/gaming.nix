@@ -45,39 +45,36 @@ in
       local gameWindows = {
         { initial_class = "steam_app_.*" }, -- Catches most, but not ALL steam games
         { initial_class = "gamescope" },
-        { initial_class = ".*Minecraft.*" }
+        { content = "game" }, -- Does any game even use this?
+
+        { initial_class = ".*Minecraft.*" },
+        { initial_title = "Monstrum" }
       }
-
       for _, launcher in ipairs(launcherWindows) do
-        hl.window_rule { match = launcher, tag = "gameLauncher" }
-
-        -- Make launchers main windows open on designated workspace and call attention
-        hl.window_rule {
-          match = launcher,
-          workspace = launcherWorkspace
-        }
+        hl.window_rule { match = launcher, tag = "+gameLauncher" }
       end
       for _, automaticLauncher in ipairs(automaticLauncherWindows) do
-        -- Make "automatic" launcher windows open on designated workspace silently;
-        -- Many launchers have these for things like sign-in/update/shutdown progress,
-        -- or launchers embedded in other launchers (ugh).
-        -- NOTE: Some launchers may still call focus to their main window, like Steam on shutdown
-        hl.window_rule {
-          match = automaticLauncher,
-          workspace = launcherWorkspace .. " silent",
-          tag = "suppressInitialActivate"
-        }
+        hl.window_rule { match = automaticLauncher, tag = "+automaticGameLauncher" }
       end
       for _, game in ipairs(gameWindows) do
-        hl.window_rule { match = game, tag = "game" }
-
-        -- Make games open on designated workspace silently, cuz games take time to launch
-        hl.window_rule {
-          match = game,
-          workspace = gamingWorkspace .. " silent",
-          tag = "suppressInitialActivate"
-        }
+        hl.window_rule { match = game, tag = "+game" }
       end
+
+      hl.window_rule {
+        match = { tag = "gameLauncher*" },
+        workspace = launcherWorkspace
+      }
+      hl.window_rule {
+        match = { tag = "automaticGameLauncher*" },
+        workspace = launcherWorkspace .. " silent",
+        tag = "suppressInitialActivate"
+      }
+      hl.window_rule {
+        match = { tag = "game*" },
+        center = true,
+        workspace = gamingWorkspace .. " silent",
+        tag = "suppressInitialActivate"
+      }
 
       -- If a game opens while the currently focussed window is a launcher,
       -- then call the focus to that game window despite the silent opening
@@ -102,9 +99,13 @@ in
 
 
 
-      -- GAME SPECIFIC
+      -- GAME SPECIFIC TWEAKS
       -- When not rendering, DbD tends to hang during scene transitions; annoying when queing for match
       hl.window_rule { match = { initial_title = "DeadByDaylight *" }, render_unfocused = true }
+
+      -- Internally setting "Borderless Windowed" is preferable for Overwatch, preventing some curosr
+      -- alignment issues and making it work better with Hyprland, but then by default it'll open as a floating window
+      hl.window_rule { match = { initial_title = "Overwatch" }, fullscreen = true }
     '';
   };
 }
