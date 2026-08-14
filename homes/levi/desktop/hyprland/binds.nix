@@ -58,9 +58,10 @@ in
 
 
 
-      -- Workspace binds
+      -- WORKSPACE BINDS
       genDigitBinds("SUPER", dispatcher_map1to10toUniqueIdForMon(DIS.focus))
       genDigitBinds("SUPER + SHIFT", dispatcher_map1to10toUniqueIdForMon(WIN.move), { extraParams = { follow = true } })
+      genDigitBinds("SUPER + SHIFT", DIS.force_renderer_reload) -- Fix issue of windows flickering: seems to be caused by animation config
       genDigitBinds("SUPER + CTRL", dispatcher_map1to10toUniqueIdForMon(WIN.move), { extraParams = { follow = false } })
       -- This is a simpler form of the below binds that should work starting from Hyprland 0.66.
       -- Currently, hl.get_workspace() does not support workspace selectors besides id, but
@@ -92,36 +93,36 @@ in
       hl.bind("SUPER + mouse_down", DIS.focus({ workspace = "r-1" }))
       hl.bind("SUPER + mouse_up", DIS.focus({ workspace = "r+1" }))
 
-      -- Monitor binds
+      -- MONITOR BINDS
       hl.bind("SUPER + TAB", DIS.focus { monitor = "+1" })
       hl.bind("SUPER + SHIFT + TAB", DIS.focus { monitor = "-1" })
       hl.bind("SUPER + mouse_left", DIS.focus({ monitor = "l" }))
       hl.bind("SUPER + mouse_right", DIS.focus({ monitor = "r" }))
 
-      -- Window binds
+      -- WINDOW BINDS
       genDirectionBinds("SUPER", DIS.focus)
       genDirectionBinds("SUPER + SHIFT", WIN.move)
       genDirectionBinds("SUPER + CTRL", WIN.swap)
-      -- Mouse binds
+      -- MOUSE BINDS
       hl.bind("SUPER + mouse:272", WIN.drag(), { mouse = true })
       hl.bind("SUPER + mouse:273", WIN.resize(), { mouse = true })
-      -- Split management
+      -- SPLIT MANAGEMENT
       hl.bind("SUPER + PERIOD", DIS.layout("splitratio +0.1"))
       hl.bind("SUPER + COMMA",  DIS.layout("splitratio -0.1"))
       hl.bind("SUPER + R",  DIS.layout("swapsplit"))
       hl.bind("SUPER + SHIFT + R",  DIS.layout("togglesplit")) -- Requires preserve_split to be true
-      -- Screenstate management
+      -- SCREENSTATE MANAGEMENT
       hl.bind("SUPER + F", WIN.fullscreen({ mode = "fullscreen", action = "toggle" }))
       hl.bind("SUPER + SHIFT + F", WIN.fullscreen({ mode = "maximized", action = "toggle" }))
-      -- Floating management
+      -- FLOATING MANAGEMENT
       hl.bind("SUPER + Z", WIN.float({ action = "toggle" }))
       hl.bind("SUPER + SHIFT + Z", WIN.center())
       hl.bind("SUPER + ALT + Z", WIN.pin())
-      -- Kill binds
+      -- KILL BINDS
       hl.bind("SUPER + ALT + C", WIN.close())
       hl.bind("SUPER + SHIFT + CTRL + ALT + C", WIN.kill())
 
-      -- Application binds
+      -- APPLICATION BINDS
       hl.bind("SUPER + T", DIS.exec_cmd("kitty"))
       hl.bind("SUPER + E", DIS.exec_cmd("dolphin"))
       hl.bind("SUPER + B", DIS.exec_cmd("firefox"))
