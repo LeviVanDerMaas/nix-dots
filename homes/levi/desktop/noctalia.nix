@@ -225,6 +225,7 @@ in
             title_scroll = "on_hover";
             capsule = true;
             capsule_padding = 8;
+            show_progress = true;
           };
           network = {
             show_label = false;
