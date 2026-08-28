@@ -16,6 +16,9 @@
     { device = "/dev/disk/by-uuid/6808-C1D1";
       fsType = "vfat";
       options = [ "fmask=0022" "dmask=0022" ];
+      # Hacks around issue where boot stage 2 gets stuck for ~30 seconds on a
+      # start job for this partition; doesn't occur in stage 1. IDK and IDC why.
+      neededForBoot = true;
     };
 
   fileSystems."/" =
