@@ -39,12 +39,12 @@ in
         { initial_class = "r2modman" }
       }
       local automaticLauncherWindows = {
-        { initial_class = "steam", initial_title = "(Sign in to Steam)|(Shutdown)"},
-        { initial_class = "", initial_title = "Steam"} -- Steam updater window
+        { initial_class = "steam", initial_title = "(Sign in to Steam)|(Shutdown)" },
+        { initial_class = "", initial_title = "Steam" } -- Steam updater window
       }
       local gameWindows = {
         { initial_class = "steam_app_.*" }, -- Catches most, but not ALL steam games
-        { initial_class = "gamescope" },
+        { initial_class = "gamescope" }, -- Catches anything running in gamescope
         { content = "game" }, -- Does any game even use this?
 
         { initial_class = ".*Minecraft.*" },
@@ -79,7 +79,7 @@ in
       -- If a game opens while the currently focussed window is a launcher,
       -- then call the focus to that game window despite the silent opening
       -- NOTE: For some weird reason this won't work with `window.open`, in that case
-      -- it will just refocus the already window (confirmed it's not because of other config).
+      -- it will just refocus the already focussed window (confirmed it's not because of other config).
       hl.on("window.open_early", function(w)
         local active_window = hl.get_active_window()
         if not active_window then
@@ -98,12 +98,14 @@ in
 
 
 
+      -- LAUNCHER SPECIFIC TWEAKS
+      -- Many Steam UI components are implemented as windows: make sure everything but the main window is floating
+      hl.window_rule { match = { initial_class = "steam", initial_title = "negative:Steam" }, float = true }
 
       -- GAME SPECIFIC TWEAKS
       -- When not rendering, DbD tends to hang during scene transitions; annoying when queing for match
       hl.window_rule { match = { initial_title = "DeadByDaylight *" }, render_unfocused = true }
-
-      -- Internally setting "Borderless Windowed" is preferable for Overwatch, preventing some curosr
+      -- Internally setting "Borderless Windowed" is preferable for Overwatch, preventing some cursor
       -- alignment issues and making it work better with Hyprland, but then by default it'll open as a floating window
       hl.window_rule { match = { initial_title = "Overwatch" }, fullscreen = true }
     '';
