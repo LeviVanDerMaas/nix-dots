@@ -103,6 +103,12 @@ in
       genDirectionBinds("SUPER", DIS.focus)
       genDirectionBinds("SUPER + SHIFT", WIN.move)
       genDirectionBinds("SUPER + CTRL", WIN.swap)
+      hl.bind("SUPER + ALT + G", DIS.exec_cmd(
+        -- Notification with active window propeties, and copy to clipboard
+        -- Note that the copy will have no effect without a clipboard manager since wl-copy exits.
+        'win=$(hyprctl activewindow); wl-copy --paste-once -- "$win"; hyprctl notify 6 5000 "#ffffff" "$win"'
+      ))
+
       -- MOUSE BINDS
       hl.bind("SUPER + mouse:272", WIN.drag(), { mouse = true })
       hl.bind("SUPER + mouse:273", WIN.resize(), { mouse = true })
