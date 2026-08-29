@@ -11,7 +11,7 @@ let
 in
 lib.mkIf cfg.enable {
   home.packages = with pkgs; [
-    (fns.checkPkgVersion grimblastPatched "0.1-unstable-2026-06-30" grimblastPatched) # Officially supported Hyprland screenshot util script (nix wraps this with all of Hyprland btw)
+    (fns.checkPkgVersion grimblastPatched "0.1-unstable-2026-08-21" grimblastPatched) # Officially supported Hyprland screenshot util script (nix wraps this with all of Hyprland btw)
     hyprpicker # Official color picker, also dep for grimblast's --freeze flag.
     wl-clipboard #  Dep for both, nix wraps this in already, but this is not technically a required dep so eh.
   ];
