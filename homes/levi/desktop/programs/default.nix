@@ -16,7 +16,13 @@
     discord
     obsidian
     signal-desktop
+
+    # Video stuff
     vlc
+    losslesscut
+    handbrake
+
+
     pavucontrol # More advanced audio control
     networkmanagerapplet # has nm-connection-editor, a good GUI network editor
   ];
