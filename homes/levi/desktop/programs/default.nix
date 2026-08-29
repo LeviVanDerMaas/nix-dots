@@ -4,6 +4,7 @@
   imports = [
     ./dolphin.nix
     ./firefox.nix
+    ./gpu-screen-recorder.nix
     ./kitty.nix
     ./texlive.nix
     ./vscode.nix
