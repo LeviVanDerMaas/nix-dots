@@ -39,7 +39,7 @@ in
         { initial_class = "r2modman" }
       }
       local automaticLauncherWindows = {
-        { initial_class = "steam", initial_title = "(Sign in to Steam)|(Shutdown)" },
+        { initial_class = "steam", initial_title = "(Sign in to Steam)|(Shutdown)|(Launching...)" },
         { initial_class = "", initial_title = "Steam" } -- Steam updater window
       }
       local gameWindows = {
