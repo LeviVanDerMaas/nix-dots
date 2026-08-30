@@ -17,11 +17,11 @@
     obsidian
     signal-desktop
 
-    # Video stuff
+    # Media-stuff
+    kdePackages.gwenview # Already has basic image editing
     vlc
-    losslesscut
-    handbrake
-
+    losslesscut # Basic video (and audio) editing without any re-encoding
+    ffmpeg
 
     pavucontrol # More advanced audio control
     networkmanagerapplet # has nm-connection-editor, a good GUI network editor
