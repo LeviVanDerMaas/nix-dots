@@ -18,6 +18,15 @@ in
       hl.on("hyprland.start", function()
         hl.exec_cmd("gsr-ui")
       end)
+
+      hl.bind("SUPER + GRAVE", DIS.exec_raw("gsr-ui-cli toggle-show"))
+      hl.bind("SUPER + F1", DIS.exec_raw("gsr-ui-cli replay-save"))
+      hl.bind("SUPER + SHIFT + F1", DIS.exec_raw("gsr-ui-cli toggle-replay"))
+      hl.bind("SUPER + F2", DIS.exec_raw("gsr-ui-cli take-screenshot"))
+      hl.bind("SUPER + SHIFT + F2", DIS.exec_raw("gsr-ui-cli take-screenshot-region"))
+      hl.bind("SUPER + CTRL + F2", DIS.exec_raw("gsr-ui-cli take-screenshot-window"))
+      hl.bind("SUPER + F3", DIS.exec_raw("gsr-ui-cli toggle-pause"))
+      hl.bind("SUPER + SHIFT + F3", DIS.exec_raw("gsr-ui-cli toggle-record"))
     '';
   };
 }

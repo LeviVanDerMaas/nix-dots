@@ -9,8 +9,18 @@ in
       default = osConfig.modules.gpu-screen-recorder.enable or false;
       type = lib.types.bool;
       description = ''
-        Enable configuration for gpu-screen-recorder; you will likely also need to enable
-        the program's NixOS module in order for it to work properly.
+        Enable configuration for gpu-screen-recorder; you will likely also need
+        to enable the program's NixOS module in order for it to work properly,
+        due to security reasons.
+
+        It appears gpu-screen-recorder-ui reads it config file only on startup and
+        then internally keeps state; it will try to write any changed settings but
+        of course fail to do so. That effectively makes the config set here the default
+        config that the program starts with everytime. The most important changes we make are:
+        - Enable game detection for instant replay.
+        - Disable global hotkeys: we should set them up in the compositor instead.
+        - Configured global hotkeys still appear in the UI even if disabled; purely cosmetic.
+        - These comsetic binds we set use SUPER instead of alt and do not include all options.
       '';
     };
   };
@@ -23,21 +33,20 @@ in
       gpu-screen-recorder-notification
     ];
 
-    # Config file appears to get read only on startup of the program. I.e. between every restart of the
-    # program these are the default settings, but we can still tweak em for the given session.
+    # Unfortunately this config syntax is custom and not documented
     xdg.configFile."gpu-screen-recorder/config_ui".text = ''
       main.config_file_version 2
-      main.exclude_metadata false
-      main.hotkeys_enable_option enable_hotkeys
+      main.exclude_metadata true
+      main.hotkeys_enable_option disable_hotkeys
       main.joystick_hotkeys_enable_option disable_hotkeys
       main.language 
       main.notification_speed normal
-      main.show_hide_hotkey 26 16
+      main.show_hide_hotkey 144 64
       main.software_encoding_warning_shown false
       main.tint_color intel
       main.wayland_warning_shown true
       record.container mp4
-      record.pause_unpause_hotkey 92 16
+      record.pause_unpause_hotkey 88 64
       record.record_options.advanced_view true
       record.record_options.audio_codec opus
       record.record_options.audio_track_item false [add_audio_track]
@@ -74,9 +83,9 @@ in
       record.record_options.webcam_y 0
       record.save_directory /home/levi/Videos/Recordings
       record.save_video_in_game_folder false
-      record.start_stop_hotkey 94 16
-      record.start_stop_region_hotkey 94 4
-      record.start_stop_window_hotkey 94 1
+      record.start_stop_hotkey 88 65
+      record.start_stop_region_hotkey 0 0
+      record.start_stop_window_hotkey 0 0
       replay.container mp4
       replay.only_start_replay_if_power_supply_connected false
       replay.record_options.advanced_view true
@@ -115,12 +124,12 @@ in
       replay.record_options.webcam_y 0
       replay.replay_storage ram
       replay.restart_replay_on_save false
-      replay.save_10_min_hotkey 97 16
-      replay.save_1_min_hotkey 96 16
+      replay.save_10_min_hotkey 0 0
+      replay.save_1_min_hotkey 0 0
       replay.save_directory /home/levi/Videos/Instant Replays
-      replay.save_hotkey 95 16
+      replay.save_hotkey 86 64
       replay.save_video_in_game_folder false
-      replay.start_stop_hotkey 95 17
+      replay.start_stop_hotkey 86 65
       replay.time 60
       replay.turn_on_replay_automatically_mode turn_on_at_game_launch
       screenshot.change_image_resolution false
@@ -137,9 +146,9 @@ in
       screenshot.save_screenshot_to_clipboard false
       screenshot.save_screenshot_to_disk true
       screenshot.show_notifications true
-      screenshot.take_screenshot_hotkey 102 0
-      screenshot.take_screenshot_region_hotkey 102 4
-      screenshot.take_screenshot_window_hotkey 102 1
+      screenshot.take_screenshot_hotkey 87 64
+      screenshot.take_screenshot_region_hotkey 87 65
+      screenshot.take_screenshot_window_hotkey 87 68
       screenshot.use_led_indicator false
       streaming.custom.container flv
       streaming.custom.key 
@@ -181,7 +190,7 @@ in
       streaming.record_options.webcam_y 0
       streaming.rumble.key 
       streaming.service twitch
-      streaming.start_stop_hotkey 93 16
+      streaming.start_stop_hotkey 0 0
       streaming.twitch.key 
       streaming.youtube.key 
     '';
