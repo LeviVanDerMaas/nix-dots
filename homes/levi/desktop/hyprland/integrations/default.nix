@@ -5,7 +5,7 @@
     ./gaming.nix
     ./gpu-screen-recorder.nix
     ./noctalia.nix
-    ./screen-capture.nix
+    ./grimblast.nix
     ./udiskie.nix
   ];
 }
