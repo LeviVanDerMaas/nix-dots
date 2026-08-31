@@ -127,6 +127,9 @@ in
       -- KILL BINDS
       hl.bind("SUPER + ALT + C", WIN.close())
       hl.bind("SUPER + SHIFT + CTRL + ALT + C", WIN.kill())
+      hl.bind("SUPER + SHIFT + CTRL + ALT + W", function() -- Close all windows
+        for _, w in ipairs(hl.get_windows()) do hl.dispatch(WIN.close({ window = w })) end
+      end)
 
       -- APPLICATION BINDS
       hl.bind("SUPER + T", DIS.exec_cmd("kitty"))
