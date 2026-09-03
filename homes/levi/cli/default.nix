@@ -11,6 +11,7 @@
     ./fzf.nix
     ./git.nix
     ./less.nix
+    ./man.nix
     ./ripgrep.nix
     ./starship.nix
     ./zoxide.nix

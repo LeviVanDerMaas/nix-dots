@@ -1,6 +1,10 @@
 {
   programs.less = {
     enable = true;
+    options = [
+      # Set up some pager UI colors (don't affect displayed content).
+      "-R" "--use-color" "-DEy-d" "-DNk" "-DPc"
+    ];
     config = ''
       #command
       / forw-search ^W

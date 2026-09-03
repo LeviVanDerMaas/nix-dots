@@ -24,8 +24,12 @@ in
       user.useConfigOnly = true;
       advice.detachedHead = false;
 
+      # `LESS=FRX less` is what happens if LESS is unset; set explicitly to "merge"
+      # custom less settings with default git behaviour.
+      core.pager = "less -FRX"; 
       pretty.custom = customPretty false;
       pretty.customFull = customPretty true;
+
       alias = {
         a = "add";
         c = "commit";
