@@ -32,7 +32,7 @@ in
       noctBind("ALT + TAB", "window-switcher")
       noctBind("SUPER + X", "panel-toggle clipboard")
       -- This does not currently exist in v5 but I assume it will eventually
-      noctBind("SUPER + SHIFT + SPACE", "panel-toggle launcher /cmd")
+      -- noctBind("SUPER + SHIFT + SPACE", "panel-toggle launcher /cmd")
       -- Media controls
       noctBind("XF86AudioPlay", "media toggle", { locked = true })
       noctBind("XF86AudioStop", "media stop", { locked = true })
@@ -41,8 +41,8 @@ in
       noctBind("SHIFT + XF86AudioNext", "media next-player", { locked = true })
       noctBind("SHIFT + XF86AudioPrev", "media previous-player", { locked = true })
       -- These 2 below do not currently exist in v5 but I assume something like them will eventually
-      noctBind("XF86AudioForward", "media seekRelative 5", { locked = true })
-      noctBind("XF86AudioRewind", "media seekRelative -5", { locked = true })
+      -- noctBind("XF86AudioForward", "media seekRelative 5", { locked = true })
+      -- noctBind("XF86AudioRewind", "media seekRelative -5", { locked = true })
       -- System controls
       noctBind("XF86AudioRaiseVolume", "volume-up", { locked = true, repeating = true })
       noctBind("XF86AudioLowerVolume", "volume-down", { locked = true, repeating = true })
