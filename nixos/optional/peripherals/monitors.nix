@@ -6,8 +6,8 @@ let
   inherit (lib) mkOption types;
   nullableOption = s: mkOption (s // { type = types.nullOr s.type; default = s.default or null; });
   coordinateType = x: y: types.submodule {
-    options = { 
-      ${x} = mkOption { type = types.int; }; 
+    options = {
+      ${x} = mkOption { type = types.int; };
       ${y} = mkOption { type = types.int; };
     };
   };
@@ -86,15 +86,26 @@ in
         in
         lib.optionalString (monConfs != {}) "${lib.getExe pkgs.xrandr} ${joinedXrandrFlags}";
     };
+
+    primary = lib.mkOption {
+      type = types.nullOr types.str;
+      readOnly = true;
+      description = "Name of the monitor set as the primary monitor.";
+    };
   };
 
-  config = {
-    assertions = [
-      {
-        assertion = cfg.config != {} ->
-          (lib.count (m: m.primary == true) (lib.attrValues cfg.config)) <= 1;
-        message = "At most 1 monitor may be set as primary.";
-      }
-    ];
-  };
+  config =
+    let
+      monitorList = lib.attrValues cfg.config;
+      singlePrimaryMonitor = lib.findSingle (m: m.primary == true) null false monitorList;
+    in
+    {
+      assertions = [
+        {
+          assertion = singlePrimaryMonitor != false;
+          message = "At most 1 monitor may be set as primary.";
+        }
+      ];
+      modules.monitors.primary = singlePrimaryMonitor.name;
+    };
 }

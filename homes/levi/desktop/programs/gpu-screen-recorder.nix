@@ -23,6 +23,15 @@ in
         - These comsetic binds we set use SUPER instead of alt and do not include all options.
       '';
     };
+    instantReplaySource = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
+      default =
+        let
+          m = osConfig.modules.monitors.primary or null;
+        in
+        if m != null then m else "focused_monitor";
+      description = "Which monitor to start instant replays on";
+    };
   };
 
   config = lib.mkIf cfg.enable {
@@ -102,7 +111,7 @@ in
       replay.record_options.low_power_mode false
       replay.record_options.overclock false
       replay.record_options.record_area_height 1080
-      replay.record_options.record_area_option focused_monitor
+      replay.record_options.record_area_option ${cfg.instantReplaySource}
       replay.record_options.record_area_width 1920
       replay.record_options.record_cursor true
       replay.record_options.restore_portal_session true
