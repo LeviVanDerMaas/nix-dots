@@ -4,45 +4,52 @@ let
   cfg = config.modules.hyprland;
 in
 {
-  options.modules.hyprland.monitors = lib.mkOption {
-    description = ''
-      Set up monior configuration. Furthermore, the first monitor will have
-      workspaces 1 to 10 bound to it, the second monitor 11 to 20, and so on.
-      First monitor will also be the cursor default.
+  options.modules.hyprland.monitors = {
+    config = lib.mkOption {
+      description = ''
+        Set up monior configuration. Furthermore, the first monitor will have
+        workspaces 1 to 10 bound to it, the second monitor 11 to 20, and so on.
 
-      If Home Manager is ran as a NixOS module, then any monitor configuration
-      set at system level will also be used as (individually) overridable defaults
-      for this option.
-    '';
-    default = {};
-    type = lib.types.attrsOf (lib.types.submodule ({ name, ... }: {
-      options = {
-        output = lib.mkOption {
-          type = lib.types.str;
-          default = name;
-          description = ''
-            Defaults to the attribute name.
-          '';
+        If Home Manager is ran as a NixOS module, then any monitor configuration
+        set at system level will also be used as (individually) overridable defaults
+        for this option.
+      '';
+      default = {};
+      type = lib.types.attrsOf (lib.types.submodule ({ name, ... }: {
+        options = {
+          output = lib.mkOption {
+            type = lib.types.str;
+            default = name;
+            description = ''
+              Defaults to the attribute name.
+            '';
+          };
+          mode = lib.mkOption {
+            type = lib.types.str;
+            default = "";
+          };
+          position = lib.mkOption {
+            type = lib.types.str;
+            default = "";
+          };
+          scale = lib.mkOption {
+            type = lib.types.str;
+            default = "";
+          };
         };
-        mode = lib.mkOption {
-          type = lib.types.str;
-          default = "";
-        };
-        position = lib.mkOption {
-          type = lib.types.str;
-          default = "";
-        };
-        scale = lib.mkOption {
-          type = lib.types.str;
-          default = "";
-        };
-      };
-    }));
+      }));
+    };
+
+    defaultMonitor = lib.mkOption {
+      default = osConfig.modules.monitors.primary or null;
+      type = lib.types.nullOr lib.types.str;
+      description = "The name of the monitor to which the cursor should be set on startup";
+    };
   };
 
   config = lib.mkIf cfg.enable {
     # Set system level monitor configuration as individually overridable defaults
-    modules.hyprland.monitors =
+    modules.hyprland.monitors.config =
       let
         sysMons = osConfig.modules.monitors.config or {};
         sysMonToDefaultHyprMon = n: m:
@@ -60,7 +67,7 @@ in
       in
       lib.mapAttrs sysMonToDefaultHyprMon sysMons;
 
-    # Lua monitor conifg: set early so that other config can depend on the (externally set) monitor config.
+    # Lua monitor config: set early so that other config can depend on the (externally set) monitor config.
     wayland.windowManager.hyprland.extraConfig = lib.mkOrder 1 (
       let
         nixMonToLua = n: m: /* lua */ ''
@@ -72,14 +79,16 @@ in
           }
         '';
         hotpluggedMonDefault = { "" = { output = ""; mode = "preferred"; position = "auto"; scale = "1"; }; };
-        monConfigs = (lib.concatMapAttrsStringSep "" nixMonToLua (hotpluggedMonDefault // cfg.monitors));
-        monOutputNames = lib.mapAttrsToList (n: m: m.output) cfg.monitors;
+        monConfigs = (lib.concatMapAttrsStringSep "" nixMonToLua (hotpluggedMonDefault // cfg.monitors.config));
+        monOutputNames = lib.mapAttrsToList (n: m: m.output) cfg.monitors.config;
+        defaultMonitor = cfg.monitors.defaultMonitor;
+        setDefaultMon = lib.optionalString (defaultMonitor != null)
+          /* lua */ ''hl.config { cursor = { default_monitor = "${defaultMonitor}" } }'';
       in
       /* lua */ ''
         ${monConfigs}
-        MONITORS = { ${lib.optionalString (cfg.monitors != {}) ''"${builtins.concatStringsSep ''", "'' monOutputNames}" ''}}
-
-        hl.config { cursor = { default_monitor = MONITORS[1] } }
+        ${setDefaultMon}
+        MONITORS = { ${lib.optionalString (cfg.monitors.config != {}) ''"${builtins.concatStringsSep ''", "'' monOutputNames}" ''}}
 
         -- For the i'th monitor, bind workspaces [1, 10] * i to it
         local function bindIthWsRangeToMon(i, mon)

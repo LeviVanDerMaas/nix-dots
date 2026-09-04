@@ -106,6 +106,7 @@ in
           message = "At most 1 monitor may be set as primary.";
         }
       ];
-      modules.monitors.primary = singlePrimaryMonitor.name;
+      modules.monitors.primary = 
+        if singlePrimaryMonitor != null then singlePrimaryMonitor.name else null;
     };
 }
