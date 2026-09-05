@@ -26,34 +26,38 @@ rec {
     inherit hash name;
   };
 
-  # Given a package, replace its executable (by default tries to determine the
-  # primary executable) with a wrapper. By default this does not modify the
-  # actual package, but rather works on a symlink-copied directory structure to
-  # avoid triggering a rebuild of the actual package.
+  # Given `package`, replace its executable  with a wrapper. By default this creates a "shim"
+  # package that links to all top-level directories (and files) except for `/bin`, where it instead
+  # links to all executables individually and then replaces the main executable with the wrapper. It
+  # is also possible to instead replace it in the original package directly, but that will rebuild
+  # the whole package.
   wrapPkgExe = {
     package,
     wrapperArgs, # Arguements to pass to the wrapper, in order
-    exePath ? null, # should be relative to the package's store path
+    exeName ? package.meta.mainProgram, # name of the executable to be wrapped
     packageName ? package.name + "-wrapped", # name of the package
     symlinkShim ? true # If false will rebuild the full package!
   }:
     let
-      exe = if exePath != null then "$out/${exePath}" else "$out/bin/${package.meta.mainProgram}";
-      callWrapProgram = "wrapProgram ${exe} ${lib.escapeShellArgs wrapperArgs}";
+      originalExe = "${package}/bin/${exeName}";
+      wrapperExe = "$out/bin/${exeName}";
     in
     if symlinkShim then
-      pkgs.symlinkJoin {
-        name = packageName;
-        nativeBuildInputs = [ pkgs.makeWrapper ];
-        paths = [ package ];
-        postBuild = callWrapProgram;
-      }
+      pkgs.runCommand packageName { nativeBuildInputs = [ pkgs.makeWrapper ]; } ''
+        mkdir $out
+        ln -s ${package}/* $out
+        rm $out/bin
+        mkdir $out/bin
+        ln -s ${package}/bin/* $out/bin
+        rm ${wrapperExe}
+        makeWrapper ${originalExe} ${wrapperExe} ${lib.escapeShellArgs wrapperArgs}
+      ''
     else
       package.overrideAttrs (prev: {
         name = packageName;
         nativeBuildInputs = prev.nativeBuildInputs or [] ++ [ pkgs.makeWrapper ];
         postFixup = prev.postFixup or "" + ''
-          ${callWrapProgram}
+          wrapProgram ${wrapperExe} ${lib.escapeShellArgs wrapperArgs}
         '';
       });
 
