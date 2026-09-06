@@ -30,6 +30,7 @@
       "ctrl+shift+g" = "show_last_command_output";
       "ctrl+alt+g" = "show_scrollback";
       "ctrl+alt+c" = "copy_last_command_output";
+      "ctrl+alt+v" = "combine | copy_last_command_output | paste_from_clipboard";
       "shift+alt+c" = "copy_ansi_to_clipboard";
 
       # SCROLLING
