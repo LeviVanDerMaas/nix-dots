@@ -8,9 +8,12 @@ rec {
   apply = f: args: lib.foldl' (f': arg: f' arg) f args;
 
   # Take a package (derivation) and a version and warn if the package's version does not
-  # match the supplied version, then return the next argument (much like builtins.warn).
-  # Useful for things like warning you that a package you're overriding has been updated.
-  checkPkgVersion = p: v:
+  # match the supplied version, then return the package.
+  checkPkgVersion = p: v: checkPkgVersion' p v p;
+
+  # Like `checkPkgVersion`, but takes an extra argument
+  # which will be the return value (much like builtins.warn).
+  checkPkgVersion' = p: v:
     let
       pv = lib.getVersion p;
       pvDiff = lib.compareVersions pv v != 0;
