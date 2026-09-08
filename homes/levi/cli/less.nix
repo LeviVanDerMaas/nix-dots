@@ -18,7 +18,7 @@
     # one of these flags removed, call with -+<flagname>
     package = fns.wrapPkgExe {
       package = pkgs.less;
-      wrapperArgs = [
+      makeWrapperArgs = [
         "--add-flags"
         "-R --use-color -DEy-d -DNk -DPm --search-options=W -i --incsearch"
       ];

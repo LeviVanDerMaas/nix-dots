@@ -7,7 +7,7 @@
     # Wrap kitty to launch all as single instance
     package = fns.wrapPkgExe {
       package = pkgs.kitty;
-      wrapperArgs = [
+      makeWrapperArgs = [
         "--add-flag" "-1"
       ];
     };

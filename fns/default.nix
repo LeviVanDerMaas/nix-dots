@@ -26,55 +26,67 @@ rec {
     inherit hash name;
   };
 
-  # Given `package`, replace its executable  with a wrapper. By default this creates a "shim"
-  # package that links to all top-level directories (and files) except for `/bin`, where it instead
-  # links to all executables individually and then replaces the main executable with the wrapper. It
-  # is also possible to instead replace it in the original package directly, but that will rebuild
-  # the whole package.
-  wrapPkgExe = {
+  # Given `package`, replace its specified executables with wrappers, using makeWrapper.
+  # By default this creates a "shim" package that links to all top-level directories and files
+  # except for `/bin`, where it instead links to all executables individually and then replaces
+  # the specified  executables with their wrappers. It is also possible to instead replace it
+  # in the original package directly, but that will rebuild the whole package.
+  wrapPkgExes = {
     package,
-    wrapperArgs, # Arguements to pass to the wrapper, in order
-    exeName ? package.meta.mainProgram, # name of the executable to be wrapped
-    packageName ? package.name + "-wrapped", # name of the package
-    symlinkShim ? true # If false will rebuild the full package!
+    wrappers, # [ { exe = <executableName>; makeWrapperArgs = [ <arg> <arg> ... ]; } ... ]
+    wrappedPkgName ? package.name + "-wrapped", # name of the new package
+    symlinkShim ? true # If false will build the full package!
   }:
     let
-      originalExe = "${package}/bin/${exeName}";
-      wrapperExe = "$out/bin/${exeName}";
+      makeWrapperSpec = w: {
+        exe = lib.escapeShellArg w.exe;
+        makeWrapperArgs = lib.escapeShellArgs w.makeWrapperArgs; 
+        originalExe = "${package}/bin/${w.exe}";
+        wrapperExe = "$out/bin/${w.exe}";
+      };
+      wrapperSpecs = lib.map makeWrapperSpec wrappers;
     in
     if symlinkShim then
-      pkgs.runCommand packageName { nativeBuildInputs = [ pkgs.makeWrapper ]; } ''
+      pkgs.runCommand wrappedPkgName { nativeBuildInputs = [ pkgs.makeWrapper ]; } ''
         mkdir $out
         ln -s ${package}/* $out
         rm $out/bin
         mkdir $out/bin
         ln -s ${package}/bin/* $out/bin
-        rm ${wrapperExe}
-        makeWrapper ${originalExe} ${wrapperExe} ${lib.escapeShellArgs wrapperArgs}
+        ${
+          let
+            emplaceWrapperSpec = ws: ''
+              rm ${ws.wrapperExe}
+              makeWrapper ${ws.originalExe} ${ws.wrapperExe} ${ws.makeWrapperArgs}
+            '';
+          in
+          lib.concatMapStrings emplaceWrapperSpec wrapperSpecs
+        }
       ''
     else
       package.overrideAttrs (prev: {
-        name = packageName;
+        name = wrappedPkgName;
         nativeBuildInputs = prev.nativeBuildInputs or [] ++ [ pkgs.makeWrapper ];
-        postFixup = prev.postFixup or "" + ''
-          wrapProgram ${wrapperExe} ${lib.escapeShellArgs wrapperArgs}
-        '';
+        postFixup = prev.postFixup or "" +
+          lib.concatMapStringsSep
+          "\n"
+          (ws: "wrapProgram ${ws.wrapperExe} ${ws.makeWrapperArgs}")
+          wrapperSpecs;
       });
 
-  # Given a package, produce from it an executable that wraps another executable
-  # from said package: by default this is the executable returned by lib.getExe.
-  # Note this wrapper is under a different store path than the orginal executable.
-  wrapPkgExeExternally = {
-    package,
-    wrapperArgs, # Arguments to pass to the wrapper, in order
-    wrapperName ? package.meta.mainProgram, # The name of the wrapper
-    exePath ? null, # should be relative to the package's store path
-    packageName ? package.name + "-wrapped", # name of the package
-  }:
+  # Wrap one executable from a package, by default its main one, using makeWrapper.
+  # Convenience function around `wrapPkgExes`, to which it passes all arguments.
+  wrapPkgExe =
+    {
+      package,
+      makeWrapperArgs, # Arguments to pass to the wrapper, in order
+      exe ? package.meta.mainProgram, # name of the executable to be wrapped
+      ...
+    }@args:
     let
-      exe = if exePath != null then "${package}/${exePath}" else lib.getExe package;
+      args' = lib.removeAttrs args [ "makeWrapperArgs" "exe" ];
     in
-    pkgs.runCommand packageName { nativeBuildInputs = [ pkgs.makeWrapper ]; } ''
-      makeWrapper ${exe} $out/bin/${wrapperName} ${lib.escapeShellArgs wrapperArgs}
-    '';
+    wrapPkgExes (args' // {
+      wrappers = [ { inherit exe makeWrapperArgs; } ];
+    });
 }
