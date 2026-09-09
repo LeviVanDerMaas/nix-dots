@@ -25,6 +25,10 @@ lib.mkIf cfg.enable {
         no_focus_fallback = true,
       },
 
+      cursor = {
+        inactive_timeout = 3;
+      };
+
       decoration = {
         rounding = 3,
         blur = {
