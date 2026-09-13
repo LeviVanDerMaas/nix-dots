@@ -41,9 +41,24 @@
     initExtra = /* bash */ ''
       nixpkgs=${pkgs.path}
 
+
+      # Given paths in the nix-store, print their top-level dir in the store
+      storedirname() {
+        local storeDir=$(nix eval --raw --expr 'builtins.storeDir')
+        for storePath in "$@"; do
+          local storeRelative="''${storePath#"$storeDir"/}"
+          local storeBase="''${storeRelative%%/*}"
+          if [[ -z $storeBase ]]; then
+            echo ERROR: "$storePath" is not a store path for "$storeDir"! 1>&2
+            exit 1
+          fi
+          echo "$storeDir"/"$storeBase"
+        done
+      }
       whichr() { realpath $(which $@); }
       whichd() { dirname $(which $@); }
       whichrd() { dirname $(realpath $(which $@)); }
+      whichn() { storedirname $(whichr $@); }
       launch() { setsid $@ < /dev/null &> /dev/null; }
       '';
   };
