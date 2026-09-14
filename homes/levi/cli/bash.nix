@@ -41,10 +41,23 @@
     initExtra = /* bash */ ''
       nixpkgs=${pkgs.path}
 
+      # Given a path, print its full symlink chain. Not safe against cycles
+      linkchain() {
+        local p count=1
+        for p in "$@"; do
+          while [[ -L "$p" ]]; do
+
+            printf '%s\n-> ' "$p"
+            p=$(readlink "$p")
+          done
+          printf '%s\n' "$p"
+        done
+      }
 
       # Given paths in the nix-store, print their top-level dir in the store
       storedirname() {
         local storeDir=$(nix eval --raw --expr 'builtins.storeDir')
+        local storePath
         for storePath in "$@"; do
           local storeRelative="''${storePath#"$storeDir"/}"
           local storeBase="''${storeRelative%%/*}"
