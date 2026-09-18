@@ -28,11 +28,11 @@ in
 
       # Yazi uses `find` to get MIMEtypes.
       opener = {
-        edit = [{ run = "\${EDITOR:-vi} \"$@\""; block = true; desc = "$EDITOR"; }];
-        play = [{ run = "vlc \"$@\""; orphan = true; desc = "VLC Media Player"; }];
-        extract = [{ run = "ya pub extract --list \"$@\""; desc = "Extract here"; }];
-        gui-manager = [{ run = "dolphin \"$@\""; orphan = true; desc = "Dolphin"; }];
-        xdg-open = [{ run = "xdg-open \"$@\""; orphan = true; desc = "Open (XDG)"; }];
+        edit = [{ run = "\${EDITOR:-vi} %s"; block = true; desc = "$EDITOR"; }];
+        play = [{ run = "vlc %s"; orphan = true; desc = "VLC Media Player"; }];
+        extract = [{ run = "ya pub extract --list %s"; desc = "Extract here"; }];
+        gui-manager = [{ run = "dolphin %s"; orphan = true; desc = "Dolphin"; }];
+        xdg-open = [{ run = "xdg-open %s"; orphan = true; desc = "Open (XDG)"; }];
       };
       open.rules = [ # override defaults, that is they become unset
         { url = "*/"; use = [ "edit" "xdg-open" "gui-manager" ]; } # folders
