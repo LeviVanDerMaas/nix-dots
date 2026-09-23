@@ -4,26 +4,6 @@ let
   cfg = config.modules.hyprland;
 in
 {
-  imports = [
-    # Hyprland configuration
-    ./hotconf.nix
-    ./luaglobals.nix
-    ./monitors.nix
-    ./custom_dispatchers.nix
-    ./binds.nix
-    ./animations.nix
-    ./config.nix
-    ./windowrules.nix
-    ./integrations
-
-    # Configuration of hyprland ecosystem tools
-    ./hyprland-portals.nix
-    ./hyprpaper.nix
-    ./hyprpolkitagent.nix
-    ./hyprshutdown.nix
-    ./hyprtoolkit.nix
-  ];
-
   options.modules.hyprland = {
     enable = lib.mkEnableOption ''
       Hyprland home-manager module. Make sure to also enable system module for Hyprland!

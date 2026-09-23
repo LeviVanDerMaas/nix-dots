@@ -4,11 +4,6 @@ let
   cfg = config.modules.services;
 in
 {
-  imports = [
-    ./cliphist.nix
-    ./udiskie.nix
-  ];
-
   options.modules.services = with lib.types; {
     conditonSystemdServiceOnDE = lib.mkOption {
       type = attrsOf (either str (listOf str));

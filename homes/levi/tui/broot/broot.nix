@@ -34,8 +34,8 @@
         ".git" = { list = "never"; };
       };
 
-      verbs = import ./verbs.nix;
-      skin = import ./skin.nix;
+      verbs = import ./_verbs.nix;
+      skin = import ./_skin.nix;
     };
   };
 }

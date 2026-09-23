@@ -1,11 +1,7 @@
-{ ... }:
+{ fns, ... }:
 
 {
-  imports = [
-    ./cli
-    ./tui
-    ./desktop
-  ];
+  imports = fns.discoverOtherNixFilesAt ./default.nix;
 
   config = {
     programs.home-manager.enable = true;
