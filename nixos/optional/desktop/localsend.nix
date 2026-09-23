@@ -1,11 +1,9 @@
 { lib, config, ... }:
 
 let
-  cfg = config.modules.zoom;
+  cfg = config.modules.localsend;
 in
 {
-  # I hate zoom but I gotta use it for some stuff.
-  # And I guess it was nice enough of them to provide a linux implementation.
   options.modules.localsend = {
     enable = lib.mkOption {
       default = true;
