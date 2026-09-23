@@ -1,7 +1,5 @@
+{ fns, ... }:
+
 {
-  imports = [
-    ./global
-    ./optional
-    ./users
-  ];
+  imports = fns.discoverOtherNixFilesAt ./default.nix;
 }

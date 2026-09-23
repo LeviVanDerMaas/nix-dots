@@ -30,5 +30,9 @@ in
 
     # Needed to let udiskie automount when installed on home-manager side.
     modules.udisks2.enable = true;
+
+    environment.systemPackages = with pkgs; [
+      wl-clipboard # Useful
+    ];
   };
 }

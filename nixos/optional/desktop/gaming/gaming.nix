@@ -11,8 +11,8 @@ in
 
   options.modules.gaming = {
     enable = lib.mkEnableOption ''
-      Configures the system for gaming, including installing games/launchers
-      and other gaming-related programs such as gamescope by default.
+      Configures the system for gaming, and installs launchers, gamescope, and
+      other gaming(-related) programs.
     '';
   };
 
