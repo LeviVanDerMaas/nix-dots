@@ -4,10 +4,6 @@ let
   cfg = config.modules.users.levi;
 in
 {
-  imports = [
-    flake-inputs.home-manager.nixosModules.home-manager
-  ];
-
   options.modules.users.levi = {
     enable = lib.mkEnableOption "Set up levi as user";
 

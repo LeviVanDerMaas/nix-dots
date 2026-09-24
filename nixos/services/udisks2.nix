@@ -11,6 +11,9 @@ in
       no DE that provides an interface for managing this. For example,
       automounting can be accomplished through enabling this and then
       installing udiskie, which is an automounting daemon.
+
+      You will probably enable this module as part of another config module,
+      (e.g. in a tiling WM config module), not as a "top-level" setting.
     '';
   };
 

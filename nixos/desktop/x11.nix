@@ -1,3 +1,5 @@
+{ pkgs, ... }:
+
 {
   services.xserver = {
     enable = true;
@@ -13,4 +15,11 @@
       options = "caps:escape_shifted_capslock";
     };
   };
+
+  # Set the "default" cursor of X11.
+  # May wanna consider making a custom package that pulls just breeze cursors
+  # instead of all of breeze, should we end up not using breeze as our theme
+  # in the future.
+  environment.systemPackages = with pkgs; [ kdePackages.breeze ];
+  xdg.icons.fallbackCursorThemes = [ "breeze_cursors" ];
 }
