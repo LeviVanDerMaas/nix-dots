@@ -28,25 +28,31 @@
 
   outputs = { self, nixpkgs, home-manager, ... }@flake-inputs:
     let
-      flake-outputs = self.outputs;
-      arch = "x86_64-linux";
-      pkgs = nixpkgs.legacyPackages.${arch};
+      outputs = self.outputs;
+      system = "x86_64-linux";
+      pkgs = nixpkgs.legacyPackages.${system};
       lib = nixpkgs.lib;
-      fns = import ./fns { inherit pkgs lib; };
+      fns = callComponent ./fns; # Custom library
+      overlays = callComponent ./overlays;
 
-      # Extra args to pass to both NixOS modules and HM modules
-      specialArgs = { inherit flake-inputs flake-outputs fns; };
+      # Extra args to pass to both NixOS modules and HM modules, as well as to
+      # config components called with `callComponent`
+      specialArgs = { inherit flake-inputs flake-outputs callComponent fns; };
+
+      # Import a non-module config component and pass it the same arguments as a module.
+      callComponent = file: import file (specialArgs // { inherit pkgs lib callComponent; });
+
     in
     {
-      overlays = import ./overlays { inherit flake-inputs flake-outputs fns; };
+      inherit overlays fns;
 
       nixosConfigurations =
         let
-          systemConfigFor = system: lib.nixosSystem {
+          systemConfigFor = host: lib.nixosSystem {
             inherit specialArgs;
-            modules = [ (import ./systems/${system}/configuration.nix) ];
+            modules = [ ./systems/${host}/configuration.nix ];
           };
-          systemConfigsFor = systems: lib.genAttrs systems systemConfigFor;
+          systemConfigsFor = hosts: lib.genAttrs hosts systemConfigFor;
         in
         systemConfigsFor [
           "boo"
@@ -54,15 +60,15 @@
           "buffon"
         ];
 
-      # Note that these are generic stand-alone imports as I like to use HM as a
-      # NixOS module and use system specific tweaks. This is useful to access
-      # when I wanna run just home-manager though, like for nixd.
+      # Note that these are generic standalone configurations, while I prefer
+      # to use HM as a NixOS module and then tweak per system. However, this is
+      # useful to access when I want to run just home-manager, like for nixd.
       homeConfigurations =
         let
           HMConfigFor = user: home-manager.lib.homeManagerConfiguration {
             inherit pkgs;
             extraSpecialArgs = specialArgs;
-            modules = [ (import ./homes/${user}) ];
+            modules = [ ./homes/${user} ];
           };
           HMConfigsFor = users: lib.genAttrs users HMConfigFor;
         in
