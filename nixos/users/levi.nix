@@ -26,7 +26,7 @@ in
     };
 
     home-manager.users.levi = { ... }: {
-      imports = [ (fns.rootRel /homes/levi) ];
+      imports = [ (fns.rootRel "homes/levi") ];
       config = cfg.extraHMConfig;
     };
   };

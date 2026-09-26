@@ -6,7 +6,7 @@ let
 
   astronautThemePkg = pkgs.sddm-astronaut.override {
     themeConfig = {
-      Background = "${fns.rootRel /assets/wallpapers/tunnel.png}";
+      Background = "${fns.rootRel "assets/wallpapers/tunnel.png"}";
 
       FullBlur = "false";
       PartialBlur = "true";

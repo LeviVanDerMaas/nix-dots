@@ -2,7 +2,7 @@
 
 let
   cfg = config.modules.hyprland;
-  outskirts = "${fns.rootRel /assets/wallpapers/outskirts.jpg}";
+  outskirts = "${fns.rootRel "assets/wallpapers/outskirts.jpg"}";
 in
 lib.mkIf cfg.enable {
   services.hyprpaper = {

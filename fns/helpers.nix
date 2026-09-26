@@ -5,9 +5,9 @@
   inherit callComponent;
 
   /**
-    Takes a string or path and makes it relative to the flake root.
+    Take a subpath and resolve it relative to the flake's root directory.
   */
-  rootRel = subPath: ../. + subPath;
+  rootRel = lib.path.append ./..;
 
   /**
     Given a function and a list of arguments, call the function with these arguments.

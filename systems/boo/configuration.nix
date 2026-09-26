@@ -4,7 +4,7 @@
   # General
   imports = [
     ./hardware-configuration.nix
-    (fns.rootRel /nixos)
+    (fns.rootRel "nixos")
   ];
 
   # System Name
