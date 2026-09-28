@@ -26,7 +26,7 @@
     ];
   };
 
-  outputs = { self, nixpkgs, home-manager, ... }@flake-inputs:
+  outputs = { self, nixpkgs, home-manager, ... }@inputs:
     let
       outputs = self.outputs;
       system = "x86_64-linux";
@@ -37,7 +37,7 @@
 
       # Extra args to pass to both NixOS modules and HM modules, as well as to
       # config components called with `callComponent`
-      specialArgs = { inherit flake-inputs flake-outputs callComponent fns; };
+      specialArgs = { inherit inputs outputs callComponent fns; };
 
       # Import a non-module config component and pass it the same arguments as a module.
       callComponent = file: import file (specialArgs // { inherit pkgs lib callComponent; });

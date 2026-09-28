@@ -1,4 +1,4 @@
-{ lib, fns, flake-inputs, config, ... }:
+{ lib, fns, inputs, config, ... }:
 
 let
   cfg = config.modules.users.levi;

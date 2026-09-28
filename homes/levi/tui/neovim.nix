@@ -1,7 +1,7 @@
-{ flake-inputs, ... }:
+{ inputs, ... }:
 
 {
-  imports = [ flake-inputs.levisNeovimConfig.homeManagerModules.default ];
+  imports = [ inputs.levisNeovimConfig.homeManagerModules.default ];
 
   config = {
     programs.levisNeovimConfig.enable = true;

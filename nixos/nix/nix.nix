@@ -1,4 +1,4 @@
-{ flake-outputs, ... }:
+{ outputs, ... }:
 
 {
   nix.settings = {
@@ -14,7 +14,7 @@
 
   nixpkgs = {
     config.allowUnfree = true;
-    overlays = builtins.attrValues flake-outputs.overlays;
+    overlays = builtins.attrValues outputs.overlays;
   };
   environment.variables = { NIXPKGS_ALLOW_UNFREE = 1; };
 }

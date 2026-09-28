@@ -1,4 +1,4 @@
-{ flake-inputs, pkgs, lib, config, osConfig ? {}, ... }:
+{ inputs, pkgs, lib, config, osConfig ? {}, ... }:
 
 let
   cfg = config.modules.noctalia;
@@ -10,7 +10,7 @@ let
   );
 in
 {
-  imports = [ flake-inputs.noctalia.homeModules.default ];
+  imports = [ inputs.noctalia.homeModules.default ];
 
   options.modules.noctalia = {
     enable = lib.mkEnableOption ''Install and configure Noctalia, a Wayland compositor shell.'';
