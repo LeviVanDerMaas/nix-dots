@@ -1,4 +1,4 @@
-{ fns, ... }:
+{ lib, fns, osConfig ? {}, outputs, ... }:
 
 {
   imports = fns.discoverOtherNixFilesAt ./default.nix;
@@ -9,6 +9,15 @@
     home = {
       username = "levi";
       homeDirectory = "/home/levi";
+    };
+
+    # The nixpkgs module is disabled when using useGlobalPkgs, in which case
+    # the config and overlays available also come from that.
+    nixpkgs = lib.mkIf (osConfig.nixpkgs.home-manager.useGlobalPkgs or false) {
+      # Be wary: if the pkgs instance this was built with already has these values
+      # they will *also* be used (in case of config they are set as defaults).
+      config = fns.rootRelImport "nixpkgs-config.nix";
+      overlays = builtins.attrValues outputs.overlays;
     };
 
 

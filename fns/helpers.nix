@@ -1,9 +1,6 @@
-{ lib, callComponent, ... }:
+{ lib, ... }:
 
 {
-  # Make callComponent also available under fns for convenience
-  inherit callComponent;
-
   /**
     Take a subpath and resolve it relative to the flake's root directory.
   */

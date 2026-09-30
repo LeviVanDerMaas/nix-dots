@@ -29,23 +29,16 @@
   outputs = { self, nixpkgs, home-manager, ... }@inputs:
     let
       outputs = self.outputs;
+      lib = nixpkgs.lib;
+      fns = import ./fns { inherit pkgs lib; }; # Custom lib
+      overlays = import ./overlays { inherit inputs outputs; };
+
       system = "x86_64-linux";
       pkgs = nixpkgs.legacyPackages.${system};
-      lib = nixpkgs.lib;
-      fns = callComponent ./fns; # Custom library
-      overlays = callComponent ./overlays;
-
-      # Extra args to pass to both NixOS modules and HM modules, as well as to
-      # config components called with `callComponent`
-      specialArgs = { inherit inputs outputs callComponent fns; };
-
-      # Import a non-module config component and pass it the same arguments as a module.
-      callComponent = file: import file (specialArgs // { inherit pkgs lib callComponent; });
-
+      specialArgs = { inherit inputs outputs fns; flake = self; };
     in
     {
-      inherit overlays fns;
-
+      inherit overlays;
       nixosConfigurations =
         let
           systemConfigFor = host: lib.nixosSystem {
@@ -66,7 +59,7 @@
       homeConfigurations =
         let
           HMConfigFor = user: home-manager.lib.homeManagerConfiguration {
-            inherit pkgs;
+            inherit pkgs; # Home-manager will make its config default and use its overlays
             extraSpecialArgs = specialArgs;
             modules = [ ./homes/${user} ];
           };

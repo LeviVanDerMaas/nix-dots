@@ -1,5 +1,8 @@
-{ outputs, ... }:
+{ pkgs, fns, outputs, config, flake, lib, ... }:
 
+let
+  nixpkgs-config-file = fns.rootRel "nixpkgs-config.nix";
+in
 {
   nix.settings = {
     experimental-features = [ "nix-command" "flakes" ];
@@ -12,11 +15,39 @@
     auto-optimise-store = true;
   };
 
+  # NOTE: There is weird, undocumented interaction between `nix.settings.nixPath` and
+  # `nixpkgs.flake.setNixPath`. When you explicitly set `nix.settings.nixPath`, you should
+  # also include the values `nixpkgs.flake.setNixPath` would have set for it (if true,
+  # which it is by default for flakes), otherwise its effects are silently overriden.
+  # https://github.com/NixOS/nixpkgs/issues/568431
+  nix.nixPath =
+    # The first two values are what would have been set by `nixpkgs.flake.setNixPath`
+    [ "nixpkgs=flake:nixpkgs" ] ++ (lib.optional config.nix.channel.enable "/nix/var/nix/profiles/per-user/root/channels")
+    # Add nixpkgs-overlays to NIX_PATH, see nixpkgs manual for why.
+    ++ [ "nixpkgs-overlays=/etc/nix/nixpkgs-overlays.nix" ];
+
+
   nixpkgs = {
-    config.allowUnfree = true;
+    config = import nixpkgs-config-file;
     overlays = builtins.attrValues outputs.overlays;
   };
-  environment.variables = { NIXPKGS_ALLOW_UNFREE = 1; };
+
+  # Also use the nixpkgs config globally when using various Nix tools in impure mode.
+  # 'config.nix` is searched for at NIXPKGS_CONFIG, which defaults to `/etc/nix/nixpkgs-config.nix`
+  # Overlays are searched for in the NIX_PATH at `nixpkgs-overlays`
+  # NOTE: THESE WILL TAKE PRECEDENCE OVER FILES IN ~/.config
+  environment.etc."nix/nixpkgs-config.nix".source = nixpkgs-config-file;
+  environment.etc."nix/nixpkgs-overlays.nix".text =
+    let
+      fRef = builtins.flakeRefToString { type = "path"; path = flake.sourceInfo.outPath; narHash = flake.narHash; };
+    in
+    # Once nix is at version 2.35, you can replace this hack by just using a (relative) path literal with getFlake 
+    # (Do this in a seperate file under this flake, that you then symlink too, like for nixpkgs-config.nix)
+    # https://github.com/NixOS/nix/pull/15290
+    fns.checkPkgVersion'
+      pkgs.nix
+      "2.34.8"
+      ''builtins.attrValues ((builtins.getFlake "${fRef}").overlays)'';
 }
 
 # Note on garbage collection of derivations and build-time-only outputs:
