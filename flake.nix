@@ -30,15 +30,13 @@
     let
       outputs = self.outputs;
       lib = nixpkgs.lib;
-      fns = import ./fns { inherit pkgs lib; }; # Custom lib
-      overlays = import ./overlays { inherit inputs outputs; };
-
-      system = "x86_64-linux";
-      pkgs = nixpkgs.legacyPackages.${system};
+      fns = import ./fns { inherit lib; }; # Custom functions.
+      overlays = import ./overlays { inherit fns; };
       specialArgs = { inherit inputs outputs fns; flake = self; };
     in
     {
-      inherit overlays;
+      inherit overlays fns;
+
       nixosConfigurations =
         let
           systemConfigFor = host: lib.nixosSystem {
@@ -59,7 +57,7 @@
       homeConfigurations =
         let
           HMConfigFor = user: home-manager.lib.homeManagerConfiguration {
-            inherit pkgs; # Home-manager will make its config default and use its overlays
+            pkgs = inputs.nixpkgs.legacyPackages.x86_64-linux;
             extraSpecialArgs = specialArgs;
             modules = [ ./homes/${user} ];
           };

@@ -44,7 +44,7 @@ in
     # Once nix is at version 2.35, you can replace this hack by just using a (relative) path literal with getFlake 
     # (Do this in a seperate file under this flake, that you then symlink too, like for nixpkgs-config.nix)
     # https://github.com/NixOS/nix/pull/15290
-    fns.checkPkgVersion'
+    pkgs.fns.checkPkgVersion'
       pkgs.nix
       "2.34.8"
       ''builtins.attrValues ((builtins.getFlake "${fRef}").overlays)'';

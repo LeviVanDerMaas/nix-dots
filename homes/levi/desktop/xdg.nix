@@ -1,4 +1,4 @@
-{ pkgs, lib, fns, config, ... }:
+{ pkgs, config, ... }:
 
 {
   # user-dirs
@@ -14,7 +14,7 @@
   xdg.configFile."menus/applications.menu".source =
   let
     # We use this particular one from Plasma6 because I like its setup.
-    plasma-menu = fns.fetchRawFileFromGitHub {
+    plasma-menu = pkgs.fns.fetchRawFileFromGitHub {
       owner = "KDE";
       repo = "plasma-workspace";
       rev = "11e7f5306fa013ec5c2b894a28457dabf5c42bad";

@@ -1,11 +1,11 @@
-{ pkgs, lib, fns, ... }:
+{ pkgs, lib, ... }:
 
 {
   programs.kitty = {
     enable = true;
 
     # Wrap kitty to launch all as single instance
-    package = fns.wrapPkgExe {
+    package = pkgs.fns.wrapPkgExe {
       package = pkgs.kitty;
       makeWrapperArgs = [
         "--add-flag" "-1"

@@ -1,4 +1,4 @@
-{ pkgs, fns, ... }:
+{ pkgs, ... }:
 
 {
   programs.less = {
@@ -16,7 +16,7 @@
     # As such we should also prefer setting only options that are unlikely to interfere
     # with any others set by default by other programs. If we want to invoke less with
     # one of these flags removed, call with -+<flagname>
-    package = fns.wrapPkgExe {
+    package = pkgs.fns.wrapPkgExe {
       package = pkgs.less;
       makeWrapperArgs = [
         "--add-flags"
