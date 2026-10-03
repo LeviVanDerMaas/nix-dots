@@ -1,14 +1,11 @@
 { lib, ... }@args:
 
 let
-  fnsArgs = args // { inherit fns; };
-  callFns = file: import file fnsArgs;
-
-  fns = {
-    helpers = callFns ./helpers.nix;
-    filesystem = callFns ./filesystem.nix;
-    packages = callFns ./packages.nix;
-    fetchers = callFns ./fetchers.nix;
-  };
+  composeCallables = import ./composeCallables.nix args;
 in
-lib.mergeAttrsList (builtins.attrValues fns) // fns
+composeCallables "fns" { extraArgs = args; } {
+  helpers = ./helpers.nix;
+  filesystem = ./filesystem.nix;
+  packages = ./packages.nix;
+  fetchers = ./fetchers.nix;
+} // { inherit composeCallables; }

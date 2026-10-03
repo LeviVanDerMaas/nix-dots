@@ -1,4 +1,4 @@
-{ pkgs, lib, fns, ... }:
+{ lib, ... }:
 
 rec {
   /**
