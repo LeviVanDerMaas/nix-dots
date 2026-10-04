@@ -48,7 +48,7 @@ lib.mkIf cfg.enable {
       },
 
       misc = {
-        focus_on_activate = true, -- Let windows request focus; this can also be set per window
+        focus_on_activate = true, -- Let windows request focus; this is the global default and can also be set per window
         disable_hyprland_logo = true,
         disable_splash_rendering = true,
       },

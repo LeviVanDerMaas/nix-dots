@@ -36,14 +36,6 @@
 
     # User-specific
     users.levi.enable = true;
-    users.levi.extraHMConfig = {
-      modules = {
-        hyprland = {
-          enable = true;
-          integrations.gaming.enable = true;
-        };
-      };
-    };
   };
 
 

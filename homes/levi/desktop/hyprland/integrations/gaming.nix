@@ -1,13 +1,15 @@
-{ config, lib, ... }:
+{ config, lib, osConfig ? {}, ... }:
 
 let
   cfg = config.modules.hyprland.integrations.gaming;
 in
 {
   options.modules.hyprland.integrations.gaming = {
-    enable = lib.mkEnableOption ''
-      Integration for games.
-    '';
+    enable = lib.mkOption {
+      type = lib.types.bool;
+      default = osConfig.modules.gaming.enable or false;
+      description = "Integration, mostly workspace and window rules, for games.";
+    };
     launcherWorkspace = lib.mkOption {
       type = lib.types.either lib.types.int lib.types.str;
       default = 4;
