@@ -15,14 +15,17 @@
 
     shellAliases =
       let
-        rebuild = "sudo nixos-rebuild --flake .";
+        rebuild = "sudo nixos-rebuild";
       in
       {
+        # These aliases rely on /etc/nixos/flake.nix being symlinked to the working
+        # dir ouf our NixOS flake project, but the advantage is they're system wide.
         dots-switch = "${rebuild} switch";
         dots-boot = "${rebuild} boot";
         dots-test = "${rebuild} test";
         dots-dryb = "${rebuild} dry-build";
         dots-drya = "${rebuild} dry-activate";
+        dots-repl = "${rebuild} repl";
 
         nixpkgs-repl = "nix repl --expr 'import <nixpkgs> {}'";
 

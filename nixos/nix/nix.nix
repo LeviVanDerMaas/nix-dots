@@ -15,6 +15,10 @@ in
     auto-optimise-store = true;
   };
 
+  # Since levi manages all systems, and to protect against building a stray config file
+  # left in /etc/nixos when accidentally invoking nixos cli tools without --flake...
+  environment.etc."nixos/flake.nix".source = pkgs.fns.mkOutOfStoreSymlink /home/levi/.dots/flake.nix;
+
   # NOTE: There is weird, undocumented interaction between `nix.settings.nixPath` and
   # `nixpkgs.flake.setNixPath`. When you explicitly set `nix.settings.nixPath`, you should
   # also include the values `nixpkgs.flake.setNixPath` would have set for it (if true,
@@ -25,7 +29,6 @@ in
     [ "nixpkgs=flake:nixpkgs" ] ++ (lib.optional config.nix.channel.enable "/nix/var/nix/profiles/per-user/root/channels")
     # Add nixpkgs-overlays to NIX_PATH, see nixpkgs manual for why.
     ++ [ "nixpkgs-overlays=/etc/nix/nixpkgs-overlays.nix" ];
-
 
   nixpkgs = {
     config = import nixpkgs-config-file;
