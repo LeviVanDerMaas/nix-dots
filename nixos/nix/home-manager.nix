@@ -1,4 +1,4 @@
-{ inputs, specialArgs, ... }:
+{ inputs, extraModuleArgs, ... }:
 
 # Note that this configures only the HM NixOS module and has no effect for standalone.
 {
@@ -8,6 +8,9 @@
   ];
   home-manager = {
     useGlobalPkgs = true;
-    extraSpecialArgs = specialArgs;
+
+    # Do not inherit specialArgs directly from the `specialArgs` module argument,
+    # as that can mess things up live override HM's modulesPath with NixOS's.
+    extraSpecialArgs = extraModuleArgs;
   };
 }

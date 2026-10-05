@@ -33,7 +33,9 @@
       lib = nixpkgs.lib;
       fns = import ./fns { inherit lib; }; # Custom functions.
       overlays = import ./overlays { inherit fns; };
-      specialArgs = { inherit inputs outputs fns; flake = self; };
+      # Use a distinct name for thing to pass to specialArgs to distinguish
+      # between specialArgs set by us and implcitly by the module system.
+      extraModuleArgs = { inherit inputs outputs extraModuleArgs fns; flake = self; };
     in
     {
       inherit overlays fns;
@@ -41,7 +43,7 @@
       nixosConfigurations =
         let
           systemConfigFor = host: lib.nixosSystem {
-            inherit specialArgs;
+            specialArgs = extraModuleArgs;
             modules = [ ./systems/${host}/configuration.nix ];
           };
           systemConfigsFor = hosts: lib.genAttrs hosts systemConfigFor;
@@ -59,7 +61,7 @@
         let
           HMConfigFor = user: home-manager.lib.homeManagerConfiguration {
             pkgs = inputs.nixpkgs.legacyPackages.x86_64-linux;
-            extraSpecialArgs = specialArgs;
+            extraSpecialArgs = extraModuleArgs;
             modules = [ ./homes/${user} ];
           };
           HMConfigsFor = users: lib.genAttrs users HMConfigFor;
