@@ -6,4 +6,5 @@
 fns.composeCallables "fns" { extraArgs = args; } {
   packages = ./packages.nix;
   fetchers = ./fetchers.nix;
+  files = ./files.nix;
 }
