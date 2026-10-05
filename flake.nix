@@ -7,12 +7,13 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    levisNeovimConfig = {
+    leviNeovimConfig = {
+      # No need to follow nixpkgs with the hmModule's `useHMPkgs` option
       url = "github:LeviVanDerMaas/neovim-config";
-      inputs.nixpkgs.follows = "nixpkgs";
     };
 
     noctalia = {
+      # Don't follow nixpkgs to take advantage of cachix
       url = "github:noctalia-dev/noctalia/cachix";
     };
   };

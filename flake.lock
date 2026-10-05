@@ -21,18 +21,16 @@
         "type": "github"
       }
     },
-    "levisNeovimConfig": {
+    "leviNeovimConfig": {
       "inputs": {
-        "nixpkgs": [
-          "nixpkgs"
-        ]
+        "nixpkgs": "nixpkgs"
       },
       "locked": {
-        "lastModified": 1788303064,
-        "narHash": "sha256-40IfnCxYB8EKy6potx9kdIlv9IOX2VCPWNaBSQc1Y3o=",
+        "lastModified": 1791305632,
+        "narHash": "sha256-e9c2QH9rXoaHceD6WMUQgkf4R8JbYkC9w/gtQ3Njp64=",
         "owner": "LeviVanDerMaas",
         "repo": "neovim-config",
-        "rev": "6a2f5ea8fffa0faa62a04b0dcf445a710877e7e8",
+        "rev": "00ede70019a9a2cc8cc245e3a8658b6b68519dc6",
         "type": "github"
       },
       "original": {
@@ -42,6 +40,22 @@
       }
     },
     "nixpkgs": {
+      "locked": {
+        "lastModified": 1791048980,
+        "narHash": "sha256-KgItSKML8Xvte0B7/uGnBDsYzSnnKHcOaiUbgWBXLXw=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "a7868a727837f3c09cee2ce0ca671c76b1589fed",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "ref": "nixos-unstable",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "nixpkgs_2": {
       "locked": {
         "lastModified": 1787736819,
         "narHash": "sha256-cV5xEJJK3BvhU8rEd4mC9UsmDi5qscv/kzGPhBRC5WA=",
@@ -57,7 +71,7 @@
         "type": "github"
       }
     },
-    "nixpkgs_2": {
+    "nixpkgs_3": {
       "locked": {
         "lastModified": 1788614874,
         "narHash": "sha256-PRK1fSEiAcO29DkUoOlsVLGYRK3h1YKVr+qQJB0VcYQ=",
@@ -72,7 +86,7 @@
     },
     "noctalia": {
       "inputs": {
-        "nixpkgs": "nixpkgs_2"
+        "nixpkgs": "nixpkgs_3"
       },
       "locked": {
         "lastModified": 1789053136,
@@ -92,8 +106,8 @@
     "root": {
       "inputs": {
         "home-manager": "home-manager",
-        "levisNeovimConfig": "levisNeovimConfig",
-        "nixpkgs": "nixpkgs",
+        "leviNeovimConfig": "leviNeovimConfig",
+        "nixpkgs": "nixpkgs_2",
         "noctalia": "noctalia"
       }
     }

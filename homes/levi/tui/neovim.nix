@@ -1,10 +1,13 @@
 { inputs, ... }:
 
 {
-  imports = [ inputs.levisNeovimConfig.homeManagerModules.default ];
+  imports = [ inputs.leviNeovimConfig.homeManagerModules.default ];
 
   config = {
-    programs.levisNeovimConfig.enable = true;
+    programs.leviNeovimConfig = {
+      enable = true;
+      useHMPkgs = true;
+    };
     # Add a shell function that opens man pages in neovim
     programs.bash.initExtra = /* bash */ ''
       viman() { nvim +"Man $* | only"; }
