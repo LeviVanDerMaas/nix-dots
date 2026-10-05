@@ -30,8 +30,10 @@
         nixpkgs-repl = "nix repl --expr 'import <nixpkgs> {}'";
 
         ls = "ls --color=auto --hyperlink=auto";
-        l = "ls -Ah";
-        ll = "ls -Ahl";
+        l = "ls -A";
+        ll = "ls -Al";
+        lh = "ls -Ah";
+        llh = "ls -Ahl";
 
         zzz = "systemctl suspend";
       };
