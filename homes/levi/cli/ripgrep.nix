@@ -1,14 +1,10 @@
-{ config, ... }:
-
 {
   programs.ripgrep = {
     enable = true;
     arguments = [
-      "--hidden" 
+      "--hidden"
       "--smart-case" # case-insensitive if all lower-case.
-      "--glob=!.nix-profile/*"
-      "--glob=!.git/*"
-      "--glob=!/nix/store/*"
+      "--ignore-file=${./_rg_fd_ignore}"
     ];
   };
 }

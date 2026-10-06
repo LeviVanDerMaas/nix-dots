@@ -4,11 +4,7 @@
     extraOptions = [
       "--hidden"
     ];
-    ignores = [
-      ".git/"
-      "/nix/store/"
-      ".nix-profile/"
-      "**/.local/share/Trash"
-    ];
   };
+
+  xdg.configFile."fd/ignore".source = ./_rg_fd_ignore;
 }
