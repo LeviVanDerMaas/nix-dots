@@ -15,6 +15,7 @@
     themeFile = "Catppuccin-Mocha";
 
     settings = {
+      remember_window_size = false;
       confirm_os_window_close = 0;
       background_blur = 1;
       background_opacity = "0.80";
