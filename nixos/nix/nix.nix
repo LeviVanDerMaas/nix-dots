@@ -13,22 +13,22 @@ in
     keep-outputs = true;
 
     auto-optimise-store = true;
+
+    # NOTE: There is weird, undocumented interaction between `nix.settings.nixPath` and
+    # `nixpkgs.flake.setNixPath`. When you explicitly set `nix.settings.nixPath`, you should
+    # also include the values `nixpkgs.flake.setNixPath` would have set for it (if true,
+    # which it is by default for flakes), otherwise its effects are silently overriden.
+    # https://github.com/NixOS/nixpkgs/issues/568431
+    nix-path =
+      # The first two values are what would have been set by `nixpkgs.flake.setNixPath`
+      [ "nixpkgs=flake:nixpkgs" ] ++ (lib.optional config.nix.channel.enable "/nix/var/nix/profiles/per-user/root/channels")
+      # Add nixpkgs-overlays to NIX_PATH, see nixpkgs manual for why.
+      ++ [ "nixpkgs-overlays=/etc/nix/nixpkgs-overlays.nix" ];
   };
 
   # Since levi manages all systems, and to protect against building a stray config file
   # left in /etc/nixos when accidentally invoking nixos cli tools without --flake...
   environment.etc."nixos/flake.nix".source = pkgs.fns.mkOutOfStoreSymlink /home/levi/.dots/flake.nix;
-
-  # NOTE: There is weird, undocumented interaction between `nix.settings.nixPath` and
-  # `nixpkgs.flake.setNixPath`. When you explicitly set `nix.settings.nixPath`, you should
-  # also include the values `nixpkgs.flake.setNixPath` would have set for it (if true,
-  # which it is by default for flakes), otherwise its effects are silently overriden.
-  # https://github.com/NixOS/nixpkgs/issues/568431
-  nix.nixPath =
-    # The first two values are what would have been set by `nixpkgs.flake.setNixPath`
-    [ "nixpkgs=flake:nixpkgs" ] ++ (lib.optional config.nix.channel.enable "/nix/var/nix/profiles/per-user/root/channels")
-    # Add nixpkgs-overlays to NIX_PATH, see nixpkgs manual for why.
-    ++ [ "nixpkgs-overlays=/etc/nix/nixpkgs-overlays.nix" ];
 
   nixpkgs = {
     config = import nixpkgs-config-file;
