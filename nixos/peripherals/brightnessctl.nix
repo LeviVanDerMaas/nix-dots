@@ -22,9 +22,15 @@ in
         description = "Percentage value by which to change brightness";
       };
       minBrightness = lib.mkOption {
-        type = lib.types.numbers.between 0 100;
-        default = 1;
-        description = "Prevent brightness from falling below this percentage when using keys";
+        type = lib.types.int;
+        default = 0;
+        description = ''
+          Prevents brightness from being set below this absolute value. Since
+          these are absolute values, a value of "1" is very likely
+          indistinguishable from 0% brightness. You can use "brightnessctl max"
+          to get the max value of the screen's brightness, then divide that by 100 to
+          get the value corresponding to a 1% brightness.
+        '';
       };
     };
   };
@@ -44,7 +50,7 @@ in
           {
             keys = [ 224 ];
             events = [ "key" "rep" ];
-            command = "${brightnessctl} -n=${minBrightness}% set ${step}%-";
+            command = "${brightnessctl} -n${minBrightness} set ${step}%-";
           }
           {
             keys = [ 225 ];

@@ -51,7 +51,7 @@ in
       ${ # If we didn't set brightness binds at the OS level (i.e. for builtin screens), then let Noctalia handle it
         let
           bctl = osConfig.modules.brightnessctl or {};
-          osBinds = (bctl.enabled or false) && (bctl.brightnessKeys or false);
+          osBinds = (bctl.enable or false) && (bctl.brightnessKeys.enable or false);
         in
         lib.optionalString (!osBinds) /* lua */ ''
           noctBind("XF86MonBrightnessUp", "brightness-up", { locked = true, repeating = true })

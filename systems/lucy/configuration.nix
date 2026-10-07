@@ -25,7 +25,10 @@
     # System-wide
     hyprland.enable = true;
     plasma.enable = true;
-    brightnessctl.enable = true;
+    brightnessctl = {
+      enable = true;
+      brightnessKeys.minBrightness = 240;
+    };
 
     # User-specific
     users.levi.enable = true;
