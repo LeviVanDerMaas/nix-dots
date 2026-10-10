@@ -7,13 +7,10 @@ in
   config = lib.mkIf cfg.enable {
     modules.noctalia = {
       enable = true;
+      targetDesktops = "Hyprland";
     };
 
     wayland.windowManager.hyprland.extraConfig = /* lua */ ''
-      hl.on("hyprland.start", function ()
-        hl.exec_cmd("noctalia")
-      end)
-
       hl.layer_rule {
         name = "noctalia",
         match = { namespace = "^noctalia-(bar-.+|notification|dock|panel|attached-panel|osd)$" },
