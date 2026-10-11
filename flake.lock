@@ -26,11 +26,11 @@
         "nixpkgs": "nixpkgs"
       },
       "locked": {
-        "lastModified": 1791305632,
-        "narHash": "sha256-e9c2QH9rXoaHceD6WMUQgkf4R8JbYkC9w/gtQ3Njp64=",
+        "lastModified": 1791749571,
+        "narHash": "sha256-DhB13EEgmuNNr8dbWauGjkL1oE7O2cBh3DNfQeV1Q4w=",
         "owner": "LeviVanDerMaas",
         "repo": "neovim-config",
-        "rev": "00ede70019a9a2cc8cc245e3a8658b6b68519dc6",
+        "rev": "cb650fbed6754b0de0581695c38bd4f0319d9be0",
         "type": "github"
       },
       "original": {
