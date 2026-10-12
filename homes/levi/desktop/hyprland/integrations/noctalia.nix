@@ -37,15 +37,16 @@ in
       noctBind("XF86AudioPrev", "media previous", { locked = true })
       noctBind("SHIFT + XF86AudioNext", "media next-player", { locked = true })
       noctBind("SHIFT + XF86AudioPrev", "media previous-player", { locked = true })
-      -- These 2 below do not currently exist in v5 but I assume something like them will eventually
-      -- noctBind("XF86AudioForward", "media seekRelative 5", { locked = true })
-      -- noctBind("XF86AudioRewind", "media seekRelative -5", { locked = true })
+      -- For the below to v4 had a native IPC call for it, but v5 doesn't as of yet.
+      hl.bind("XF86AudioForward", DIS.exec_raw("playerctl position 5+"), { locked = true, repeating = true })
+      hl.bind("XF86AudioRewind", DIS.exec_raw("playerctl position 5-"), { locked = true, repeating = true })
       -- System controls
       noctBind("XF86AudioRaiseVolume", "volume-up", { locked = true, repeating = true })
       noctBind("XF86AudioLowerVolume", "volume-down", { locked = true, repeating = true })
       noctBind("XF86AudioMute", "volume-mute", { locked = true })
       noctBind("XF86AudioMicMute", "mic-mute", { locked = true })
-      ${ # If we didn't set brightness binds at the OS level (i.e. for builtin screens), then let Noctalia handle it
+      ${
+        # If we didn't set brightness binds at the OS level (i.e. for builtin screens), then let Noctalia handle it
         let
           bctl = osConfig.modules.brightnessctl or {};
           osBinds = (bctl.enable or false) && (bctl.brightnessKeys.enable or false);
