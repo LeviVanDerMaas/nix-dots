@@ -2,6 +2,8 @@
 
 {
   home.packages = with pkgs; [
-    ffmpeg
+    zip # Create zip archives
+    unzip # Unpack zip archives
+    ffmpeg # Multimedia processing library
   ];
 }
