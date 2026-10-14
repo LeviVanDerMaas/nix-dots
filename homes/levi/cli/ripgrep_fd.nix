@@ -43,7 +43,9 @@ let
     /nix/var/log/
     /nix/var/nix/profiles
     /nix/var/nix/gcroots
-    **/.nix-profile/
+    # Small amount of overlap here between XDG_*_HOMEs and this being on XDG_*_DIRSs;
+    # most stuff in here is unique though so worth keeping on.
+    # **/.nix-profile/
     **/.local/state/nix/profiles/
     **/.local/state/home-manager/gcroots/
     **/.nix-defexpr/
