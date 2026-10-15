@@ -14,12 +14,6 @@ in
 
   options.modules.noctalia = {
     enable = lib.mkEnableOption ''Install and configure Noctalia, a Wayland compositor shell.'';
-
-    targetDesktops = lib.mkOption {
-      type = lib.types.either lib.types.str (lib.types.listOf lib.types.str);
-      default = [];
-      description = ''Start noctalia only when XDG_CURRENT_DESKTOP matches one of these values'';
-    };
   };
 
 
@@ -27,9 +21,6 @@ in
 
 
   config = lib.mkIf cfg.enable {
-    programs.noctalia.systemd.enable = true;
-    modules.services.conditonSystemdServiceOnDE = { noctalia = cfg.targetDesktops; };
-
     programs.noctalia = {
       enable = true;
       customPalettes.CatppuccinMochaBlue.dark = {
