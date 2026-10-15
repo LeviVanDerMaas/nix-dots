@@ -68,8 +68,18 @@ in
           Appearance = {
             custom_palette = "true";
             icon_theme = "breeze-dark";
-            standard_dialogs = "default";
             style = "Breeze";
+
+            # WARNING:
+            # By default ("default"), Qt apps will use Qt's native dialogs instead of portals. For
+            # portals, the platformtheme must be programmed/configured to call them.
+            # WARNING:
+            # Setting this to "xdgdesktopportal" when a portal backend used in your spec is
+            # broken/configured incorrectly may cock up that portal for the WHOLE system even if it
+            # worked fine outside Qt Apps while this was set to "default".
+            # WARNING:
+            # Chaning this value will not take proper effect until portal services are restarted.
+            standard_dialogs = "xdgdesktopportal";
           };
           Interface = {
             activate_item_on_single_click = "1";

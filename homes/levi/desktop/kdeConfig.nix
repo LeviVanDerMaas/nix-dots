@@ -8,7 +8,7 @@ let
   toINI = lib.generators.toINI {};
 in
 {
-  options.modules.kdeConfig = { 
+  options.modules.kdeConfig = {
     enable = lib.mkOption {
       type = lib.types.bool;
       default = true;
@@ -45,13 +45,59 @@ in
         This ensures that while inside KDE, KDE manages Qt apps.
       '';
     };
-  };
+    xdg-desktop-portal-kde = {
+      enable = lib.mkEnableOption ''
+        Install `kdePackages.xdg-desktop-portal-kde` and set some additional
+        configuration to make it work (mostly) correctly outside of Plasma.
+      '';
+      forceKdePlatformTheme = lib.mkOption {
+        type = lib.types.bool;
+        default = true;
+        description = ''
+          Forces `QT_QPA_PLATFORMTHEME=kde` in the portal's systemd service environment.
+          This fixes some issues where the portal depends on the presence of KDE's Qt
+          platformtheme to construct and style dialogs properly when certain parameters are passed,
+          and will fall back to native Qt dialogs without it (e.g. the File Picker portal will
+          fall back to the native Qt one if `directory = true` is passed when invoking the portal,
+          though it works fine without any parameters).
 
-  config = lib.mkIf cfg.enable {
-    xdg.configFile = {
-      kdeglobals.text = lib.mkIf (cfg.kdeglobals != null) cfg.kdeglobals;
-      "plasma-workspace/env/enforcePlatformtheme.sh".text =
-        lib.mkIf cfg.enforceQtPlatformthemeInPlasma "export QT_QPA_PLATFORMTHEME=kde";
+          DOWNSIDE: The Qt styling for portal dialogs now is managed by the KDE platformtheme too
+          and ignores the global Qt styling. Though, this is not an issue if you are already using
+          Breeze as your Qt theme globally, provided you have it configured properly.
+        '';
+      };
     };
   };
+
+  config = lib.mkIf cfg.enable (lib.mkMerge [
+    {
+      xdg.configFile = {
+        kdeglobals.text = lib.mkIf (cfg.kdeglobals != null) cfg.kdeglobals;
+        "plasma-workspace/env/enforcePlatformtheme.sh".text =
+          lib.mkIf cfg.enforceQtPlatformthemeInPlasma "export QT_QPA_PLATFORMTHEME=kde";
+        };
+    }
+
+    (lib.mkIf cfg.xdg-desktop-portal-kde.enable {
+      xdg.portal = {
+        enable = true;
+        extraPortals = [ pkgs.kdePackages.xdg-desktop-portal-kde ];
+      };
+      home.packages = [
+        # Needed because even when using a different platformtheme, the portal *might*
+        # break without this being present depending on Qt configuration.
+        # It is also needed for the below systemd service envvar hack to work.
+        pkgs.kdePackages.plasma-integration
+      ];
+      xdg.configFile."systemd/user/plasma-xdg-desktop-portal-kde.service.d/force_qt_platformtheme_kde.conf".text =
+        lib.mkIf cfg.xdg-desktop-portal-kde.forceKdePlatformTheme ''
+          [Service]
+          Environment=QT_QPA_PLATFORMTHEME=kde
+        '';
+      # systemd.user.services.plasma-xdg-desktop-portal-kde.Service.Environment =
+      #   lib.mkIf cfg.xdg-desktop-portal-kde.forceKdePlatformTheme [
+      #     "QT_QPA_PLATFORMTHEME=kde"
+      #   ];
+    })
+  ]);
 }

@@ -11,15 +11,12 @@ let
   cfg = config.modules.hyprland;
 in
 lib.mkIf cfg.enable {
-  xdg.portal = {
-    extraPortals = with pkgs; [ 
-      xdg-desktop-portal-gtk 
-      kdePackages.xdg-desktop-portal-kde
-    ];
-    config.hyprland = { # Portal spec enforces lower-case config names.
-      default = "hyprland;gtk";
-      "org.freedesktop.impl.portal.FileChooser" = "kde";
-    };
+
+  xdg.portal.extraPortals = with pkgs; [ xdg-desktop-portal-gtk ];
+  modules.kdeConfig.xdg-desktop-portal-kde.enable = true;
+  xdg.portal.config.hyprland = {
+    default = "hyprland;gtk";
+    "org.freedesktop.impl.portal.FileChooser" = "kde";
   };
 
   # This helps persuade most gtk apps to actually respect portal config.
