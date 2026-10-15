@@ -7,7 +7,7 @@ in
   options.modules.texlive = {
     enable = lib.mkOption {
       type = lib.types.bool;
-      default = true;
+      default = false;
       description = ''
         Install all of Tex Live and do some additional configuration.
         *All* because I cannot be arsed to deal with the specifics of
