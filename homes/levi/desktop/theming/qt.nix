@@ -23,7 +23,7 @@ in
     };
   };
 
-  config = lib.mkIf cfg.enable { 
+  config = lib.mkIf cfg.enable {
     qt = {
       enable = true;
       platformTheme.name = "qtct";
@@ -34,13 +34,98 @@ in
       # Wayland support: HM Qt module doesn't seem to ship this by default.
       qtwayland # for Qt6
       pkgs.libsForQt5.qtwayland # for Qt5
-     
+
       # Breeze Theme/style:
       breeze # Breeze for Qt6
       breeze.qt5 # Breeze for Qt5 (libsForQt5 pkg causes collisions with Breeze 6).
       catppuccin-kde-mocha-blue
     ];
 
+    # Write the actual configuration files for qtct
+    xdg.configFile =
+      let
+        # Set the color scheme used by native Qt (e.g. some platformthemes, such as kde,
+        # have components which source at least part of their palette config elsewhere).
+        # qt6ct expects slightly different config values from qt5ct for color
+        # schemes: if you want a consistent colorscheme between the two, these differences
+        # are only at the end. I'm not entirely sure what changes, but I have confirmed the
+        # validity of this by checking the effects these settings have both for Breeze and
+        # for Catppuccin KDE and the result is consistent for both versions of qtct.
+        colorsConf = v: {
+          ColorScheme = {
+            active_colors = "#ffcdd6f4, #ff313244, #ff3d3d5e, #ff2f2f48, #ff0c0c12, #ff151520, #ffcdd6f4, #ffcdd6f4, #ffcdd6f4, #ff1e1e2e, #ff181825, #ff09090d, #ff89b4fa, #ff11111b, #ff89b4fa, #ffcba6f7, #ff181825, #ffffffff, #ff1e1e2e, #ffcdd6f4, "
+              + "${if v == 5 then "#806c7086" else "#ffa6adc8, #ff89b4fa"}";
+            disabled_colors = "#ff6c7086, #ff313244, #ff45475a, #ff313244, #ff11111b, #ff181825, #ff6c7086, #ffcdd6f4, #ff6c7086, #ff1e1e2e, #ff181825, #ff11111b, #ff181825, #ff6c7086, #ffa9bcdb, #ffc7cceb, #ff181825, #ffffffff, #ff1e1e2e, #ffcdd6f4, #806c7086"
+              + "${if v == 5 then "" else ", #ff181825"}";
+            inactive_colors = "#ffcdd6f4, #ff313244, #ff3d3d5e, #ff2f2f48, #ff0c0c12, #ff151520, #ffcdd6f4, #ffcdd6f4, #ffcdd6f4, #ff1e1e2e, #ff181825, #ff09090d, #ff89b4fa, #ff11111b, #ff89b4fa, #ffcba6f7, #ff181825, #ffffffff, #ff1e1e2e, #ffcdd6f4, #806c7086, "
+              + "${if v == 5 then "#806c7086" else "#ffa6adc8, #ff89b4fa"}";
+          };
+        };
+
+        # qt5ct and qt6ct config values that are exactly the same between both.
+        # THese also control some none-theme behaviour, such as interface behaviour
+        sharedConf = {
+          Appearance = {
+            custom_palette = "true";
+            icon_theme = "breeze-dark";
+            standard_dialogs = "default";
+            style = "Breeze";
+          };
+          Interface = {
+            activate_item_on_single_click = "1";
+            buttonbox_layout = "0";
+            cursor_flash_time = "1000";
+            dialog_buttons_have_icons = "1";
+            double_click_interval = "400";
+            keyboard_scheme = "2";
+            menus_have_icons = "true";
+            show_shortcuts_in_context_menus = "true";
+            toolbutton_style = "4";
+            underline_shortcut = "1";
+            wheel_scroll_lines = "3";
+          };
+          Troubleshooting = {
+            force_raster_widgets = "1";
+          };
+        };
+
+        toINI = lib.generators.toINI {};
+        confDir = v: "qt${toString v}ct";
+        confFile = v: "${confDir v}/qt${toString v}ct.conf";
+        colorsFile = v: "${confDir v}/colors/catppuccin-mocha-blue-breeze.conf";
+        absColorsFile = v: "${config.xdg.configHome}/${colorsFile v}";
+      in
+      {
+        "${confFile 5}".text = toINI (lib.recursiveUpdate
+          sharedConf
+          {
+            Appearance = {
+              color_scheme_path = absColorsFile 5;
+            };
+            Fonts = {
+              fixed = "\"Noto Sans,10,-1,5,50,0,0,0,0,0,Regular\"";
+              general = "\"Noto Sans,10,-1,5,50,0,0,0,0,0,Regular\"";
+            };
+          }
+        );
+        "${confFile 6}".text = toINI (lib.recursiveUpdate
+          sharedConf
+          {
+            Appearance = {
+              color_scheme_path = absColorsFile 6;
+            };
+            Fonts = {
+              fixed = "\"Noto Sans,10,-1,5,400,0,0,0,0,0,0,0,0,0,0,1,Regular\"";
+              general = "\"Noto Sans,10,-1,5,400,0,0,0,0,0,0,0,0,0,0,1,Regular\"";
+            };
+          }
+        );
+
+        "${colorsFile 5}".text = toINI (colorsConf 5);
+        "${colorsFile 6}".text = toINI (colorsConf 6);
+      };
+
+    # SETUP BREEZE COLORING:
     # Breeze's color scheme is entirely customizable. Most of the color scheme
     # is applied from values set in KDE config files (this is also actually how
     # Breeze Dark works), but in some cases colors are taken directly from the
@@ -61,7 +146,7 @@ in
     #    non-existent colorscheme), these colors should override the earlier set
     #    ones. However the consistency of this is flakey when not using `kde`
     #    as the platformtheme and prone to behavioural changes between updates.
-    # 6. For some reason, in some obscure cases step 4 will fail to apply to 
+    # 6. For some reason, in some obscure cases step 4 will fail to apply to
     #    certain UI elements (e.g. the text in the menu bar of VLC media
     #    player). In these cases step 5 seems to fix the issue consistently
     #    even when not running under the kde platformtheme. This weird
@@ -72,94 +157,13 @@ in
     #    if the aforementioned XDG data or config file cannot be found), fall
     #    back to defaults. Defaults may come from a variety of places (app
     #    itself, QtPallete, Breeze) and it's hard to predict which it'll be.
-
     modules.kdeConfig.kdeglobals = lib.mkMerge [
       { UiSettings.ColorScheme = "CatppuccinMochaBlue"; }
-      ( 
+      (
         # To deal with the issue described above in step 6:
         builtins.readFile
        "${catppuccin-kde-mocha-blue}/share/color-schemes/CatppuccinMochaBlue.colors"
       )
     ];
-
-    xdg.configFile = let
-      toStr = builtins.toString;
-      toINI = lib.generators.toINI {};
-      confDir = v: "qt${toStr v}ct";
-      confFile = v: "${confDir v}/qt${toStr v}ct.conf";
-      colorsFile = v: "${confDir v}/colors/catppuccin-mocha-blue-breeze.conf";
-      absColorsFile = v: "${config.xdg.configHome}/${colorsFile v}";
-
-      # qt6ct expects slightly different config values from qt5ct for color
-      # schemes. In the case of colorschemes (assuming we aim for a consistent
-      # coloring between both versions) these differences are only at the end.
-      # Not entirely sure what changes but I have checked that this is also
-      # consistent with what happens in Breeze and Catppuccin-KDE and as far as
-      # I can tell the theme is consist between qt5 and qt6 apps, so whatever.
-      colorsConf = v: { 
-        ColorScheme = {
-          active_colors = "#ffcdd6f4, #ff313244, #ff3d3d5e, #ff2f2f48, #ff0c0c12, #ff151520, #ffcdd6f4, #ffcdd6f4, #ffcdd6f4, #ff1e1e2e, #ff181825, #ff09090d, #ff89b4fa, #ff11111b, #ff89b4fa, #ffcba6f7, #ff181825, #ffffffff, #ff1e1e2e, #ffcdd6f4, "
-            + "${if v == 5 then "#806c7086" else "#ffa6adc8, #ff89b4fa"}";
-          disabled_colors = "#ff6c7086, #ff313244, #ff45475a, #ff313244, #ff11111b, #ff181825, #ff6c7086, #ffcdd6f4, #ff6c7086, #ff1e1e2e, #ff181825, #ff11111b, #ff181825, #ff6c7086, #ffa9bcdb, #ffc7cceb, #ff181825, #ffffffff, #ff1e1e2e, #ffcdd6f4, #806c7086"
-            + "${if v == 5 then "" else ", #ff181825"}";
-          inactive_colors = "#ffcdd6f4, #ff313244, #ff3d3d5e, #ff2f2f48, #ff0c0c12, #ff151520, #ffcdd6f4, #ffcdd6f4, #ffcdd6f4, #ff1e1e2e, #ff181825, #ff09090d, #ff89b4fa, #ff11111b, #ff89b4fa, #ffcba6f7, #ff181825, #ffffffff, #ff1e1e2e, #ffcdd6f4, #806c7086, "
-            + "${if v == 5 then "#806c7086" else "#ffa6adc8, #ff89b4fa"}";
-        };
-      }; 
-
-      # qt5ct and qt6ct config values that are exactly the same between both.
-      sharedConf = {
-        Appearance = {
-          custom_palette = "true";
-          icon_theme = "breeze-dark";
-          standard_dialogs = "default";
-          style = "Breeze";
-        };
-        Interface = {
-          activate_item_on_single_click = "1";
-          buttonbox_layout = "0";
-          cursor_flash_time = "1000";
-          dialog_buttons_have_icons = "1";
-          double_click_interval = "400";
-          keyboard_scheme = "2";
-          menus_have_icons = "true";
-          show_shortcuts_in_context_menus = "true";
-          toolbutton_style = "4";
-          underline_shortcut = "1";
-          wheel_scroll_lines = "3";
-        };
-        Troubleshooting = {
-          force_raster_widgets = "1";
-        };
-      };
-    in {
-      "${confFile 5}".text = toINI (lib.recursiveUpdate
-        sharedConf
-        {
-          Appearance = {
-            color_scheme_path = absColorsFile 5;
-          };
-          Fonts = {
-            fixed = "\"Noto Sans,10,-1,5,50,0,0,0,0,0,Regular\"";
-            general = "\"Noto Sans,10,-1,5,50,0,0,0,0,0,Regular\"";
-          };
-        }
-      );
-      "${confFile 6}".text = toINI (lib.recursiveUpdate 
-        sharedConf
-        {
-          Appearance = {
-            color_scheme_path = absColorsFile 6;
-          };
-          Fonts = {
-            fixed = "\"Noto Sans,10,-1,5,400,0,0,0,0,0,0,0,0,0,0,1,Regular\"";
-            general = "\"Noto Sans,10,-1,5,400,0,0,0,0,0,0,0,0,0,0,1,Regular\"";
-          };
-        }
-      );
-
-      "${colorsFile 5}".text = toINI (colorsConf 5);
-      "${colorsFile 6}".text = toINI (colorsConf 6);
-    };
   };
 }
