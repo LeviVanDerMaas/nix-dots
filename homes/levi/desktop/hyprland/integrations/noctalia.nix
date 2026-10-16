@@ -1,4 +1,4 @@
-{ config, lib, osConfig ? {}, ... }:
+{ config, pkgs, lib, osConfig ? {}, ... }:
 
 let
   cfg = config.modules.hyprland;
@@ -9,10 +9,12 @@ in
       enable = true;
     };
 
+    # Main config
     wayland.windowManager.hyprland.extraConfig = /* lua */ ''
       hl.on("hyprland.start", function ()
         hl.exec_cmd("noctalia")
       end)
+      require("restart-updated-noctalia")
 
       hl.layer_rule {
         name = "noctalia",
@@ -62,5 +64,33 @@ in
         ''
       }
     '';
+
+    # Upon config reload, check if the executable of the current running noctalia instance
+    # is still at the same location as the one installed by the noctalia module. If not,
+    # this implies that noctalia has been updated through Nix, so restart it.
+    # NOTE: The reason this is in a seperate file in xdg config is that this lets us avoid
+    # rebuilding the full hyprland config everytime Noctalia updates, by importing this
+    # file via the config dir instead; then only this file is rebuilt upon noctalia updates.
+    xdg.configFile."hypr/restart-updated-noctalia.lua".text =
+      let
+      restart-updated-noctalia = pkgs.writeShellScript "hyprland-restart-updated-noctalia" ''
+        noctaliaPid=$(pidof -s noctalia) || exit 0
+        # Gotta do it this cursed way with dirs instead of the executables directly,
+        # because the direct executable obtained for the running instance is .noctalia-wrapped
+        runningNoctaliaDir=$(dirname $(realpath /proc/"$noctaliaPid"/exe))
+        pathNoctaliaDir=${config.programs.noctalia.package}/bin
+        if [ "$runningNoctaliaDir" != "$pathNoctaliaDir" ]; then
+          hyprctl notify 1 5000 0 "Noctalia: detected updated installation, starting updated executable!"
+          kill "$noctaliaPid"
+          sleep 1 # Give noctalia enough time to actually properly shutdown
+          hyprctl eval "hl.exec_cmd('$pathNoctaliaDir/noctalia -d')"
+        fi
+        '';
+      in
+      /* lua */ ''
+        hl.on("config.reloaded", function ()
+          hl.exec_cmd("${restart-updated-noctalia}")
+        end)
+      '';
   };
 }
