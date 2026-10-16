@@ -14,6 +14,14 @@ in
 
   options.modules.noctalia = {
     enable = lib.mkEnableOption ''Install and configure Noctalia, a Wayland compositor shell.'';
+    annotateDesktopEntry = lib.mkOption {
+      type = lib.types.bool;
+      default = true;
+      description = ''
+        Create an XDG Desktop Entry for the Noctalia image annotation tool to open images
+        with (e.g. via an "Open with..." menu in a file browser).
+      '';
+    };
   };
 
 
@@ -21,6 +29,20 @@ in
 
 
   config = lib.mkIf cfg.enable {
+    xdg.desktopEntries.noctaliaImageAnnotator = lib.mkIf cfg.annotateDesktopEntry {
+      type = "Application";
+      name = "Noctalia Image Annotator";
+      icon = "noctalia";
+      comment = "Edit images with Noctalia's builtin image annotator";
+      exec = "noctalia msg annotate %f";
+      terminal = false;
+      categories= [ "Graphics" "ImageProcessing" "Utility" ];
+      noDisplay = true;
+      mimeType = [
+        # Had AI produce this list based on the documentation
+        "image/png" "image/jpeg" "image/gif" "image/webp" "image/jxl" "image/vnd.microsoft.icon" "image/svg+xml" "image/bmp" "image/tiff" "image/avif" "image/qoi" "image/x-xpixmap" "image/x-xbitmap" "image/x-tga" "image/x-portable-anymap" "image/x-portable-bitmap" "image/x-portable-graymap" "image/x-portable-pixmap" "image/x-cursor" "application/x-navi-animation"
+      ];
+    };
     programs.noctalia = {
       enable = true;
       customPalettes.CatppuccinMochaBlue.dark = {
