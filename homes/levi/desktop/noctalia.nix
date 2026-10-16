@@ -125,11 +125,12 @@ in
         notification = {
           history_retention_hours = 24;
         };
-        
+
         shell = {
           setup_wizard_enabled = false;
           settings_show_advanced = true;
           clipboard_history_max_entries = 30;
+          clipboard_image_action_command = "noctalia msg annotate {path}";
 
           animation = {
             speed = 1.5;
@@ -144,7 +145,9 @@ in
             open_near_click_control_center = true;
           };
           launcher = {
-            categories = false;
+            layout = "simple";
+            categories = true;
+            categories_icons_only = true;
           };
 
           session.actions = let hyprshutdown = config.modules.hyprshutdown; in [
@@ -223,6 +226,7 @@ in
             max_length = 400;
             min_length = 145;
             title_scroll = "on_hover";
+            art_size = 18;
             capsule = true;
             capsule_padding = 8;
             show_progress = true;
@@ -235,10 +239,6 @@ in
           };
           tray = {
             drawer = true;
-            hidden = [ "Discord" ];
-            # Once the option to hide passive items comes back in v5, adding this rule
-            # together with hiding passive should make udiskie so that it only shows when an usb is inserted.
-            # pinned = [ "udiskie" ];
           };
           volume = {
             font_family = systemDefaultMonospaceFont;
@@ -284,4 +284,3 @@ in
     };
   };
 }
-
