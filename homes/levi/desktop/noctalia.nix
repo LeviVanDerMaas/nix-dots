@@ -169,7 +169,7 @@ in
           launcher = {
             layout = "simple";
             categories = true;
-            categories_icons_only = true;
+            category_icons_only = true;
           };
 
           session.actions = let hyprshutdown = config.modules.hyprshutdown; in [
