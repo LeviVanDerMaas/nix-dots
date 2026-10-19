@@ -81,8 +81,7 @@ in
           Main = {
             # Widgets
             start = [
-              "launcher"
-              "tray"
+              "group:app_management"
               "active_window"
               "media"
             ];
@@ -94,12 +93,35 @@ in
               "notifications"
               "brightness"
               "volume"
-              "bluetooth"
-              "network"
+              "group:connections"
               "Spacer"
               "battery"
               "clock"
               "control-center"
+            ];
+            capsule_group = [
+              {
+                id = "connections";
+                accordion = false;
+                accordion_direction = "end";
+                border_width = 1.0;
+                enabled = true;
+                fill = "surface_variant";
+                members = [ "network" "bluetooth" ];
+                opacity = 1.0;
+                padding = 7.0;
+              }
+              {
+                id = "app_management";
+                accordion = false;
+                accordion_direction = "end";
+                border_width = 1.0;
+                enabled = true;
+                fill = "surface_variant";
+                members = [ "launcher" "tray" ];
+                opacity = 1.0;
+                padding = 7.0;
+              }
             ];
             # Bar style and layout settings
             background_opacity = 0.93;
@@ -221,6 +243,10 @@ in
           };
           bluetooth = {
             hide_when_no_connected_device = true;
+            color = "primary";
+            actions = {
+              right = "none";
+            };
           };
           clock = {
             capsule = true;
@@ -255,6 +281,9 @@ in
           };
           network = {
             show_label = false;
+            actions = {
+              right = "none";
+            };
           };
           notifications = {
             hide_when_no_unread = true;
