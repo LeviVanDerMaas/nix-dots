@@ -11,10 +11,7 @@
   networking.hostName = "boo";
 
   # Enable bluetooth
-  hardware.bluetooth = {
-    enable = true;
-    powerOnBoot = false;
-  };
+  hardware.bluetooth.enable = true;
 
   # Custom config modules
   modules = {
