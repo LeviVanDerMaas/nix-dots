@@ -40,7 +40,7 @@ in
       noDisplay = true;
       mimeType = [
         # Had AI produce this list based on the documentation
-        "image/png" "image/jpeg" "image/gif" "image/webp" "image/jxl" "image/vnd.microsoft.icon" "image/svg+xml" "image/bmp" "image/tiff" "image/avif" "image/qoi" "image/x-xpixmap" "image/x-xbitmap" "image/x-tga" "image/x-portable-anymap" "image/x-portable-bitmap" "image/x-portable-graymap" "image/x-portable-pixmap" "image/x-cursor" "application/x-navi-animation"
+        "image/bmp" "image/gif" "image/vnd.microsoft.icon" "image/jpeg" "image/jxl" "image/png" "image/qoi" "image/svg+xml" "image/x-tga" "image/webp" "image/vnd.wap.wbmp" "image/x-portable-anymap" "image/x-portable-bitmap" "image/x-portable-graymap" "image/x-portable-pixmap"
       ];
     };
     programs.noctalia = {
