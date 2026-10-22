@@ -27,6 +27,8 @@
       # are merged into the profile's prefs.js, which controls about:config values.
       # So, these are startup-defaults for about:config.
       settings = {
+        "browser.aboutConfig.showWarning" = false;
+
         # I'm sure eventually I will have to submit to the new theming, but
         # for now we'll do this. I hope when it's time, I at least have the
         # option to use square instead of round corners like in the old theme.
