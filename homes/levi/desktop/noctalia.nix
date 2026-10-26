@@ -29,20 +29,6 @@ in
 
 
   config = lib.mkIf cfg.enable {
-    xdg.desktopEntries.noctaliaImageAnnotator = lib.mkIf cfg.annotateDesktopEntry {
-      type = "Application";
-      name = "Noctalia Image Annotator";
-      icon = "noctalia";
-      comment = "Edit images with Noctalia's builtin image annotator";
-      exec = "noctalia msg annotate %f";
-      terminal = false;
-      categories= [ "Graphics" "ImageProcessing" "Utility" ];
-      noDisplay = true;
-      mimeType = [
-        # Had AI produce this list based on the documentation
-        "image/bmp" "image/gif" "image/vnd.microsoft.icon" "image/jpeg" "image/jxl" "image/png" "image/qoi" "image/svg+xml" "image/x-tga" "image/webp" "image/vnd.wap.wbmp" "image/x-portable-anymap" "image/x-portable-bitmap" "image/x-portable-graymap" "image/x-portable-pixmap"
-      ];
-    };
     programs.noctalia = {
       enable = true;
       customPalettes.CatppuccinMochaBlue.dark = {
