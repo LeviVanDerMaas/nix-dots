@@ -36,7 +36,7 @@ in
       local launcherWindows = {
         -- Steam UI has many components implemented as seperate windows. So match
         -- only main steam window so rest will open on main windows *current* workspace
-        { initial_class = "steam", initial_title = "Steam" },
+        { initial_class = "steam", initial_title = "(Steam)|(Steam Big Picture Mode)" },
         { initial_class = ".*prismlauncher.*" },
         { initial_class = "r2modman" }
       }
