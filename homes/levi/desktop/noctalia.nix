@@ -92,7 +92,7 @@ in
                 accordion_direction = "end";
                 border_width = 1.0;
                 enabled = true;
-                fill = "surface_variant";
+                fill = "surface_container";
                 members = [ "network" "bluetooth" ];
                 opacity = 1.0;
                 padding = 7.0;
@@ -103,7 +103,7 @@ in
                 accordion_direction = "end";
                 border_width = 1.0;
                 enabled = true;
-                fill = "surface_variant";
+                fill = "surface_container";
                 members = [ "launcher" "tray" ];
                 opacity = 1.0;
                 padding = 7.0;
@@ -174,10 +174,15 @@ in
           panel = {
             open_near_click_control_center = true;
           };
+
           launcher = {
             layout = "simple";
             categories = true;
             category_icons_only = true;
+          };
+
+          screenshot = {
+            directory = "${config.home.homeDirectory}/Pictures/Screenshots";
           };
 
           session.actions = let hyprshutdown = config.modules.hyprshutdown; in [
