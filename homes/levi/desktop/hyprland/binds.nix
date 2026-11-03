@@ -61,7 +61,6 @@ in
       -- WORKSPACE BINDS
       genDigitBinds("SUPER", dispatcher_map1to10toUniqueIdForMon(DIS.focus))
       genDigitBinds("SUPER + SHIFT", dispatcher_map1to10toUniqueIdForMon(WIN.move), { extraParams = { follow = true } })
-      genDigitBinds("SUPER + SHIFT", DIS.force_renderer_reload) -- Fix issue of windows flickering: seems to be caused by animation config
       genDigitBinds("SUPER + CTRL", dispatcher_map1to10toUniqueIdForMon(WIN.move), { extraParams = { follow = false } })
       -- This is a simpler form of the below binds that should work starting from Hyprland 0.66.
       -- Currently, hl.get_workspace() does not support workspace selectors besides id, but
