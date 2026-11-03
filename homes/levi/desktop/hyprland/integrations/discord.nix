@@ -31,17 +31,23 @@ in
         '';
       in
       /* lua */ ''
-        hl.workspace_rule { workspace = "special:discord", on_created_empty = "discord" }
+        ${discordAutoStart}
+
+        -- Spawn discord if special:discord is created emtpy
+        hl.on("workspace.created", function(ws)
+          if ws.name == "special:discord" and ws.is_empty then
+            hl.exec_cmd("discord")
+          end
+        end)
+
         hl.window_rule {
-            match = { class = "discord" },
-            workspace = "special:discord silent",
-            tag = "suppressInitialActivate"
+          match = { class = "discord" },
+          workspace = "special:discord silent",
+          tag = "suppressInitialActivate"
         }
 
         hl.bind("SUPER + V", WS.toggle_special("discord"))
         hl.bind("SUPER + V", WIN.move({ window = "class:discord", workspace = "special:discord"}))
-
-        ${discordAutoStart}
       '';
   };
 }
