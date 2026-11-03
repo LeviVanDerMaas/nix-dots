@@ -49,7 +49,7 @@ in
     # https://github.com/NixOS/nix/pull/15290
     pkgs.fns.checkPkgVersion'
       pkgs.nix
-      "2.34.8"
+      "2.34.9"
       ''builtins.attrValues ((builtins.getFlake "${fRef}").overlays)'';
 }
 
