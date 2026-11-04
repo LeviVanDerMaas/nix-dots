@@ -10,23 +10,6 @@ lib.mkIf cfg.enable {
     WIN = hl.dsp.window
     WS = hl.dsp.workspace
 
-    -- Override the default hl.workspace_rule to also store the rules in a lua table for access later
-    -- Yes this is a bad hack, but there is currently no other easy way to access set workspace rules.
-    -- CAVEAT: Will store incorrect rule values too (and incorrect rules); this may cause a desync with
-    -- the actual rule until you set the rule again with a correct value.
-    TRACKED_WORKSPACE_RULES = {}
-    local hyprland_set_workspace_rule = hl.workspace_rule
-    hl.workspace_rule = function (rule)
-      local ws = tostring(rule.workspace)
-      local current_rules = TRACKED_WORKSPACE_RULES[ws]
-      if current_rules then
-        for r,v in pairs(rule) do current_rules[r] = v end
-      else
-        TRACKED_WORKSPACE_RULES[ws] = rule
-      end
-      hyprland_set_workspace_rule(rule)
-    end
-
     -- Useful for runtime debugging
     function debug_notify(msg, duration)
       hl.notification.create { text = tostring(msg), timeout = duration or 5000, icon = 1 }
