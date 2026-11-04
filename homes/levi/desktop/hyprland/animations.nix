@@ -35,7 +35,7 @@ lib.mkIf cfg.enable {
       leaf = "workspacesIn",
       bezier = "easierOut",
       style = "slide 13%",
-      speed = 4,
+      speed = 3,
       enabled = true
     }
     hl.animation {
