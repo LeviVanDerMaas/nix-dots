@@ -34,79 +34,56 @@ in
         end
       end
 
-      -- A custom dispatcher that is like `hl.dsp.workspace.change_id` but actively swaps both workspaces,
-      -- including between monitors; also accepts a `follow` parameter (defaults true).
-      -- If no workspace corresponding to id exists, "swaps" it by interpreting it as an empty workspace and placing that.
+      -- Like `hl.dsp.workspace.change_id` but actively swaps both workspaces,
+      -- also accepts a `follow` parameter (defaults true).
       function workspace_swap_id_and_move(params)
         params = tbl_deepclone(params)
         return function()
-          local this_workspace = hl.get_workspace(params.workspace)
-          if not this_workspace then
-            return -- No-op
+          local wsPrimary = hl.get_workspace(params.workspace)
+          if not wsPrimary then
+            error("workspace_swap_id_and_move: `workspace` must exist!")
           end
-          local old_id = this_workspace.id
-          local old_id_mon = this_workspace.monitor
+          ---@type string stop diagnostics from bitching
+          ---@diagnostic disable-next-line assign-type-mismatch
+          local fromId = wsPrimary.id
+          local fromMon = wsPrimary.monitor
+          local fromWasPersistent = wsPrimary.is_persistent
+          local fromMonActiveId = fromMon and fromMon.active_workspace.id
+          -- Temporarily enforce existence
+          hl.workspace_rule({ workspace = fromId, persistent = true })
 
-          local new_id = params.id
-          local other_workspace = hl.get_workspace(new_id)
-          local new_id_rules = TRACKED_WORKSPACE_RULES[tostring(new_id)]
-          local new_id_mon = new_id_rules and new_id_rules.monitor
+          local wsOther = hl.get_workspace(params.id) -- Might not exist yet here
+          local targetId = params.id
+          local targetWasPersistent = wsOther and wsOther.is_persistent or false
+          -- Temporarily enforce existence
+          hl.workspace_rule({ workspace = targetId, persistent = true })
+          hl.exec_scheduled_prop_refresh_immediately()
+          wsOther = hl.get_workspace(targetId) -- Now it def exists
+          local targetMon = wsOther.monitor ---@diagnostic disable-line need-check-nil
+          local targetMonActiveId = targetMon and targetMon.active_workspace.id
 
-          -- Temporarily disable persistence on the involved ids to ensure we can free them in the next step
-          local old_persistent; if this_workspace.is_persistent then old_persistent = true hl.workspace_rule({ workspace = old_id, persistent = false }) end
-          local new_persistent; if other_workspace and other_workspace.is_persistent then new_persistent = true hl.workspace_rule({ workspace = new_id, persistent = false }) end
+          -- First swap the ids proper, prevents edge cases where moving workspaces
+          -- around can destroy them (thus our references would become invalid)
+          local tempWsId = find_free_workspace_id()
+          hl.dispatch(WS.change_id({ workspace = wsOther, id = tempWsId }))
+          hl.dispatch(WS.change_id({ workspace = wsPrimary, id = targetId }))
+          hl.dispatch(WS.change_id({ workspace = wsOther, id = fromId }))
 
-          -- First swap the ids proper, only then do the moves. That way, for the swapping
-          -- logic we can avoid dealing with edge cases where moving workspaces can
-          -- recreate or destroy the involved workspaces (e.g. empty ones)
-          if not other_workspace then
-            hl.dispatch(WS.change_id(params))
+          -- Then move them to each other's monitor
+          hl.dispatch(WS.move({ workspace = wsPrimary, monitor = targetMon }))
+          hl.dispatch(WS.move({ workspace = wsOther, monitor = fromMon }))
+          -- restore previously active workspaces on monitors
+          if fromMon then fromMon:set_workspace(fromMonActiveId) end
+          if targetMon then targetMon:set_workspace(targetMonActiveId) end
 
-            -- this_workspace moves to a non-existing id, so if it was focused we 'leave' an empty one with the old id.
-            if this_workspace == this_workspace.monitor.active_workspace then
-              hl.dispatch(DIS.focus({ monitor = old_id_mon }))
-              hl.dispatch(DIS.focus({ workspace = old_id }))
-            end
-
-            -- Now move the workspace to the bound monitor if its new id has one.
-            if new_id_mon then
-              hl.dispatch(WS.move({ workspace = new_id, monitor = new_id_mon }))
-            end
-          else
-            -- Since both workspaces exist, just move them to each other's monitor
-            -- Now, if an involved workspace is also the active workspace of a monitor,
-            -- the 'move' dispatcher will change the active one so make sure to restore that.
-            hl.dispatch(WS.change_id({ workspace = this_workspace, id = find_free_workspace_id() }))
-            hl.dispatch(WS.change_id({ workspace = other_workspace, id = old_id }))
-            hl.dispatch(WS.change_id({ workspace = this_workspace, id = new_id }))
-            -- NOTE: they have already swapped ids at this point so this_workspace now has new_id
-            local old_id_mon = this_workspace.monitor
-            local new_id_mon = other_workspace.monitor
-            local restore_old_id_mon = this_workspace == this_workspace.monitor.active_workspace
-            local restore_new_id_mon = other_workspace == other_workspace.monitor.active_workspace
-            hl.dispatch(WS.move({ workspace = old_id, monitor = old_id_mon }))
-            hl.dispatch(WS.move({ workspace = new_id, monitor = new_id_mon }))
-            -- Restoring new first and then old means the cursor will stay on the same monitor in almost
-            -- every case (the exception being when you swap a non-active workspace with an active one,
-            -- but I don't care enough to deal with this rare use case for how niche the problem is)
-            if restore_new_id_mon then
-              hl.dispatch(DIS.focus({ monitor = new_id_mon }))
-              hl.dispatch(DIS.focus({ workspace = new_id }))
-            end
-            if restore_old_id_mon then
-              hl.dispatch(DIS.focus({ monitor = old_id_mon }))
-              hl.dispatch(DIS.focus({ workspace = old_id }))
-            end
-          end
-
-          -- Now finally, follow the swapped workspace if `follow` if set
+          -- Finally, follow if needed
           if params.follow ~= false then
-            hl.dispatch(DIS.focus({ workspace = new_id }))
+            hl.dispatch(DIS.focus({ workspace = wsPrimary }))
           end
 
-          -- Restore persistence
-          if old_persistent then hl.workspace_rule({ workspace = old_id, persistent = true }) end
-          if new_persistent then hl.workspace_rule({ workspace = new_id, persistent = true }) end
+          -- Restore workspace persistence rules
+          hl.workspace_rule({ workspace = fromId, persistent = fromWasPersistent})
+          hl.workspace_rule({ workspace = targetId, persistent = targetWasPersistent})
         end
       end
 
