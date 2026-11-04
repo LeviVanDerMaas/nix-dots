@@ -26,7 +26,9 @@ in
             local dParams = tbl_deepclone(params)
             dParams[field] = map1to10toUniqueIdForMon(dParams[field], dParams.monitor)
             local returnValue = dispatcher(dParams)
-            if type(returnValue) == "userdata" then
+            local returnType = type(returnValue)
+            -- A function that mimmicks a dispatcher will return a callable function instead of userdata
+            if returnType == "userdata" or returnType == "function" then
               returnValue = hl.dispatch(returnValue)
             end
             return returnValue
