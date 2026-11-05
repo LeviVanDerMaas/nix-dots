@@ -78,9 +78,12 @@ in
           if fromMon then fromMon:set_workspace(fromMonActiveId) end
           if targetMon then targetMon:set_workspace(targetMonActiveId) end
 
-          -- Finally, follow if needed
+          -- Finally, stay or follow workspace. Using explicit focus requests in both cases
+          -- mimics the behaviour of other dispatcher where the workspace under the cursor moves
           if params.follow ~= false then
             hl.dispatch(DIS.focus({ workspace = wsPrimary }))
+          else
+            hl.dispatch(DIS.focus({ workspace = wsOther }))
           end
 
           -- Restore workspace persistence rules
