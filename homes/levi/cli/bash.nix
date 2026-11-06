@@ -35,6 +35,9 @@
         lh = "ls -Ah";
         llh = "ls -Ahl";
 
+        # Copy the actual file tree, with default perms.
+        cptree = "cp -rL --no-preserve=mode";
+
         zzz = "systemctl suspend";
       };
 
@@ -73,12 +76,31 @@
           echo "$storeDir"/"$storeBase"
         done
       }
-      whichr() { realpath $(which $@); }
-      whichd() { dirname $(which $@); }
-      whichrd() { dirname $(realpath $(which $@)); }
-      whichn() { storedirname $(whichr $@); }
+
+      # Move sources to backup, then copy their filetrees to their original location.
+      # If source's backup already exists, move it back instead.
+      # Useful for quicly modifying Home-Manager files for testing purposes.
+      bakcp() {
+        for s in "$@"; do
+          if [[ -e "$s.bak" ]]; then
+            rm -r "$s"
+            mv "$s.bak" "$s"
+          else
+            mv "$s" "$s.bak"
+            cptree "$s.bak" "$s"
+          fi
+        done
+      }
+
+      # Run a command detached from the calling terminal and process session
       launch() { setsid $@ < /dev/null &> /dev/null; }
-      '';
+
+      # Various variants of `which`
+      whichd() { dirname $(which $@); } # Get the directory of a binary
+      whichr() { realpath $(which $@); } # Get the resolved path to binaries
+      whichrd() { dirname $(realpath $(which $@)); } # Get the resolved directory of a binary
+      whichn() { storedirname $(whichr $@); } # Get the Nix store path in which a binary resides
+    '';
   };
 }
 
