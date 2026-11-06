@@ -92,7 +92,7 @@ set_defaults [
     external = "mv {file} {to_path:path-from-parent}"; auto_exec = false;
   }
   {
-    invocation = "move"; shortcut = "mv"; kes = [ "x" "ctrl-x" ]; panels = [ "stage" ];
+    invocation = "move"; shortcut = "mv"; keys = [ "x" "ctrl-x" ]; panels = [ "stage" ];
     external = "mv {file:space-separated} {other-panel-directory}"; auto_exec = false;
   }
   {

@@ -18,8 +18,6 @@
       imports = []; # Ensure imports empty because of aformentioned reasons.
 
       default_flags = "-g";
-      modal = true;
-      initial_mode = "command";
 
       terminal_title = "br: {file}";
       lines_before_match_in_preview = 5;
