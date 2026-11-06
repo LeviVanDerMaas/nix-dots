@@ -13,18 +13,6 @@ in
         border_color = "#3320b7"
       }
 
-      -- APP SPECIFIC RULES
-      -- pavucontrol
-      hl.window_rule {
-        match = { initial_class = "org.pulseaudio.pavucontrol"},
-        float = true, center = true
-      }
-      -- nm-connection-editor, a.k.a nm-applet's GUI
-      hl.window_rule {
-        match = { initial_class = "nm-connection-editor"},
-        float = true, center = true
-      }
-
       -- Windows with a DYNAMIC "suppessInitialActivates" tag will upon opening disable
       -- focus_on_activate requests briefly, before this is reset to the global default.
       -- Mainly useful to silently open windows that request activation upon opening.
@@ -50,6 +38,28 @@ in
           hl.dispatch(setWinFOA(globalFOA))
         end, { timeout = 3000, type = "oneshot" })
       end)
+
+
+
+
+
+      -- APP SPECIFIC RULES
+      -- pavucontrol
+      hl.window_rule {
+        match = { initial_class = "org.pulseaudio.pavucontrol"},
+        float = true, center = true
+      }
+      -- nm-connection-editor, a.k.a nm-applet's GUI
+      hl.window_rule {
+        match = { initial_class = "nm-connection-editor"},
+        float = true, center = true
+      }
+
+      -- KDE File Picker
+      hl.window_rule {
+        match = { initial_class = "org.freedesktop.impl.portal.desktop.kde" },
+        float = true, center = true, size = "0.417*monitor_w 0.555*monitor_h"
+      }
     '';
   };
 }
