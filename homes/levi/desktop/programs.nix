@@ -8,10 +8,10 @@
     signal-desktop
 
     # Media-stuff
-    kdePackages.gwenview # Already has basic image editing
-    vlc
+    qimgv # image viewer (uses mpv to view videos too)
+    vlc # Video viewer
     losslesscut # Basic video (and audio) editing without any re-encoding
-    handbrake
+    handbrake # media conversion tool
 
     pavucontrol # More advanced audio control
     networkmanagerapplet # has nm-connection-editor, a good GUI network editor
