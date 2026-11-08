@@ -12,7 +12,7 @@
     xkb = {
       layout = "us";
       variant = "altgr-weur"; # https://altgr-weur.eu/
-      options = "caps:escape_shifted_capslock";
+      options = "caps:escape_shifted_capslock,shift:both_capslock";
     };
   };
 

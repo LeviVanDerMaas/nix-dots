@@ -312,6 +312,7 @@ in
           kinds = {
             media = false;
             privacy = false;
+            lock_keys = false;
           };
         };
 
