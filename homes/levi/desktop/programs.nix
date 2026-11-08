@@ -10,6 +10,7 @@
     # Media-stuff
     qimgv # image viewer (uses mpv to view videos too)
     vlc # Video viewer
+    mpv # Another video viewer, trying out alongside vlc for now
     losslesscut # Basic video (and audio) editing without any re-encoding
     handbrake # media conversion tool
 
