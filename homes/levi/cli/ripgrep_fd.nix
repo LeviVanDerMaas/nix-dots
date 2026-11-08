@@ -18,12 +18,13 @@ let
         "--follow"
         "--smart-case"
         "--ignore-file=${globalIgnoreFile}"
+        "--no-messages" # suppresses a bunch of error messages around symlinks and special OS file
       ];
     };
 
     home.shellAliases = {
       "root-fd" = "fd ${lib.concatMapStringsSep " " (p: "--exclude ${p}") rootIgnores}";
-      "root-rg" = "fd ${lib.concatMapStringsSep " " (p: "--glob !${p}") rootIgnores}";
+      "root-rg" = "rg ${lib.concatMapStringsSep " " (p: "--glob=!${p}") rootIgnores}";
     };
   };
 
