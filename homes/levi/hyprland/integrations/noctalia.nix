@@ -24,6 +24,11 @@ in
         blur_popups = true,
         ignore_alpha = 0.5
       }
+      -- So that the bar globally will still get fade animations when fading in or out
+      hl.layer_rule {
+        match = { namespace = "^noctalia-bar-Main$" },
+        no_anim = false,
+      }
 
       local function noctBind(keys, cmd, flags)
         hl.bind(keys, DIS.exec_cmd("noctalia msg " .. cmd), flags or {})
