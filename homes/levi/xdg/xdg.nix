@@ -1,5 +1,8 @@
 { pkgs, config, ... }:
 
+let
+  cfg = config.modules.xdg;
+in
 {
   # user-dirs
   xdg.userDirs = {
@@ -25,7 +28,6 @@
   "${plasma-menu}";
 
   # Symlink to XDG_DESKTOP_DIR in $XDG_DATA_HOME/applications to include any .desktop files from it.
-  # As of writing, noctalia has an issue where it does not follow symlinks in .desktop dirs.
   xdg.dataFile."applications/Desktop".source =
     config.lib.file.mkOutOfStoreSymlink "${config.xdg.userDirs.desktop}";
 }
