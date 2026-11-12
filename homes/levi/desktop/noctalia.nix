@@ -271,6 +271,7 @@ in
             show_progress = true;
           };
           network = {
+            vpn_status = "both";
             show_label = false;
             actions = {
               right = "none";
