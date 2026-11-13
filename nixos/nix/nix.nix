@@ -1,56 +1,74 @@
-{ pkgs, fns, outputs, config, flake, lib, ... }:
+{ self, pkgs, fns, outputs, config, lib, ... }:
 
 let
+  cfg = config.modules.nix;
+
   nixpkgs-config-file = fns.rootRel "nixpkgs-config.nix";
 in
 {
-  nix.settings = {
-    experimental-features = [ "nix-command" "flakes" ];
-    trusted-users = [ "root" "@wheel" ];
+  options.modules.nix = {
+    addFlakeOverlaysToSystem = lib.mkEnableOption ''
+      Enabling this makes this flake's overlays available to the system as an
+      importable list under `<nixpkgs-overlays>` (see "Install overlays via
+      configuration lookup" in the nixpkgs manual). As a result, any Nix tools
+      and scripts that use a nixpkgs instance (as well as general imports of
+      nixpkgs) will also have these overlays set when used in impure mode. The
+      downside of this is that it forces the flake to be copied to the store
+      whenever rebuilding the system.
+    '';
+  };
 
-    # Read note below to understand what keep-{derivations,outputs} actually do
-    keep-derivations = true;
-    keep-outputs = true;
+  config = {
+    nix.settings = {
+      experimental-features = [ "nix-command" "flakes" ];
+      trusted-users = [ "root" "@wheel" ];
 
-    auto-optimise-store = true;
+      # Read note below to understand what keep-{derivations,outputs} actually do
+      keep-derivations = true;
+      keep-outputs = true;
+
+      auto-optimise-store = true;
+    };
+
+    # Since levi manages all systems, and to protect against building a stray config file
+    # left in /etc/nixos when accidentally invoking nixos cli tools without --flake...
+    environment.etc."nixos/flake.nix".source = pkgs.fns.mkOutOfStoreSymlink /home/levi/.dots/flake.nix;
+
+    nixpkgs = {
+      config = import nixpkgs-config-file;
+      overlays = builtins.attrValues outputs.overlays;
+    };
+
+
+
+
+
+    ##########################################################
+    # BELOW HERE, WE SET SOME SYSTEM ENVIRONMENT-LEVEL THINGS:
+    ##########################################################
 
     # NOTE: There is weird, undocumented interaction between `nix.settings.nixPath` and
     # `nixpkgs.flake.setNixPath`. When you explicitly set `nix.settings.nixPath`, you should
     # also include the values `nixpkgs.flake.setNixPath` would have set for it (if true,
     # which it is by default for flakes), otherwise its effects are silently overriden.
     # https://github.com/NixOS/nixpkgs/issues/568431
-    nix-path =
+    nix.nixPath =
       # The first two values are what would have been set by `nixpkgs.flake.setNixPath`
       [ "nixpkgs=flake:nixpkgs" ] ++ (lib.optional config.nix.channel.enable "/nix/var/nix/profiles/per-user/root/channels")
       # Add nixpkgs-overlays to NIX_PATH, see nixpkgs manual for why.
       ++ [ "nixpkgs-overlays=/etc/nix/nixpkgs-overlays.nix" ];
+
+    # Also use the nixpkgs config globally when using various Nix tools in impure mode.
+    # 'config.nix` is searched for at NIXPKGS_CONFIG, which defaults to `/etc/nix/nixpkgs-config.nix`
+    # Overlays are searched for in the NIX_PATH at `nixpkgs-overlays`
+    # NOTE: THESE WILL TAKE PRECEDENCE OVER FILES IN ~/.config
+    environment.etc."nix/nixpkgs-config.nix".source = nixpkgs-config-file;
+
+    # If this option is set, the flake will be copied to the store!
+    environment.etc."nix/nixpkgs-overlays.nix" = lib.mkIf cfg.addFlakeOverlaysToSystem {
+      text = ''builtins.attrValues ((builtins.getFlake ${self}).overlays)'';
+    };
   };
-
-  # Since levi manages all systems, and to protect against building a stray config file
-  # left in /etc/nixos when accidentally invoking nixos cli tools without --flake...
-  environment.etc."nixos/flake.nix".source = pkgs.fns.mkOutOfStoreSymlink /home/levi/.dots/flake.nix;
-
-  nixpkgs = {
-    config = import nixpkgs-config-file;
-    overlays = builtins.attrValues outputs.overlays;
-  };
-
-  # Also use the nixpkgs config globally when using various Nix tools in impure mode.
-  # 'config.nix` is searched for at NIXPKGS_CONFIG, which defaults to `/etc/nix/nixpkgs-config.nix`
-  # Overlays are searched for in the NIX_PATH at `nixpkgs-overlays`
-  # NOTE: THESE WILL TAKE PRECEDENCE OVER FILES IN ~/.config
-  environment.etc."nix/nixpkgs-config.nix".source = nixpkgs-config-file;
-  environment.etc."nix/nixpkgs-overlays.nix".text =
-    let
-      fRef = builtins.flakeRefToString { type = "path"; path = flake.sourceInfo.outPath; narHash = flake.narHash; };
-    in
-    # Once nix is at version 2.35, you can replace this hack by just using a (relative) path literal with getFlake 
-    # (Do this in a seperate file under this flake, that you then symlink too, like for nixpkgs-config.nix)
-    # https://github.com/NixOS/nix/pull/15290
-    pkgs.fns.checkPkgVersion'
-      pkgs.nix
-      "2.34.9"
-      ''builtins.attrValues ((builtins.getFlake "${fRef}").overlays)'';
 }
 
 # Note on garbage collection of derivations and build-time-only outputs:
