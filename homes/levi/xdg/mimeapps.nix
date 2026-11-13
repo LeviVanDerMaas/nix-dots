@@ -3,6 +3,7 @@
 {
   # Reroute the mimeapp module's generated mimeapps to secondaryXdg.
   xdg.configFile."mimeapps.list".enable = false;
+  xdg.dataFile."applications/mimeapps.list".enable = false;
   modules.xdg.secondaryConfigFile."mimeapps.list".source =
     config.xdg.configFile."mimeapps.list".source;
 
