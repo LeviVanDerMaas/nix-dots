@@ -43,16 +43,11 @@ let
 
   globalIgnoreFile = builtins.toFile "ripgrep_fd_ignore_global" /* gitignore */ ''
     # nix dirs:
-    # Filter out most duplicate symlinks and files not used in the current active system.
+    # Filter out most system-level symlinks and files not used in the current active system.
     /nix/store/
     /nix/var/log/
     /nix/var/nix/profiles
     /nix/var/nix/gcroots
-    # **/.nix-profile/ Mostly unique except small overlap with XDG_*_HOME due to being on XDG_*_DIRS
-    **/.local/state/nix/profiles/
-    **/.local/state/home-manager/gcroots/
-    **/.nix-defexpr/
-    **/.cache/nix
 
     # git dir
     .git/
@@ -64,7 +59,21 @@ let
     # This feature is documented in `man rg` at the `--hidden` flag, and works for fd too
     !/.*
 
-    # Except for those ignored below:
+    # But still ignore these ones below, even with --hidden:
+
+    # Large file trees that I would not need to search from the ~ dir anyway,
+    # as I generally know what is in them and everything in there was put there explicitly
+    /.dots/
+    /Dev/
+
+    # nix dirs:
+    # Filter out most home-level symlinks and files that are not in the active profile/config:
+    /.local/state/nix/profiles/
+    /.local/state/home-manager/gcroots/
+    /.nix-defexpr/
+    /.cache/nix
+    # /.nix-profile/ Mostly unique except small overlap with XDG_*_HOME due to being on
+
     # XDG dirs
     /.cache/
     /.local/share/Trash/
