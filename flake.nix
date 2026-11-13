@@ -35,7 +35,7 @@
       overlays = import ./overlays { inherit fns; };
       # Use a distinct name for thing to pass to specialArgs to distinguish
       # between specialArgs set by us and implcitly by the module system.
-      extraModuleArgs = { inherit inputs outputs extraModuleArgs fns; flake = self; };
+      extraModuleArgs = { inherit self inputs outputs extraModuleArgs fns; };
     in
     {
       inherit overlays fns;
