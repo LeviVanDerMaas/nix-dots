@@ -8,7 +8,7 @@
     This is stolen directly from home-manager's `lib.mkOutOfStoreSymlink`
   */
   mkOutOfStoreSymlink =
-    path: 
+    path:
     let
       pathStr = toString path; # Direct path interpolation would turn it into a store path.
       name = "symlink_to_" + (baseNameOf pathStr);
