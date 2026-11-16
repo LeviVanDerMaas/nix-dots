@@ -56,7 +56,7 @@ in
       # The first two values are what would have been set by `nixpkgs.flake.setNixPath`
       [ "nixpkgs=flake:nixpkgs" ] ++ (lib.optional config.nix.channel.enable "/nix/var/nix/profiles/per-user/root/channels")
       # Add nixpkgs-overlays to NIX_PATH, see nixpkgs manual for why.
-      ++ [ "nixpkgs-overlays=/etc/nix/nixpkgs-overlays.nix" ];
+      ++ (lib.optional cfg.addFlakeOverlaysToSystem "nixpkgs-overlays=/etc/nix/nixpkgs-overlays.nix");
 
     # Also use the nixpkgs config globally when using various Nix tools in impure mode.
     # 'config.nix` is searched for at NIXPKGS_CONFIG, which defaults to `/etc/nix/nixpkgs-config.nix`
