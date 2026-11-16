@@ -47,6 +47,10 @@ in
     # BELOW HERE, WE SET SOME SYSTEM ENVIRONMENT-LEVEL THINGS:
     ##########################################################
 
+    # Disable this since we are using a flake-managed system: this existing
+    # serves only to pollute any impure Nix usages with outdated channels.
+    nix.channel.enable = false;
+
     # NOTE: There is weird, undocumented interaction between `nix.settings.nixPath` and
     # `nixpkgs.flake.setNixPath`. When you explicitly set `nix.settings.nixPath`, you should
     # also include the values `nixpkgs.flake.setNixPath` would have set for it (if true,
