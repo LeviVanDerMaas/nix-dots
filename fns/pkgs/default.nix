@@ -4,9 +4,11 @@
 {
   fns ? import ./.. { inherit (pkgs) lib; },
   pkgs ? import <nixpkgs> {},
-}@args:
-
-fns.composeCallables "fns" { extraArgs = args // { inherit (pkgs) lib; }; } {
+}:
+let
+  fnsArgs = { inherit fns pkgs; };
+in
+fns.composeCallables "fns" { extraArgs = fnsArgs // { inherit (pkgs) lib; }; } {
   packages = ./packages.nix;
   fetchers = ./fetchers.nix;
   files = ./files.nix;

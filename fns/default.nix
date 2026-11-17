@@ -1,11 +1,13 @@
 {
   lib ? import <nixpkgs/lib>
-}@args:
+}:
 
 let
-  composeCallables = import ./composeCallables.nix args;
+  # Default function args are NOT bound by the @-construct
+  fnsArgs = { inherit lib; };
+  composeCallables = import ./composeCallables.nix fnsArgs;
 in
-composeCallables "fns" { extraArgs = args; } {
+composeCallables "fns" { extraArgs = fnsArgs; } {
   helpers = ./helpers.nix;
   filesystem = ./filesystem.nix;
 } // { inherit composeCallables; }
