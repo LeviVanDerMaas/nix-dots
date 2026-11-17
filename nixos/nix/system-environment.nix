@@ -6,52 +6,61 @@ in
 {
   options.modules.nix = {
     dotsDir = lib.mkOption {
-      type = lib.types.path;
+      type = lib.types.nullOr lib.types.path;
       default = /home/levi/.dots;
       description = ''
         Directory on the system where this flake is developed.
         'etc/nixos/flake.nix', will symlink to it, which means nixos-rebuild
-        will by default use the `--flake` flag with this directory. Aditionally,
-        it will be added to the NIX_PATH under `<dots>`.
+        will implicitly use the `--flake` flag with this directory as argument.
+        Aditionally, it will be added to the NIX_PATH under `<dots>`.
       '';
     };
-    addFlakeOverlaysToSystem = lib.mkEnableOption ''
-      Enabling this makes this flake's overlays available to the system as an
-      importable list under `<nixpkgs-overlays>` (see "Install overlays via
-      configuration lookup" in the nixpkgs manual). As a result, any Nix tools
-      and scripts that use a nixpkgs instance (as well as general imports of
-      nixpkgs) will also have these overlays set when used in impure mode. The
-      downside of this is that it forces the flake to be copied to the store
-      whenever rebuilding the system.
-    '';
-  };
+    addToSystem = {
+      flakeOverlays = lib.mkEnableOption ''
+        WARNING: If true, the full flake tree is copied to the store for any change!
 
-  config = {
-    # NOTE: There is weird, undocumented interaction between `nix.settings.nixPath` and
-    # `nixpkgs.flake.setNixPath`. When you explicitly set `nix.settings.nixPath`, you should
-    # also include the values `nixpkgs.flake.setNixPath` would have set for it (if true,
-    # which it is by default for flakes), otherwise its effects are silently overriden.
-    # https://github.com/NixOS/nixpkgs/issues/568431
-    nix.nixPath =
-      # The first two values are what would have been set by `nixpkgs.flake.setNixPath`
-      [ "nixpkgs=flake:nixpkgs" ]
-      ++ (lib.optional config.nix.channel.enable "/nix/var/nix/profiles/per-user/root/channels")
-      ++ (lib.optional cfg.addFlakeOverlaysToSystem "nixpkgs-overlays=/etc/nix/nixpkgs-overlays.nix")
-      ++ [ "fns=/etc/nix/fns" ]
-      ++ [ "dots=${toString cfg.dotsDir}" ];
-
-    environment.etc = {
-      # Also use the nixpkgs config globally when using various Nix tools in impure mode.
-      # 'config.nix` is searched for at NIXPKGS_CONFIG, which defaults to `/etc/nix/nixpkgs-config.nix`
-      "nix/nixpkgs-config.nix".source = fns.rootRel "nixpkgs-config.nix";
-      # Overlays are searched for in the NIX_PATH at `nixpkgs-overlays`
-      # NOTE: If this option is set, the flake will be copied to the store!
-      "nix/nixpkgs-overlays.nix" = lib.mkIf cfg.addFlakeOverlaysToSystem {
-        text = ''builtins.attrValues ((builtins.getFlake ${self}).overlays)'';
-      };
-
-      "nixos/flake.nix".source = pkgs.fns.mkOutOfStoreSymlink (cfg.dotsDir + /flake.nix);
-      "nix/fns".source = fns.rootRel "fns";
+        Make this flake's overlays available to the system as an importable
+        list under `<nixpkgs-overlays>` on NIX_PATH. These overlays will be
+        implicitly added to any nixpkgs instance used in impure mode.
+      '';
+      fns = lib.mkEnableOption ''
+        Copies this flake's `fns/` subdir to the store, symlink it to
+        etc/nix/fns, and add it to NIX_PATH under <fns>.
+      '';
     };
   };
+
+  config = lib.mkMerge [
+    {
+      # The default values for nix.nixPath IF this config is built via --flake.
+      # They must be explicitly set depending on if --flake or not, because of this issue:
+      # https://github.com/NixOS/nixpkgs/issues/568431
+      nix.nixPath = [ "nixpkgs=flake:nixpkgs" ]
+        ++ (lib.optional config.nix.channel.enable "/nix/var/nix/profiles/per-user/root/channels");
+
+      # Instances of nixpkgs used in impure mode should copy the nixpkgs config used for this flake.
+      environment.etc."nix/nixpkgs-config.nix".source = fns.rootRel "nixpkgs-config.nix";
+    }
+
+    # Overlays are searched for in the NIX_PATH at `nixpkgs-overlays`
+    # BEWARE: When this is true the full flake tree is copied to the store for any little change.
+    (lib.mkIf cfg.addToSystem.flakeOverlays {
+      nix.nixPath = [ "/nix/var/nix/profiles/per-user/root/channels" ];
+      environment.etc."nix/nixpkgs-overlays.nix".text =
+        "builtins.attrValues ((builtins.getFlake ${self}).overlays)";
+    })
+
+    (lib.mkIf cfg.addToSystem.fns {
+      nix.nixPath = [ "fns=/etc/nix/fns" ];
+      environment.etc."nix/fns".source = fns.rootRel "fns";
+    })
+
+    # If /etc/nixos/flake.nix exist then nixos-rebuild implicitly uses --flake. There is no way
+    # to change this (besides passing --no-flake), and this completely ignores the value of NIXOS_CONFIG.
+    (lib.mkIf (cfg.dotsDir != null) {
+      nix.nixPath = [ "dots=${toString cfg.dotsDir}" ];
+      environment.etc."nixos/flake.nix" = lib.mkIf (cfg.dotsDir != /etc/nixos)
+        { source = pkgs.fns.mkOutOfStoreSymlink (cfg.dotsDir + /flake.nix); };
+    })
+  ];
 }
