@@ -1,0 +1,35 @@
+:root {
+  /*
+    Accent colors: must be explicitly set, because since Nova every theme besides the default builtin theme
+    cannot actually set accent colors and just inherits them from the OS (gtk on linux). Stupid change.
+    https://blog.mozilla.org/addons/2026/09/29/nova-is-here-what-changes-for-your-firefox-theme/
+  */
+  /* Nova's default purple accents (looks quite good on Proton too) */
+  --color-accent-attention: light-dark(var(--color-green-50), var(--color-green-20)) !important;
+  --color-accent-primary: light-dark(var(--color-violet-50), var(--color-violet-30)) !important;
+  --color-accent-primary-hover: light-dark(var(--color-violet-60), var(--color-violet-20)) !important;
+  --color-accent-primary-active: light-dark(var(--color-violet-70), var(--color-violet-10)) !important;
+  --color-accent-primary-selected: var(--button-background-color-primary-active) !important;
+  /* Proton's default blue accents */
+  /* --color-accent-attention: light-dark(var(--color-green-50), var(--color-green-20)) !important; */
+  /* --color-accent-primary: light-dark(var(--color-blue-60), var(--color-cyan-30)) !important; */
+  /* --color-accent-primary-hover: light-dark(var(--color-blue-70), var(--color-cyan-20)) !important; */
+  /* --color-accent-primary-active: light-dark(var(--color-blue-80), var(--color-cyan-10)) !important; */
+  /* --color-accent-primary-selected: light-dark(var(--color-blue-60), var(--color-cyan-30)) !important; */
+
+  /* These must be manually set as, outside Nova, they still inherit the OS accents for some reason */
+  --toolbarbutton-icon-fill-attention: var(--color-accent-primary) !important;
+  --button-text-color-primary: light-dark(var(--color-white), var(--color-gray-70)) !important;
+  --link-color: var(--color-accent-primary) !important;
+
+  /* Nova: Remove the small gray border around the url-bar */
+  .urlbar:not([focused]) {
+    --toolbar-field-border-color: transparent !important;
+  }
+
+  /*
+    Nova: "Remove" the gradient around the active tab by making it the same color as the rest of the tab.
+    Gotta do it like this because outright removing it and/or setting a border color shows clipping artifacts.
+  */
+  --tab-border-color-accent: linear-gradient(var(--tab-background-color-selected), var(--tab-background-color-selected)) !important;
+}

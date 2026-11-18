@@ -1,0 +1,74 @@
+/*
+  This userChrome restores most common Firefox UI elements' geometry to that of the
+  the 2021-2026 Proton layout rather than that of the Nova redesign. Combined with
+  the 2026+ Proton theme it almost fully restores the default look of Firefox prior to Nova
+  (and it looks quite good on the Nova theme too!).
+*/
+:root {
+  /* Border radii. Most borders in the ui eventually inherit from these one way or another. */
+  --border-radius-xsmall: 2px !important; /* Nova Default: 4px, Proton Default: 2px */
+  --border-radius-small: 4px !important; /* Nova Default: 8px, Proton Default: 4px */
+  --border-radius-medium: 8px !important; /* Nova Default: 12px, Proton Default: 8px */
+  --border-radius-large: 16px !important; /* Proton Default: 16px, [Undefined in Nova] */
+  --border-radius-xlarge: var(--border-radius-medium) !important; /* Nova Default: 24px, [Undefined in Proton, but everything that uses it in Nova used border-radius-medium in Proton] */
+
+  /* Border radius of items in most menus. Nova Default: xlarge, Proton Default: small. */
+  --panel-menuitem-border-radius: var(--border-radius-small) !important;
+
+  /* Tab Bar Geometry */
+  --tab-border-radius: var(--border-radius-medium) !important;
+  --tab-min-height: 36px !important;
+  --tab-block-margin: 4px !important;
+  #TabsToolbar {
+    /* Hacky approximation of Proton spacing between tabbar and urlbar. */
+    margin-top: -2px !important;
+    margin-bottom: -3px !important;
+    z-index: 2 !important;
+  }
+
+  /* Url Bar Geometry */
+  --urlbar-height: max(32px, 1.4em) !important;
+  --urlbar-input-container-padding: round(up, 1px, 1.0px) !important; /* Proton default: round(up, 1px, env(hairline)), but env(hairline) does not resolve in userChrome.css */
+  --urlbar-basic-component-size: calc(var(--urlbar-height) - 2 * (var(--urlbar-input-container-border-width) + var(--urlbar-input-container-padding))) !important;
+  --urlbar-inner-border-radius: calc(var(--urlbar-border-radius) - 1px) !important;
+  --urlbar-border-radius: var(--button-border-radius) !important;
+  --urlbarview-margin-block: 0px !important;
+  --urlbarview-margin-inline: 7px !important;
+  --urlbar-background-overhang-open: 0px !important; /* Computed urlbarview-margin block and inline in Proton */
+  .urlbar {
+    --urlbar-background-border: var(--urlbar-input-container-border-width) solid var(--toolbar-field-border-color) !important;
+    --urlbar-background-border-open: var(--urlbar-input-container-border-width) solid var(--panel-border-color) !important;
+    --urlbar-background-border-focused: var(--urlbar-background-border) !important;
+    --urlbar-background-box-shadow-open: 0 2px 14px var(--chrome-box-shadow) !important;
+    --urlbar-background-outline-focused: var(--focus-outline-width) solid var(--toolbar-field-border-color-focus) !important;
+    --urlbar-input-container-border: var(--urlbar-input-container-border-width) solid transparent !important;
+    --urlbar-input-container-outline-open: none !important;
+    --urlbar-input-container-outline-open-focused: none !important;
+    --urlbar-input-container-outline-offset-open: 0px !important;
+    --urlbar-input-growth-open-inline: var(--urlbar-margin-inline) !important;
+    --urlbar-input-growth-open-block: var(--urlbar-container-padding-block) !important;
+    --urlbar-searchmode-switcher-panel-list-min-width: auto !important;
+  }
+  .urlbar-input {
+    line-height: calc(var(--urlbar-height) - 2 * var(--urlbar-input-container-border-width)) !important;
+  }
+  .urlbar-input-container {
+    border: var(--urlbar-input-container-border) !important;
+  }
+  .urlbar-input-container, .urlbar-background {
+    border-radius: var(--border-radius-medium) !important;
+  }
+
+  /*
+    Restore native Proton's behaviour where the URL-Bar's focused border-color disappears
+    once the results overview opens. Proton implemented this by setting CSS rules for the border when
+    the class "suppress-focus-border" does NOT exist on the URL bar. This appears to be dynamically
+    added and removed as needed by Firefox; it still does this in Nova, but the CSS for Nova adds a rule
+    that sets the value of `border` unconditionally. So we just add an overriding rule to make the
+    border transparent whenever that class is on there, though it does rely on them not actually
+    removing this behaviour in the future...
+  */
+  .urlbar:[focused]:is([suppress-focus-border]) {
+    --toolbar-field-border-color-focus: transparent !important;
+  }
+}
