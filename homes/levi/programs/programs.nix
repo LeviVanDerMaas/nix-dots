@@ -3,7 +3,6 @@
 {
   # Non-module packages
   home.packages = with pkgs; [
-    discord
     obsidian
     signal-desktop
 
