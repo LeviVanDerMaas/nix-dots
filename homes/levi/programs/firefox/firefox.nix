@@ -29,6 +29,8 @@
       settings = {
         "browser.aboutConfig.showWarning" = false;
         "toolkit.legacyUserProfileCustomizations.stylesheets" = true; # needed to run userChrome
+        "devtools.chrome.enabled" = true; # Enables debugging of "chrome" (browser-UI) code with CTRL+SHIFT+ALT+I
+        "devtools.debugger.remote-enabled" = true; # Needed for debugging chrome
       };
 
       userChrome = /* css */ ''
