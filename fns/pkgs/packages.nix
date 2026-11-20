@@ -1,4 +1,4 @@
-{ pkgs, lib, ... }:
+{ pkgs, lib, fns, ... }:
 
 rec {
   /**
@@ -85,4 +85,21 @@ rec {
     wrapPkgExes (args' // {
       wrappers = [ { inherit exe makeWrapperArgs; } ];
     });
+
+  /**
+    Like wrapPkgExe, but all executables instead of just the main one are
+    wrapped using `makeWrapperArgs`.
+  */
+  wrapAllPkgExes = {
+    package,
+    makeWrapperArgs, # Arguments to pass to the wrapper, in order
+    exe ? package.meta.mainProgram, # name of the executable to be wrapped
+    ...
+  }@args:
+    let
+      args' = lib.removeAttrs args [ "makeWrapperArgs" "exe" ];
+      exes = map baseNameOf (fns.listFilesIn "${package}/bin");
+      wrappers = map (exe: { inherit exe makeWrapperArgs; }) exes;
+    in
+    wrapPkgExes (args' // { inherit package wrappers; });
 }

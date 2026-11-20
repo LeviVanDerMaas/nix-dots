@@ -4,7 +4,9 @@
     `extraArgs // { namespace = «result of *this* function»; }`, and compose
     their results into a single attribute set. Since each callable is passed the
     final result of *this* function, every callable has access to every other
-    callable in `callables` while called via this function.
+    callable in `callables` while called via this function. In case `extraArgs`
+    contains a field `namespace`, the composed set of functions will be merged
+    into it.
 
     `callables` may be given as: a function that accepts `args`, a path to such a
     function, an attrset of the former two, or a list of any of these. Non-attrset
@@ -41,6 +43,7 @@
           if builtins.isAttrs r then r else abort "Callable is not in attrset, but does not return an attrset either!";
 
     composition =
-      lib.mergeAttrsList (map resolveInputCallable (lib.toList callables));
+      extraArgs.${namespace} or {} //
+        lib.mergeAttrsList (map resolveInputCallable (lib.toList callables));
   in
   composition

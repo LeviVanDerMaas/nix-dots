@@ -8,7 +8,7 @@
 let
   fnsArgs = { inherit fns pkgs; };
 in
-fns.composeCallables "fns" { extraArgs = fnsArgs // { inherit (pkgs) lib; }; } {
+fns.composeCallables "fns" { extraArgs = fnsArgs // { inherit fns; inherit (pkgs) lib; }; } {
   packages = ./packages.nix;
   fetchers = ./fetchers.nix;
   files = ./files.nix;
